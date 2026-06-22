@@ -773,7 +773,7 @@
 
               <!-- Step 7: Brands -->
               <div v-if="currentStep === 7" class="tab-pane fade show active">
-                <h5 class="mb-4">Product Brands</h5>
+                <h5 class="mb-4 pt-3">Merk Product</h5>
 
                 <div
                   class="mb-3 d-flex justify-content-between align-items-center"
@@ -786,6 +786,7 @@
                       placeholder="Search brands..."
                     />
                   </div>
+
                 </div>
 
                 <div v-if="loadingBrands" class="text-center py-3">
@@ -1368,6 +1369,7 @@ const steps = [
   { key: 4, label: "Images", icon: "bi bi-images" },
   { key: 5, label: "Attributes", icon: "bi bi-list-check" },
   { key: 6, label: "Variants", icon: "bi bi-box-seam" },
+  { key: 7, label: "Merk", icon: "bi bi-tag" },
 ];
 
 // Product form
