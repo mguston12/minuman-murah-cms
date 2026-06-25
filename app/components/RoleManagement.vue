@@ -374,7 +374,7 @@ const performDelete = async () => {
 
 .modal-title {
   font-weight: 600;
-  color: #111111;
+  color: #1E1E1E;
 }
 
 @media (max-width: 768px) {

@@ -33,7 +33,7 @@ useHead({
 
 <style>
 :root {
-  --app-text-black: #111111;
+  --app-text-black: #1E1E1E;
   --app-text-muted: #4f5b66;
   --app-light-surface: #f3f4f6;
   --app-light-border: #d3d7dd;

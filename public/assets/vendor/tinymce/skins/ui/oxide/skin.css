@@ -2713,7 +2713,7 @@ body.tox-dialog__disable-scroll {
   outline-offset: 2px;
 }
 .tox .tox-notification--error a:active {
-  color: #000000;
+  color: #1E1E1E;
   text-decoration: underline;
 }
 .tox .tox-notification--error svg {

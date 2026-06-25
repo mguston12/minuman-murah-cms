@@ -1245,6 +1245,19 @@ const saveSettings = async (category: string) => {
       categoryKeys = Object.keys(formData.value).filter(
         (key) => key.startsWith("midtrans_") || key.startsWith("xendit_"),
       );
+
+      categoryKeys.sort((a, b) => {
+        const aActive = a.endsWith("_is_active") && formData.value[a] === true;
+        const bActive = b.endsWith("_is_active") && formData.value[b] === true;
+        const aInactive = a.endsWith("_is_active") && formData.value[a] === false;
+        const bInactive = b.endsWith("_is_active") && formData.value[b] === false;
+
+        if (aActive && !bActive) return -1;
+        if (!aActive && bActive) return 1;
+        if (aInactive && !bInactive) return 1;
+        if (!aInactive && bInactive) return -1;
+        return 0;
+      });
     }
 
     // for APP tab also include image keys used by API

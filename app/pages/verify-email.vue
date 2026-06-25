@@ -159,7 +159,7 @@ onMounted(async () => {
 
 .logo {
   text-decoration: none;
-  color: #111111;
+  color: #1E1E1E;
   font-weight: 700;
   font-size: 26px;
 }
@@ -227,7 +227,7 @@ onMounted(async () => {
 }
 
 .credits a {
-  color: #111111;
+  color: #1E1E1E;
   text-decoration: none;
 }
 

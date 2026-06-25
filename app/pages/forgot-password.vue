@@ -168,7 +168,7 @@ const handleForgotPassword = async () => {
 
 .logo {
   text-decoration: none;
-  color: #111111;
+  color: #1E1E1E;
   font-weight: 700;
   font-size: 26px;
 }
@@ -223,7 +223,7 @@ const handleForgotPassword = async () => {
 }
 
 .text-primary {
-  color: #111111 !important;
+  color: #1E1E1E !important;
 }
 
 .fw-bold {
@@ -243,7 +243,7 @@ const handleForgotPassword = async () => {
 }
 
 .credits a {
-  color: #111111;
+  color: #1E1E1E;
   text-decoration: none;
 }
 

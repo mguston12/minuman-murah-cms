@@ -466,21 +466,21 @@ const handleRegister = async () => {
 
 <style scoped>
 .btn-auth-dark {
-  background-color: #111111 !important;
-  border-color: #111111;
+  background-color: #1E1E1E !important;
+  border-color: #1E1E1E;
   color: #ffffff;
 }
 
 .btn-auth-dark:hover,
 .btn-auth-dark:focus {
-  background-color: #000000;
-  border-color: #000000;
+  background-color: #1E1E1E;
+  border-color: #1E1E1E;
   color: #ffffff;
 }
 
 .btn-auth-dark:disabled {
-  background-color: #111111;
-  border-color: #111111;
+  background-color: #1E1E1E;
+  border-color: #1E1E1E;
   color: #ffffff;
   opacity: 0.7;
 }
@@ -498,7 +498,7 @@ const handleRegister = async () => {
 
 .logo {
   text-decoration: none;
-  color: #111111;
+  color: #1E1E1E;
   font-weight: 700;
   font-size: 26px;
 }
@@ -555,7 +555,7 @@ const handleRegister = async () => {
 }
 
 .text-primary {
-  color: #111111 !important;
+  color: #1E1E1E !important;
 }
 
 .fw-bold {
@@ -575,7 +575,7 @@ const handleRegister = async () => {
 }
 
 .credits a {
-  color: #111111;
+  color: #1E1E1E;
   text-decoration: none;
 }
 

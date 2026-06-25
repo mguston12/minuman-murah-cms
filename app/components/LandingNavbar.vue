@@ -117,7 +117,7 @@ const handleLogout = async () => {
 
 .navbar-brand {
   font-size: 20px;
-  color: #111111 !important;
+  color: #1E1E1E !important;
   transition: opacity 0.3s;
 }
 
@@ -133,7 +133,7 @@ const handleLogout = async () => {
 }
 
 .nav-link:hover {
-  color: #111111 !important;
+  color: #1E1E1E !important;
 }
 
 .btn-primary {
@@ -158,7 +158,7 @@ const handleLogout = async () => {
 
 .dropdown-item:hover {
   background-color: #f8f9fa;
-  color: #111111;
+  color: #1E1E1E;
 }
 
 .dropdown-item.text-danger:hover {
