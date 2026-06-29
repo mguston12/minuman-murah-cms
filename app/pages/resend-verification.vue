@@ -216,7 +216,7 @@ const handleResend = async () => {
 }
 
 .text-primary {
-  color: #1E1E1E; !important;
+  color: #1E1E1E !important;
 }
 
 .fw-bold {
