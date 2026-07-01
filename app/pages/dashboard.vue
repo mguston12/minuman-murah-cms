@@ -251,6 +251,24 @@ onMounted(() => {
   color: #5f6b7a !important;
 }
 
+.dashboard-page :deep(.page-link) {
+  background-color: #fff;
+  border: 1px solid #000;
+  color: #000;
+}
+
+.dashboard-page :deep(.page-item.active .page-link) {
+  background-color: #000;
+  border-color: #000;
+  color: #fff;
+}
+
+.dashboard-page :deep(.page-item.disabled .page-link) {
+  background-color: #fff;
+  border-color: #ccc;
+  color: #ccc;
+}
+
 .dashboard-page :deep(.badge) {
   font-weight: 600;
 }

@@ -187,6 +187,10 @@ const filters = ref({ search: '', status: '' });
 
 const filteredGroups = computed(() => {
   let list = groups.value;
+  const search = filters.value.search?.toLowerCase().trim();
+  if (search) {
+    list = list.filter((g) => g.title?.toLowerCase().includes(search));
+  }
   if (filters.value.status) {
     list = list.filter((g) => g.status === filters.value.status);
   }
