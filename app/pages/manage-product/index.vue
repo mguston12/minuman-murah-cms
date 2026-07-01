@@ -30,7 +30,7 @@
             <select
               v-model="filters.status"
               class="form-select form-select-sm"
-              @change="loadProducts(1)"
+              @change="applyFilters"
             >
               <option value="">All Status</option>
               <option value="PUBLISH">Published</option>
@@ -42,11 +42,11 @@
             <select
               v-model="filters.freeShipping"
               class="form-select form-select-sm"
-              @change="loadProducts(1)"
+              @change="applyFilters"
             >
-              <option value="">All Shipping</option>
-              <option value="ACTIVE">Free Shipping</option>
-              <option value="INACTIVE">No Free Shipping</option>
+              <option value="">Free Shipping</option>
+              <option value="ACTIVE">Active</option>
+              <option value="INACTIVE">Inactive</option>
             </select>
           </div>
         </div>
@@ -63,7 +63,7 @@
           <p class="mt-2 text-muted">Loading products...</p>
         </div>
 
-        <div v-else-if="products.length === 0" class="text-center py-5">
+        <div v-else-if="filteredProducts.length === 0" class="text-center py-5">
           <p class="text-muted">No products found. Create your first product!</p>
         </div>
 
@@ -82,7 +82,7 @@
               </tr>
             </thead>
             <tbody>
-              <tr v-for="(product, index) in products" :key="product.id">
+              <tr v-for="(product, index) in filteredProducts" :key="product.id">
                 <td>
                   <span class="badge bg-secondary">{{ getRowNumber(index) }}</span>
                 </td>
@@ -177,6 +177,9 @@
           <div class="d-flex flex-column flex-md-row justify-content-center justify-content-md-between align-items-center gap-2">
             <div class="text-muted text-center text-md-start small" style="font-size: 0.875rem;">
               Showing {{ pagination.from }} to {{ pagination.to }} of {{ pagination.total }} entries
+              <span v-if="filteredProducts.length !== products.length" class="ms-1">
+                ({{ filteredProducts.length }} filtered)
+              </span>
             </div>
             <nav aria-label="Page navigation">
               <ul class="pagination mb-0">
@@ -372,6 +375,19 @@ const toast = useToast()
 
 const products = ref<Product[]>([])
 const categoryProducts = ref<any[]>([])
+
+const filteredProducts = computed(() => {
+  let list = products.value
+  const status = filters.value.status
+  if (status) {
+    list = list.filter((p) => p.status === status)
+  }
+  const freeShipping = filters.value.freeShipping
+  if (freeShipping) {
+    list = list.filter((p) => (p.is_freeshiping || 'INACTIVE') === freeShipping)
+  }
+  return list
+})
 const categories = ref<any[]>([])
 const loadingProducts = ref(false)
 const loadingCategories = ref(false)
@@ -397,6 +413,7 @@ const selectedCategoryId = ref<number | string | null>(null)
 const formErrors = ref<Record<string, string[]>>({})
 
 const loadProducts = async (page: number = currentPage.value) => {
+  const requestId = ++loadRequestId
   loadingProducts.value = true
   currentPage.value = page
   try {
@@ -412,6 +429,7 @@ const loadProducts = async (page: number = currentPage.value) => {
         is_freeshiping: filters.value.freeShipping || undefined,
       }
     )
+    if (requestId !== loadRequestId) return
     if (error || !data?.success) {
       console.error('Failed to load products:', error)
       products.value = []
@@ -425,13 +443,16 @@ const loadProducts = async (page: number = currentPage.value) => {
         }
       }
     }
-    // Load category products for all products
+    if (requestId !== loadRequestId) return
     await loadCategoryProducts()
   } catch (err) {
+    if (requestId !== loadRequestId) return
     console.error('Error loading products:', err)
     products.value = []
   } finally {
-    loadingProducts.value = false
+    if (requestId === loadRequestId) {
+      loadingProducts.value = false
+    }
   }
 }
 
@@ -494,12 +515,18 @@ const availableCategoriesForProduct = computed(() => {
 })
 
 const searchTimer = ref<ReturnType<typeof setTimeout> | null>(null)
+let loadRequestId = 0
 
 const handleSearch = () => {
   if (searchTimer.value) clearTimeout(searchTimer.value)
   searchTimer.value = setTimeout(() => {
     loadProducts(1)
   }, 300)
+}
+
+const applyFilters = () => {
+  if (searchTimer.value) clearTimeout(searchTimer.value)
+  loadProducts(1)
 }
 
 const changePage = (page: number) => {
