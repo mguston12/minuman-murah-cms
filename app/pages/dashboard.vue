@@ -157,7 +157,7 @@
 
 <script setup lang="ts">
 import { useUserManagement } from "~/composables/useUserManagement";
-import type { Orders } from "~/types/order";
+import type { Order } from "~/types/order";
 
 definePageMeta({
   layout: "dashboard",
@@ -178,7 +178,7 @@ const dashboardStats = ref({
 });
 
 const recentUsers = ref<any[]>([]);
-const recentOrders = ref<Orders[]>([]);
+const recentOrders = ref<Order[]>([]);
 
 const formatNumber = (value: number | undefined) => {
   return (value ?? 0).toLocaleString("id-ID");
@@ -210,7 +210,8 @@ const loadDashboardData = async () => {
     // ORDERS
     const orderRes = await getOrders(1, 5);
     if (orderRes.data?.success) {
-      recentOrders.value = orderRes.data.data.orders ?? [];
+      const ordersData = orderRes.data.data;
+      recentOrders.value = Array.isArray(ordersData) ? ordersData : (ordersData.orders ?? []);
     }
   } catch (err) {
     console.error("Dashboard load error:", err);
