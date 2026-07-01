@@ -8,6 +8,30 @@
         <span class="me-2">+</span>Create New Merk
       </button>
     </div>
+    <!-- Filter Section -->
+    <div class="card mb-4">
+      <div class="card-body p-3">
+        <div class="row g-2">
+          <div class="col-md-4">
+            <input
+              v-model="filters.search"
+              type="text"
+              class="form-control form-control-sm"
+              placeholder="Search name or slug..."
+              @input="handleSearch"
+            />
+          </div>
+          <div class="col-md-3">
+            <select v-model="filters.status" class="form-select form-select-sm" @change="handleSearch">
+              <option value="">All Status</option>
+              <option value="ACTIVE">Active</option>
+              <option value="INACTIVE">Inactive</option>
+            </select>
+          </div>
+        </div>
+      </div>
+    </div>
+
     <section class="section">
       <div class="card">
         <div>
@@ -21,7 +45,7 @@
                 <p class="mt-2 text-muted">Loading brands...</p>
               </div>
 
-              <div v-else-if="brands.length === 0" class="text-center py-5">
+              <div v-else-if="filteredBrands.length === 0" class="text-center py-5">
                 <p class="text-muted">No brands found. Create your first brand!</p>
               </div>
 
@@ -39,7 +63,7 @@
                     </tr>
                   </thead>
                   <tbody>
-                    <tr v-for="(brand, index) in brands" :key="brand.id">
+                    <tr v-for="(brand, index) in filteredBrands" :key="brand.id">
                       <td>
                         <span class="badge bg-secondary">{{ index + 1 }}</span>
                       </td>
@@ -69,7 +93,8 @@
                             <i class="bi bi-pencil"></i>
                           </button>
                           <button type="button" class="btn btn-sm btn-outline-danger"
-                            @click="handleDeleteBrandClick(brand)" title="Delete">
+                            @click="handleDeleteBrandClick(brand)" title="Delete"
+                            :disabled="isLoading">
                             <i class="bi bi-trash"></i>
                           </button>
                         </div>
@@ -275,6 +300,27 @@ const toast = useToast();
 const isLoading = ref(false);
 const brands = ref<Brand[]>([]);
 const loadingBrands = ref(false);
+const filters = ref({ search: '', status: '' });
+
+const filteredBrands = computed(() => {
+  let list = brands.value;
+  const q = filters.value.search.toLowerCase().trim();
+  if (q) {
+    list = list.filter(
+      (brand) =>
+        brand.name.toLowerCase().includes(q) ||
+        brand.slug.toLowerCase().includes(q)
+    );
+  }
+  if (filters.value.status) {
+    list = list.filter((brand) => brand.status === filters.value.status);
+  }
+  return list;
+});
+
+const handleSearch = () => {
+  // ponytail: client-side filter, computed handles it
+};
 
 const brandToEdit = ref<Brand | null>(null);
 const brandToDelete = ref<Brand | null>(null);

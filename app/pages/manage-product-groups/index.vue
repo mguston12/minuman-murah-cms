@@ -10,6 +10,30 @@
       </NuxtLink>
     </div>
 
+    <!-- Filter Section -->
+    <div class="card mb-4">
+      <div class="card-body p-3">
+        <div class="row g-2">
+          <div class="col-md-4">
+            <input
+              v-model="filters.search"
+              type="text"
+              class="form-control form-control-sm"
+              placeholder="Search title..."
+              @input="handleSearch"
+            />
+          </div>
+          <div class="col-md-3">
+            <select v-model="filters.status" class="form-select form-select-sm" @change="handleSearch">
+              <option value="">All Status</option>
+              <option value="ACTIVE">Active</option>
+              <option value="INACTIVE">Inactive</option>
+            </select>
+          </div>
+        </div>
+      </div>
+    </div>
+
     <!-- Loading State -->
     <div v-if="loading" class="text-center py-5">
       <div class="spinner-border text-primary" role="status">
@@ -33,12 +57,12 @@
             </tr>
           </thead>
           <tbody>
-            <tr v-if="groups.length === 0">
+            <tr v-if="filteredGroups.length === 0">
               <td colspan="6" class="text-center py-5 text-muted">
                 No product groups found. Create your first group!
               </td>
             </tr>
-            <tr v-for="group in groups" :key="group.id">
+            <tr v-for="group in filteredGroups" :key="group.id">
               <td>
                 <img
                   v-if="group.image_url"
@@ -123,7 +147,7 @@
             class="page-item"
             :class="{ active: page === currentPage }"
           >
-            <button class="page-link" @click="fetchGroups(page)">
+            <button class="page-link action-btn-dark" @click="fetchGroups(page)">
               {{ page }}
             </button>
           </li>
@@ -159,11 +183,24 @@ const loading = ref(true);
 const deleting = ref<number | null>(null);
 const currentPage = ref(1);
 const totalPages = ref(1);
+const filters = ref({ search: '', status: '' });
+
+const filteredGroups = computed(() => {
+  let list = groups.value;
+  if (filters.value.status) {
+    list = list.filter((g) => g.status === filters.value.status);
+  }
+  return list;
+});
+
+const handleSearch = () => {
+  fetchGroups(1);
+};
 
 const fetchGroups = async (page = 1) => {
   loading.value = true;
 
-  const { data, error } = await getProductGroups(page);
+  const { data, error } = await getProductGroups(page, filters.value.search || undefined);
 
   if (error) {
     console.error("Failed to fetch product groups:", error);

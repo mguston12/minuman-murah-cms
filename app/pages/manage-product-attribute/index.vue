@@ -10,6 +10,30 @@
       </button>
     </div>
 
+    <!-- Filter Section -->
+    <div class="card mb-4">
+      <div class="card-body p-3">
+        <div class="row g-2">
+          <div class="col-md-4">
+            <input
+              v-model="filters.search"
+              type="text"
+              class="form-control form-control-sm"
+              placeholder="Search name or slug..."
+              @input="handleSearch"
+            />
+          </div>
+          <div class="col-md-3">
+            <select v-model="filters.status" class="form-select form-select-sm" @change="handleSearch">
+              <option value="">All Status</option>
+              <option value="ACTIVE">Active</option>
+              <option value="INACTIVE">Inactive</option>
+            </select>
+          </div>
+        </div>
+      </div>
+    </div>
+
     <!-- Loading State -->
     <div v-if="loading" class="text-center py-5">
       <div class="spinner-border text-primary" role="status">
@@ -33,12 +57,12 @@
             </tr>
           </thead>
           <tbody>
-            <tr v-if="attributes.length === 0">
+            <tr v-if="filteredAttributes.length === 0">
               <td colspan="7" class="text-center py-5 text-muted">
                 Attributes not found yet
               </td>
             </tr>
-            <tr v-for="(attr, i) in attributes" :key="i + 1">
+            <tr v-for="(attr, i) in filteredAttributes" :key="i + 1">
               <td>{{ i + 1 }}</td>
               <td>
                 <strong>{{ attr.name }}</strong>
@@ -258,6 +282,27 @@ const loading = ref(true);
 const saving = ref(false);
 const errorMessage = ref<string | null>(null);
 const deleting = ref<number | null>(null);
+const filters = ref({ search: '', status: '' });
+
+const filteredAttributes = computed(() => {
+  let list = attributes.value;
+  const q = filters.value.search.toLowerCase().trim();
+  if (q) {
+    list = list.filter(
+      (attr) =>
+        attr.name.toLowerCase().includes(q) ||
+        attr.slug.toLowerCase().includes(q)
+    );
+  }
+  if (filters.value.status) {
+    list = list.filter((attr) => attr.status === filters.value.status);
+  }
+  return list;
+});
+
+const handleSearch = () => {
+  // ponytail: client-side filter, computed handles it
+};
 
 const deleteId = ref<number | null>(null);
 

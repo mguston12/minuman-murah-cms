@@ -78,9 +78,13 @@ export const useProductGroupApi = () => {
     }
   };
 
-  const getProductGroups = async (page = 1) => {
+  const getProductGroups = async (page = 1, search?: string) => {
+    let url = `${baseURL}/product-groups?page=${page}`
+    if (search && search.trim()) {
+      url += `&search=${encodeURIComponent(search.trim())}`
+    }
     const result = await fetchWithHandling<ProductGroupsResponse>(
-      `${baseURL}/product-groups?page=${page}`,
+      url,
       { method: "GET" },
     );
 

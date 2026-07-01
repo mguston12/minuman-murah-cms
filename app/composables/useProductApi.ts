@@ -19,6 +19,8 @@ export const useProductApi = () => {
       minRating?: number
       minPrice?: number
       maxPrice?: number
+      status?: string
+      is_freeshiping?: string
     }
   ) => {
     try {
@@ -53,6 +55,12 @@ export const useProductApi = () => {
         }
         if (filters.maxPrice !== undefined && filters.maxPrice > 0) {
           params.max_price = filters.maxPrice
+        }
+        if (filters.status) {
+          params.status = filters.status
+        }
+        if (filters.is_freeshiping) {
+          params.is_freeshiping = filters.is_freeshiping
         }
       }
       

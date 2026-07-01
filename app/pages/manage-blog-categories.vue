@@ -63,6 +63,7 @@
                         class="btn btn-sm btn-outline-primary"
                         @click="handleEditClick(category)"
                         title="Edit"
+                        :disabled="loadingCategories"
                       >
                         <i class="bi bi-pencil"></i>
                       </button>
@@ -72,7 +73,7 @@
                         class="btn btn-sm btn-outline-danger"
                         @click="handleDeleteClick(category)"
                         title="Delete"
-                        :disabled="getBlogsCount(category) > 0"
+                        :disabled="loadingCategories || getBlogsCount(category) > 0"
                       >
                         <i class="bi bi-trash"></i>
                       </button>
@@ -138,8 +139,8 @@ const loadCategories = async () => {
     // Handle response structure
     if (Array.isArray(data.data)) {
       categories.value = data.data
-    } else if (data.data && 'categories' in data.data && Array.isArray(data.data.categories)) {
-      categories.value = data.data.categories
+    } else if (data.data && typeof data.data === 'object' && 'categories' in data.data && Array.isArray((data.data as any).categories)) {
+      categories.value = (data.data as any).categories
     }
   }
 

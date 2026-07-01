@@ -135,10 +135,11 @@
 
             <button
               class="btn btn-primary action-btn-dark"
-              :disabled="!selectedProductId"
+              :disabled="!selectedProductId || adding"
               @click="handleAddSelected"
             >
-              Tambah
+              <span v-if="adding" class="spinner-border spinner-border-sm me-1"></span>
+              {{ adding ? 'Menambah...' : 'Tambah' }}
             </button>
           </div>
         </div>
@@ -148,21 +149,33 @@
 </template>
 
 <script setup lang="ts">
+import type { ProductGroup } from "~/types/product-group";
+import type { Product } from "~/types/product";
+
 definePageMeta({
   middleware: "auth",
   layout: "dashboard",
 });
 
+interface SubGroupWithProducts {
+  id: number;
+  product_group_id: number;
+  title: string;
+  sort: number;
+  status: string;
+  products: Product[];
+}
+
 const route = useRoute();
-const groupId = route.params.id as string;
-const subGroupId = route.params.subGroupId as string;
+const groupId = Number(route.params.id);
+const subGroupId = Number(route.params.subGroupId);
 
 const { getProductGroup } = useProductGroupApi();
 const { getSubGroup, addProducts, removeProduct } = useProductSubGroupApi();
 const { getAllProducts } = useProductApi();
 
 const group = ref<ProductGroup | null>(null);
-const subGroup = ref<SubGroup | null>(null);
+const subGroup = ref<SubGroupWithProducts | null>(null);
 
 const products = ref<Product[]>([]);
 const allProducts = ref<Product[]>([]);
@@ -170,6 +183,7 @@ const allProducts = ref<Product[]>([]);
 const loading = ref(true);
 const loadingProducts = ref(false);
 const removing = ref<number | null>(null);
+const adding = ref(false);
 
 const showAddModal = ref(false);
 
@@ -240,15 +254,20 @@ const selectProduct = (product: any) => {
 
 // ================= ACTION =================
 const handleAddSelected = async () => {
-  if (!selectedProductId.value) return;
+  if (!selectedProductId.value || adding.value) return;
 
-  await addProducts(groupId, subGroupId, [selectedProductId.value]);
+  adding.value = true;
+  try {
+    await addProducts(groupId, subGroupId, [selectedProductId.value]);
 
-  selectedProductId.value = null;
-  search.value = "";
-  dropdownOpen.value = false;
+    selectedProductId.value = null;
+    search.value = "";
+    dropdownOpen.value = false;
 
-  await fetchData();
+    await fetchData();
+  } finally {
+    adding.value = false;
+  }
 };
 
 const handleRemove = async (productId: number) => {
@@ -265,19 +284,4 @@ const handleRemove = async (productId: number) => {
 onMounted(fetchData);
 </script>
 
-<style scoped>
-.card-header {
-  background-color: #f8fafc;
-}
 
-.bg-light {
-  background-color: #eef2f7 !important;
-}
-
-.text-muted.bg-light,
-.bg-light.text-muted,
-.bg-light .text-muted,
-.border.rounded.mt-1.bg-white .text-muted {
-  color: #4f5b66 !important;
-}
-</style>

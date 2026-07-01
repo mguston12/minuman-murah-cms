@@ -760,8 +760,10 @@
                               type="button"
                               class="btn btn-sm btn-outline-danger"
                               @click="removeVariant(index)"
+                              :disabled="deletingVariantId === variant.id"
                             >
-                              <i class="bi bi-trash"></i>
+                              <i v-if="deletingVariantId === variant.id" class="bi bi-hourglass-split"></i>
+                              <i v-else class="bi bi-trash"></i>
                             </button>
                           </div>
                         </td>
@@ -1361,6 +1363,7 @@ const toast = useToast();
 // Step management
 const currentStep = ref(1);
 const isLoading = ref(false);
+const deletingVariantId = ref<number | null>(null);
 
 const steps = [
   { key: 1, label: "Category", icon: "bi bi-tags" },
@@ -2295,7 +2298,9 @@ const removeVariant = async (index: number) => {
   const variant = variants.value[index];
   if (variant?.id) {
     if (!confirm("Are you sure you want to delete this variant?")) return;
+    deletingVariantId.value = variant.id;
     const { error } = await deleteProductVariant(variant.id);
+    deletingVariantId.value = null;
     if (error) {
       toast.error(error.message || "Failed to delete variant");
       return;
@@ -3022,7 +3027,7 @@ onMounted(async () => {
 
 <style scoped>
 .create-product-page {
-  color: #000;
+  color: var(--app-text-black);
 }
 
 .create-product-page :deep(.text-muted) {
@@ -3032,7 +3037,7 @@ onMounted(async () => {
 .nav-tabs .nav-link {
   border: none;
   border-bottom: 2px solid transparent;
-  color: #000;
+  color: var(--app-text-black);
   cursor: pointer;
 }
 
@@ -3042,8 +3047,8 @@ onMounted(async () => {
 }
 
 .nav-tabs .nav-link.active {
-  border-bottom-color: #000;
-  color: #000;
+  border-bottom-color: var(--app-action-dark-bg);
+  color: var(--app-text-black);
   font-weight: 500;
 }
 
@@ -3092,13 +3097,13 @@ onMounted(async () => {
 }
 
 .category-selection-list .list-group-item {
-  color: #000;
+  color: var(--app-text-black);
   border-color: #dee2e6;
 }
 
 .category-selection-list .list-group-item.active {
-  background: #000;
-  border-color: #000;
+  background: var(--app-action-dark-bg);
+  border-color: var(--app-action-dark-bg);
   color: #fff;
 }
 
@@ -3127,7 +3132,7 @@ onMounted(async () => {
 .category-selected-pill {
   padding: 0.2rem 0.45rem;
   border: 1px solid rgba(0, 0, 0, 0.2);
-  color: #000;
+  color: var(--app-text-black);
   background: rgba(0, 0, 0, 0.08);
 }
 
@@ -3190,20 +3195,6 @@ onMounted(async () => {
   background: #ffffff;
 }
 
-.btn-outline-secondary,
-.outline-dark-btn {
-  --bs-btn-color: #000;
-  --bs-btn-border-color: #000;
-  --bs-btn-hover-color: #000;
-  --bs-btn-hover-bg: rgba(0, 0, 0, 0.08);
-  --bs-btn-hover-border-color: #000;
-  --bs-btn-focus-shadow-rgb: 33, 37, 41;
-  --bs-btn-active-color: #000;
-  --bs-btn-active-bg: rgba(0, 0, 0, 0.12);
-  --bs-btn-active-border-color: #000;
-  --bs-btn-disabled-color: #4b4b4b;
-  --bs-btn-disabled-border-color: #4b4b4b;
-}
 
 .btn-outline-primary {
   --bs-btn-color: #b7791f;

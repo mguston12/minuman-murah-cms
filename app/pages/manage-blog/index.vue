@@ -106,8 +106,8 @@
                     <span v-else class="text-muted">-</span>
                   </td>
                   <td>
-                    <span :class="`badge ${(blog.status === 'published' || blog.status === 1 || blog.status === true) ? 'bg-success' : 'bg-warning'}`">
-                      {{ (blog.status === 'published' || blog.status === 1 || blog.status === true) ? 'Published' : 'Draft' }}
+                    <span :class="`badge ${(blog.status === 'published' || blog.status === 1) ? 'bg-success' : 'bg-warning'}`">
+                      {{ (blog.status === 'published' || blog.status === 1) ? 'Published' : 'Draft' }}
                     </span>
                   </td>
                   <td>{{ formatDate(blog.created_at) }}</td>
@@ -127,6 +127,7 @@
                         class="btn btn-sm btn-outline-danger"
                         @click="handleDeleteClick(blog)"
                         title="Delete"
+                        :disabled="loadingBlogs"
                       >
                         <i class="bi bi-trash"></i>
                       </button>
@@ -462,8 +463,8 @@ const loadBlogs = async (page: number = currentPage.value) => {
       if (data.data.pagination) {
         pagination.value = {
           ...data.data.pagination,
-          from: data.data.pagination.from || null,
-          to: data.data.pagination.to || null,
+          from: (data.data.pagination as any).from || null,
+          to: (data.data.pagination as any).to || null,
         }
       }
     }
@@ -482,8 +483,8 @@ const loadCategories = async () => {
     // Handle response structure
     if (Array.isArray(data.data)) {
       categories.value = data.data
-    } else if (data.data && 'categories' in data.data && Array.isArray(data.data.categories)) {
-      categories.value = data.data.categories
+    } else if (data.data && typeof data.data === 'object' && 'categories' in data.data && Array.isArray((data.data as any).categories)) {
+      categories.value = (data.data as any).categories
     }
   }
 

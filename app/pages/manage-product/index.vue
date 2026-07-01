@@ -13,6 +13,46 @@
       </NuxtLink>
     </div>
 
+    <!-- Filter Section -->
+    <div class="card mb-4">
+      <div class="card-body p-3">
+        <div class="row g-2">
+          <div class="col-md-6">
+            <input
+              v-model="filters.search"
+              type="text"
+              class="form-control form-control-sm"
+              placeholder="Search name or slug..."
+              @input="handleSearch"
+            />
+          </div>
+          <div class="col-md-3">
+            <select
+              v-model="filters.status"
+              class="form-select form-select-sm"
+              @change="loadProducts(1)"
+            >
+              <option value="">All Status</option>
+              <option value="PUBLISH">Published</option>
+              <option value="DRAFT">Draft</option>
+              <option value="INACTIVE">Inactive</option>
+            </select>
+          </div>
+          <div class="col-md-3">
+            <select
+              v-model="filters.freeShipping"
+              class="form-select form-select-sm"
+              @change="loadProducts(1)"
+            >
+              <option value="">All Shipping</option>
+              <option value="ACTIVE">Free Shipping</option>
+              <option value="INACTIVE">No Free Shipping</option>
+            </select>
+          </div>
+        </div>
+      </div>
+    </div>
+
     <!-- Products Table -->
     <div v-if="hasPermission('products.read')" class="card">
       <div class="card-body">
@@ -121,6 +161,7 @@
                       class="btn btn-sm btn-outline-danger"
                       @click="handleDeleteClick(product)"
                       title="Delete"
+                      :disabled="isLoading"
                     >
                       <i class="bi bi-trash"></i>
                     </button>
@@ -156,7 +197,7 @@
                 >
                   <a
                     v-if="page !== '...'"
-                    class="page-link"
+                    class="page-link action-btn-dark"
                     href="#"
                     @click.prevent="changePage(Number(page))"
                   >
@@ -166,7 +207,7 @@
                 </li>
                 <li class="page-item" :class="{ disabled: pagination.current_page === pagination.last_page }">
                   <a
-                    class="page-link"
+                    class="page-link action-btn-dark"
                     href="#"
                     @click.prevent="changePage(pagination.current_page + 1)"
                   >
@@ -345,6 +386,11 @@ const pagination = ref<{
   from: number | null
   to: number | null
 } | null>(null)
+const filters = ref({
+  search: '',
+  status: '',
+  freeShipping: '',
+})
 const productToDelete = ref<Product | null>(null)
 const productToAddCategory = ref<Product | null>(null)
 const selectedCategoryId = ref<number | string | null>(null)
@@ -354,7 +400,18 @@ const loadProducts = async (page: number = currentPage.value) => {
   loadingProducts.value = true
   currentPage.value = page
   try {
-    const { data, error } = await getProducts(page, perPage.value)
+    const { data, error } = await getProducts(
+      page,
+      perPage.value,
+      undefined,
+      'desc',
+      undefined,
+      filters.value.search || undefined,
+      {
+        status: filters.value.status || undefined,
+        is_freeshiping: filters.value.freeShipping || undefined,
+      }
+    )
     if (error || !data?.success) {
       console.error('Failed to load products:', error)
       products.value = []
@@ -435,6 +492,15 @@ const availableCategoriesForProduct = computed(() => {
   const assignedCategoryIds = getProductCategories(productToAddCategory.value.id).map(c => c.id)
   return categories.value.filter(cat => !assignedCategoryIds.includes(cat.id))
 })
+
+const searchTimer = ref<ReturnType<typeof setTimeout> | null>(null)
+
+const handleSearch = () => {
+  if (searchTimer.value) clearTimeout(searchTimer.value)
+  searchTimer.value = setTimeout(() => {
+    loadProducts(1)
+  }, 300)
+}
 
 const changePage = (page: number) => {
   if (page >= 1 && page <= (pagination.value?.last_page || 1)) {
@@ -590,6 +656,10 @@ const getRowNumber = (index: number) => {
 onMounted(async () => {
   await loadProducts()
   await loadCategories()
+})
+
+onUnmounted(() => {
+  if (searchTimer.value) clearTimeout(searchTimer.value)
 })
 </script>
 

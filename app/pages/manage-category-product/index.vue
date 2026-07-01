@@ -9,6 +9,7 @@
         v-if="hasPermission('products.create')"
         @click="openAddCategoryProductModal"
         class="btn btn-primary"
+        :disabled="isLoading"
       >
         <span class="me-2">+</span>Add Category
       </button>
@@ -76,6 +77,7 @@
                     v-if="hasPermission('products.update')"
                     class="btn btn-sm btn-outline-warning me-2"
                     @click="openEditCategoryModal(category)"
+                    :disabled="isLoading"
                   >
                     <i class="bi bi-pencil me-1"></i>Edit Category
                   </button>
@@ -84,6 +86,7 @@
                     v-if="hasPermission('products.delete')"
                     class="btn btn-sm btn-outline-danger"
                     @click="openDeleteCategoryModal(category)"
+                    :disabled="isLoading"
                   >
                     <i class="bi bi-trash me-1"></i>Delete
                   </button>

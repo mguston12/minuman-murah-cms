@@ -38,7 +38,7 @@
           <button
             @click="openAddProductModal"
             class="btn btn-primary btn-sm"
-            :disabled="loadingProducts || availableProducts.length === 0"
+            :disabled="isLoading || loadingProducts || availableProducts.length === 0"
           >
             <i class="bi bi-plus-circle me-1"></i>Add Product
           </button>
