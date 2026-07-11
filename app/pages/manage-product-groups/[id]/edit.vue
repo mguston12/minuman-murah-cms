@@ -46,6 +46,16 @@
               </div>
             </div>
 
+            <div class="col-12">
+              <label class="form-label">Description</label>
+              <textarea
+                v-model="form.description"
+                class="form-control"
+                rows="3"
+                placeholder="Deskripsi singkat product group"
+              ></textarea>
+            </div>
+
             <div class="col-md-6">
               <label class="form-label">
                 Status <span class="text-danger">*</span>
@@ -109,11 +119,12 @@ definePageMeta({
   layout: "dashboard",
 });
 
-import type { ProductGroupStatus } from "~/types";
+import type { ProductGroupStatus } from "~/types/product-group";
 
 interface ProductGroupEditForm {
   title: string;
   key: string;
+  description: string;
   status: ProductGroupStatus;
   sort: number;
   image?: File | null;
@@ -128,6 +139,7 @@ const groupId = Number(route.params.id);
 const form = ref<ProductGroupEditForm>({
   title: "",
   key: "",
+  description: "",
   status: "ACTIVE",
   sort: 0,
   image: null,
@@ -142,20 +154,23 @@ const loading = ref(true);
  * Fetch existing data
  */
 const fetchGroup = async () => {
-  const { data, error } = await getProductGroup(groupId);
+  try {
+    const { data, error } = await getProductGroup(groupId);
 
-  if (error) return;
+    if (error) return;
 
-  const group = data?.data;
-  if (!group) return;
+    const group = data?.data;
+    if (!group) return;
 
-  form.value.title = group.title;
-  form.value.key = group.key;
-  form.value.status = group.status;
-  form.value.sort = group.sort ?? 0;
-  imagePreview.value = group.image_url ?? null;
-
-  loading.value = false;
+    form.value.title = group.title;
+    form.value.key = group.key;
+    form.value.description = group.description ?? "";
+    form.value.status = group.status;
+    form.value.sort = group.sort ?? 0;
+    imagePreview.value = group.image_url ?? null;
+  } finally {
+    loading.value = false;
+  }
 };
 
 onMounted(fetchGroup);

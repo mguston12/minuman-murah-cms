@@ -129,6 +129,10 @@ export const useProductGroupApi = () => {
     formData.append("key", payload.key);
     formData.append("status", payload.status);
 
+    if (payload.description !== undefined && payload.description !== null) {
+      formData.append("description", payload.description);
+    }
+
     if (payload.sort !== undefined) {
       formData.append("sort", payload.sort.toString());
     }
@@ -162,6 +166,10 @@ export const useProductGroupApi = () => {
     formData.append("title", payload.title);
     formData.append("key", payload.key);
     formData.append("status", payload.status);
+
+    if (payload.description !== undefined && payload.description !== null) {
+      formData.append("description", payload.description);
+    }
 
     if (payload.sort !== undefined) {
       formData.append("sort", payload.sort.toString());

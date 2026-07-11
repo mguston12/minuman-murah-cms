@@ -47,6 +47,16 @@
               </div>
             </div>
 
+            <div class="col-12">
+              <label class="form-label">Description</label>
+              <textarea
+                v-model="form.description"
+                class="form-control"
+                rows="3"
+                placeholder="Deskripsi singkat product group"
+              ></textarea>
+            </div>
+
             <div class="col-md-6">
               <label class="form-label">
                 Status <span class="text-danger">*</span>
@@ -109,11 +119,12 @@ definePageMeta({
   layout: "dashboard",
 });
 
-import type { ProductGroupStatus } from "~/types";
+import type { ProductGroupStatus } from "~/types/product-group";
 
 interface ProductGroupCreateForm {
   title: string;
   key: string;
+  description: string;
   status: ProductGroupStatus;
   sort: number;
   image: File | null;
@@ -125,6 +136,7 @@ const { createProductGroup } = useProductGroupApi();
 const form = ref<ProductGroupCreateForm>({
   title: "",
   key: "",
+  description: "",
   status: "ACTIVE",
   sort: 0,
   image: null,

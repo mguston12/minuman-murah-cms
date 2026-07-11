@@ -14,6 +14,7 @@ export interface ProductGroup {
   id: number;
   key: string;
   title: string;
+  description?: string | null;
   image?: string | null;
   image_url?: string | null;
   sort: number;
@@ -46,6 +47,7 @@ export interface ProductGroupResponse {
 export interface ProductGroupCreatePayload {
   key: string;
   title: string;
+  description?: string | null;
   image?: File | null;
   sort?: number;
   status: ProductGroupStatus;
