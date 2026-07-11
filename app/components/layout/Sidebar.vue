@@ -68,8 +68,8 @@
           <span>Product Attribute</span>
         </NuxtLink>
       </li>
-      <!-- Vouchers (hidden) -->
-      <!-- <li v-if="hasPermission('vouchers.read')" class="nav-item">
+      <!-- Vouchers -->
+      <li v-if="hasPermission('vouchers.read')" class="nav-item">
         <NuxtLink
           to="/manage-voucher"
           class="nav-link"
@@ -78,7 +78,7 @@
           <i class="bi bi-ticket"></i>
           <span>Vouchers</span>
         </NuxtLink>
-      </li> -->
+      </li>
       <!-- Orders -->
       <li v-if="hasPermission('orders.read')" class="nav-item">
         <NuxtLink
