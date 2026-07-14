@@ -12,7 +12,7 @@
         </NuxtLink>
         <NuxtLink
           :to="`/manage-voucher/edit/${voucher?.id}`"
-          class="btn btn-primary"
+          class="btn btn-primary action-btn-dark"
           v-if="voucher"
         >
           <i class="bi bi-pencil me-2"></i>Edit Voucher

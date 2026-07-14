@@ -1,7 +1,7 @@
 <template>
   <div>
     <!-- Page Header -->
-    <div class="d-flex justify-content-between align-items-center mb-4">
+    <div class="d-flex justify-content-between align-items-center mb-4 ">
       <div>
         <h4 class="mb-0">Create New Voucher</h4>
         <p class="text-muted mb-0">Add a new voucher to your website</p>
@@ -290,10 +290,10 @@
               Cancel
             </NuxtLink>
 
-            <button type="submit" class="btn btn-primary" :disabled="loading">
+            <button type="submit" class="btn btn-primary action-btn-dark" :disabled="loading">
               <span
                 v-if="loading"
-                class="spinner-border spinner-border-sm me-2"
+                class="spinner-border spinner-border-sm me-2 "
                 role="status"
                 aria-hidden="true"
               ></span>

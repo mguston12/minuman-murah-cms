@@ -7,7 +7,7 @@
       <NuxtLink
         v-if="hasPermission('vouchers.create')"
         to="/manage-voucher/create"
-        class="btn btn-primary"
+        class="btn btn-primary action-btn-dark"
       >
         <span class="me-2">+</span>Create New Voucher
       </NuxtLink>
