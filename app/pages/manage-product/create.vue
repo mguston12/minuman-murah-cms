@@ -458,11 +458,9 @@
                   </button>
                 </div>
 
-                <div v-if="selectedAttributes.length === 0" class="text-muted small mb-3">
-                  Select attributes first.
-                </div>
 
-                <div v-else-if="!variants || variants.length === 0" class="text-center py-4">
+
+                <div v-if="!variants || variants.length === 0" class="text-center py-4">
                   <p class="text-muted mb-0">No variants yet</p>
                 </div>
 
