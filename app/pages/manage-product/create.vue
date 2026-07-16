@@ -1621,10 +1621,10 @@ const handleImageChange = ({ images }: { images: any }) => {
 };
 
 const handleAddVariantClick = async () => {
-  if (selectedAttributes.value.length === 0) {
-    toast.error("Please select attributes in Step 5 first");
-    return;
-  }
+  // if (selectedAttributes.value.length === 0) {
+  //   toast.error("Please select attributes in Step 5 first");
+  //   return;
+  // }
 
   editingVariantIndex.value = null;
   variantForm.value = {
