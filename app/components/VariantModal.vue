@@ -27,7 +27,6 @@
           ></button>
         </div>
         <div class="modal-body">
-          <!-- Tab Navigation -->
           <ul class="nav nav-tabs mb-4" role="tablist">
             <li class="nav-item" role="presentation">
               <button
@@ -67,15 +66,28 @@
             </li>
           </ul>
 
-          <!-- Tab Content -->
           <div class="tab-content">
-            <!-- Attributes Tab -->
             <div
               class="tab-pane fade show active"
               id="attributes-pane"
               role="tabpanel"
             >
               <div class="row g-3">
+                <div class="col-12 border-bottom pb-3 mb-2">
+                  <div class="form-check form-switch">
+                    <input
+                      class="form-check-input"
+                      type="checkbox"
+                      id="singleVariantToggle"
+                      v-model="isSingleVariant"
+                      :disabled="editingVariantIndex !== null"
+                    />
+                    <label class="form-check-label fw-bold" for="singleVariantToggle">
+                      Allow variant without attributes (single variant)
+                    </label>
+                  </div>
+                </div>
+
                 <div class="col-12">
                   <div
                     v-if="selectedAttributes.length === 0"
@@ -115,7 +127,8 @@
                                     ] === value.id,
                                   'is-disabled':
                                     editingVariantIndex !== null ||
-                                    value.status === 'INACTIVE',
+                                    value.status === 'INACTIVE' ||
+                                    isSingleVariant,
                                 }"
                               >
                                 <input
@@ -132,7 +145,8 @@
                                   @change="handleUpdateVariantName"
                                   :disabled="
                                     editingVariantIndex !== null ||
-                                    value.status === 'INACTIVE'
+                                    value.status === 'INACTIVE' ||
+                                    isSingleVariant
                                   "
                                   :title="
                                     value.status === 'INACTIVE'
@@ -146,7 +160,8 @@
                                   :class="{
                                     'text-muted':
                                       (editingVariantIndex !== null ||
-                                        value.status === 'INACTIVE') &&
+                                        value.status === 'INACTIVE' ||
+                                        isSingleVariant) &&
                                       localVariantForm.selectedAttributeValues[
                                         selectedAttr.attribute_id
                                       ] !== value.id,
@@ -155,7 +170,7 @@
                                         selectedAttr.attribute_id
                                       ] === value.id,
                                     'cursor-not-allowed':
-                                      value.status === 'INACTIVE',
+                                      value.status === 'INACTIVE' || isSingleVariant,
                                   }"
                                 >
                                   {{ value.value }}
@@ -183,7 +198,6 @@
                     </div>
                   </div>
 
-                  <!-- Variant Name Input -->
                   <div class="col-12 mt-3">
                     <label class="form-label fw-bold">
                       <i class="bi bi-pencil-square me-1"></i>
@@ -201,10 +215,8 @@
               </div>
             </div>
 
-            <!-- Details Tab -->
             <div class="tab-pane fade" id="details-pane" role="tabpanel">
               <div class="row g-3">
-                <!-- Variant Image Section -->
                 <div class="col-12">
                 </div>
                 <div class="col-12">
@@ -269,7 +281,6 @@
                   </small>
                 </div>
 
-                <!-- Product Details Section -->
                 <div class="col-12 mt-4">
                   <div class="border-bottom pb-2 mb-3">
                   </div>
@@ -350,7 +361,6 @@
                     <option value="INACTIVE">Inactive</option>
                   </select>
                 </div>
-                <!-- Weight fields (hidden but functional) -->
                 <div class="col-md-6" style="display: none;">
                   <label class="form-label"
                     >Weight ({{
@@ -379,12 +389,10 @@
               </div>
             </div>
 
-            <!-- Store Tab -->
             <div class="tab-pane fade" id="store-pane" role="tabpanel">
               <div class="row g-3">
                 <div class="col-12">
 
-                  <!-- Store Stock Form -->
                   <div
                     class="card mb-4"
                     :class="{ 'border-primary': localEditingStoreStockIndex !== null }"
@@ -475,7 +483,6 @@
                     </div>
                   </div>
 
-                  <!-- Stock Table -->
                   <div
                     v-if="sortedVariantStoreStocks.length > 0"
                     class="table-responsive stock-table-wrap"
@@ -555,7 +562,6 @@
           </div>
         </div>
         <div class="modal-footer flex-column align-items-stretch gap-2">
-          <!-- API error summary -->
           <div v-if="hasApiErrors" class="alert alert-danger mb-0 py-2 w-100">
             <div class="fw-semibold mb-1 d-flex align-items-center gap-1">
               <i class="bi bi-exclamation-triangle-fill"></i> Failed to save variant:
@@ -671,7 +677,6 @@ const emit = defineEmits<{
 const toast = useToast();
 const { getAllStores } = useStoreApi();
 
-// Local state
 const localVariantForm = ref({ ...props.variantForm });
 const localVariantStoreStocks = ref([...props.variantStoreStocks]);
 const localEditingStoreStockIndex = ref<number | null>(null);
@@ -681,7 +686,8 @@ const localStoreStockForm = ref({
   reserved_qty: 0,
 });
 
-// Inline validation errors
+const isSingleVariant = ref(false);
+
 const formErrors = ref<Record<string, string>>({});
 
 const hasApiErrors = computed(() => {
@@ -712,11 +718,101 @@ const loadingStores = ref(false);
 const savingVariant = ref(false);
 const variantImageInput = ref<HTMLInputElement | null>(null);
 
-// Watch for prop changes
+const savedSingleVariantName = ref<string | null>(null);
+const savedSingleVariantSku = ref<string | null>(null);
+
+const generateSKU = () => {
+  const productPrefix = props.productSlug
+    ? props.productSlug.replace(/[^a-zA-Z0-9]/g, "-").toUpperCase().substring(0, 6)
+    : "SKU";
+
+  const attrValueSlugs: string[] = [];
+
+  const sortedAttrs = [...props.selectedAttributes].sort(
+    (a, b) => a.attribute_id - b.attribute_id
+  );
+
+  sortedAttrs.forEach((selectedAttr) => {
+    const selectedValueId =
+      localVariantForm.value.selectedAttributeValues[selectedAttr.attribute_id];
+    if (selectedValueId) {
+      const value = getAttributeValuesList(selectedAttr.attribute_id).find(
+        (v) => v.id === selectedValueId,
+      );
+      if (value && value.slug) {
+        attrValueSlugs.push(value.slug.substring(0, 3).toUpperCase());
+      } else if (value) {
+        attrValueSlugs.push(value.value.substring(0, 3).toUpperCase());
+      }
+    }
+  });
+
+  if (attrValueSlugs.length === 0) {
+    const timestamp = Date.now().toString(36).toUpperCase();
+    return `${productPrefix}-${timestamp}`;
+  }
+
+  const attrSuffix = attrValueSlugs.join("-");
+  return `${productPrefix}-${attrSuffix}`;
+};
+
+watch(isSingleVariant, (val) => {
+  if (props.editingVariantIndex !== null) return;
+
+  if (val) {
+    if (savedSingleVariantName.value !== null) {
+      localVariantForm.value.variant_name = savedSingleVariantName.value;
+    } else {
+      localVariantForm.value.variant_name = "Default Variant";
+    }
+    if (savedSingleVariantSku.value !== null) {
+      localVariantForm.value.sku = savedSingleVariantSku.value;
+    } else {
+      localVariantForm.value.sku = generateSKU();
+    }
+
+    localVariantForm.value.selectedAttributeValues = {};
+    localVariantForm.value.attribute_value_ids = [];
+
+    emit("update:variantForm", { ...localVariantForm.value });
+  } else {
+    savedSingleVariantName.value = localVariantForm.value.variant_name;
+    savedSingleVariantSku.value = localVariantForm.value.sku;
+
+    const hasSelected = props.selectedAttributes.some(
+      (attr) => localVariantForm.value.selectedAttributeValues[attr.attribute_id]
+    );
+    if (hasSelected) {
+      handleUpdateVariantName();
+    }
+
+    emit("update:variantForm", { ...localVariantForm.value });
+  }
+});
+
 watch(
   () => props.variantForm,
-  (newForm) => { localVariantForm.value = { ...newForm }; },
-  { deep: true },
+  (newForm) => { 
+    localVariantForm.value = { ...newForm }; 
+    
+    if (props.editingVariantIndex !== null) {
+      isSingleVariant.value = (!newForm.attribute_value_ids || newForm.attribute_value_ids.length === 0);
+    } else {
+      if (props.selectedAttributes.length === 0) {
+        isSingleVariant.value = true;
+      }
+      
+      if (isSingleVariant.value) {
+        if (!localVariantForm.value.variant_name) {
+          localVariantForm.value.variant_name = "Default Variant";
+        }
+        if (!localVariantForm.value.sku) {
+          localVariantForm.value.sku = generateSKU();
+        }
+      }
+    }
+  },
+  { deep: true, immediate: true },
 );
 
 watch(
@@ -725,7 +821,6 @@ watch(
   { deep: true },
 );
 
-// Computed
 const totalVariantStock = computed(() =>
   localVariantStoreStocks.value.reduce((sum, s) => sum + (s.qty || 0), 0),
 );
@@ -804,10 +899,9 @@ const discountPercentage = computed(() => {
     ((localVariantForm.value.strike_price - localVariantForm.value.price) /
       localVariantForm.value.strike_price) *
     100;
-  return Math.round(discount * 100) / 100; // Round to 2 decimal places
+  return Math.round(discount * 100) / 100;
 });
 
-// Methods
 const getAttributeName = (attributeId: number) => {
   const attribute = props.availableAttributes.find(
     (attr) => attr.id === attributeId,
@@ -831,6 +925,8 @@ const getAttributeValuesList = (attributeId: number) => {
 };
 
 const handleUpdateVariantName = () => {
+  if (isSingleVariant.value) return;
+
   const variantNameParts: string[] = [];
   const selectedValueIds: number[] = [];
 
@@ -869,47 +965,6 @@ const handleUpdateVariantName = () => {
   emit("update:variantForm", { ...localVariantForm.value });
   emit("update-variant-name");
   emit("update-variant-sku");
-};
-
-const generateSKU = () => {
-  // Use product slug if available, otherwise use a default prefix
-  const productPrefix = props.productSlug
-    ? props.productSlug.replace(/[^a-zA-Z0-9]/g, "-").toUpperCase().substring(0, 6)
-    : "SKU";
-
-  // Get attribute value slugs to create unique SKU based on selected values
-  const attrValueSlugs: string[] = [];
-
-  // Sort selectedAttributes by attribute_id to ensure consistent ordering
-  const sortedAttrs = [...props.selectedAttributes].sort(
-    (a, b) => a.attribute_id - b.attribute_id
-  );
-
-  sortedAttrs.forEach((selectedAttr) => {
-    const selectedValueId =
-      localVariantForm.value.selectedAttributeValues[selectedAttr.attribute_id];
-    if (selectedValueId) {
-      const value = getAttributeValuesList(selectedAttr.attribute_id).find(
-        (v) => v.id === selectedValueId,
-      );
-      if (value && value.slug) {
-        attrValueSlugs.push(value.slug.substring(0, 3).toUpperCase());
-      } else if (value) {
-        // Fallback: use first 3 chars of value if no slug
-        attrValueSlugs.push(value.value.substring(0, 3).toUpperCase());
-      }
-    }
-  });
-
-  // If no attribute values, use timestamp-based suffix to ensure uniqueness
-  if (attrValueSlugs.length === 0) {
-    const timestamp = Date.now().toString(36).toUpperCase();
-    return `${productPrefix}-${timestamp}`;
-  }
-
-  // Combine product prefix with attribute value slugs (sorted)
-  const attrSuffix = attrValueSlugs.join("-");
-  return `${productPrefix}-${attrSuffix}`;
 };
 
 const handleLoadStores = async () => {
@@ -1088,7 +1143,7 @@ const handleSave = () => {
 
   let hasError = false;
 
-  if (selectedCount === 0) {
+  if (!isSingleVariant.value && selectedCount === 0) {
     formErrors.value.attributes = "Please select at least one attribute value.";
     hasError = true;
   }

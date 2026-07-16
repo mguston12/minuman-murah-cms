@@ -618,20 +618,12 @@
                       type="button"
                       class="btn btn-primary action-btn-dark"
                       @click="handleAddVariantClick"
-                      :disabled="selectedAttributes.length === 0"
                     >
                       <i class="bi bi-plus-circle me-2"></i>Add Variant
                     </button>
                   </div>
 
-                  <div
-                    v-if="selectedAttributes.length === 0"
-                    class="text-muted small mb-3"
-                  >
-                    Select attributes first.
-                  </div>
-
-                  <div v-else-if="loadingVariants" class="text-center py-3">
+                  <div v-if="loadingVariants" class="text-center py-3">
                     <div
                       class="spinner-border spinner-border-sm text-primary"
                       role="status"
@@ -1086,22 +1078,6 @@
       </div>
     </div>
 
-    <!-- Add/Edit Variant Modal -->
-    <VariantModal
-      :selected-attributes="selectedAttributes"
-      :variant-form="variantForm"
-      :variant-store-stocks="variantStoreStocks"
-      :editing-variant-index="editingVariantIndex"
-      :available-attributes="availableAttributes"
-      :product-slug="product?.slug"
-      :api-errors="variantApiErrors"
-      @save="handleSaveVariant"
-      @cancel="handleCancelVariant"
-      @update:variant-form="variantForm = $event"
-      @update:variant-store-stocks="variantStoreStocks = $event"
-      @update-variant-name="updateVariantName"
-    />
-
     <!-- Delete Image Modal -->
     <div
       id="deleteImageModal"
@@ -1291,6 +1267,7 @@
         </div>
       </div>
     </div>
+
     <!-- Edit Category Modal -->
     <div
       class="modal fade"
@@ -1347,6 +1324,7 @@
         </div>
       </div>
     </div>
+
     <!-- Delete Category Modal -->
     <div
       class="modal fade"
@@ -1379,6 +1357,7 @@
         </div>
       </div>
     </div>
+
     <!-- Add Brand Modal -->
     <div
       id="createBrandModal"
@@ -1389,7 +1368,6 @@
     >
       <div class="modal-dialog">
         <div class="modal-content">
-          <!-- Header -->
           <div class="modal-header">
             <h5 class="modal-title" id="addBrandModalLabel">
               Create New Brand
@@ -1402,11 +1380,8 @@
               aria-label="Close"
             ></button>
           </div>
-
-          <!-- Body -->
           <div class="modal-body">
             <form @submit.prevent="handleCreateBrand">
-              <!-- Brand Name -->
               <div class="mb-3">
                 <label class="form-label">
                   Brand Name <span class="text-danger">*</span>
@@ -1420,8 +1395,6 @@
                 />
                 <small class="text-muted">Name of the brand</small>
               </div>
-
-              <!-- Description -->
               <div class="mb-3">
                 <label class="form-label">Description</label>
                 <textarea
@@ -1435,8 +1408,6 @@
                   Brief description of the brand
                 </small>
               </div>
-
-              <!-- Actions -->
               <div class="d-flex gap-2">
                 <button
                   type="submit"
@@ -1451,7 +1422,6 @@
                   <i v-else class="bi bi-check-circle me-2"></i>
                   Create & Add
                 </button>
-
                 <button
                   type="button"
                   class="btn btn-secondary"
@@ -1462,8 +1432,6 @@
               </div>
             </form>
           </div>
-
-          <!-- Footer -->
           <div class="modal-footer">
             <button
               type="button"
@@ -1477,14 +1445,30 @@
         </div>
       </div>
     </div>
+
+    <!-- Variant Modal -->
+    <VariantModal
+      :selected-attributes="selectedAttributes"
+      :variant-form="variantForm"
+      :variant-store-stocks="variantStoreStocks"
+      :editing-variant-index="editingVariantIndex"
+      :available-attributes="availableAttributes"
+      :product-slug="product?.slug"
+      :api-errors="variantApiErrors"
+      @save="handleSaveVariant"
+      @cancel="handleCancelVariant"
+      @update:variant-form="variantForm = $event"
+      @update:variant-store-stocks="variantStoreStocks = $event"
+      @update-variant-name="updateVariantName"
+    />
   </div>
 </template>
 
 <script setup lang="ts">
 import type { Product, ProductCreatePayload } from "~/types/product";
-import {
-  generateSlug,
-} from "~/utils/helpers";
+import { generateSlug } from "~/utils/helpers";
+import ShopeeImageUpload from "~/components/ShopeeImageUpload.vue";
+import VariantModal from "~/components/VariantModal.vue";
 
 interface TaxonomyItem {
   id: number;
@@ -1500,9 +1484,6 @@ definePageMeta({
   middleware: "auth",
   layout: "dashboard",
 });
-
-// Register components
-import ShopeeImageUpload from "~/components/ShopeeImageUpload.vue";
 
 const route = useRoute();
 const router = useRouter();
@@ -1542,7 +1523,6 @@ const {
 const { getAllStores } = useStoreApi();
 const toast = useToast();
 
-// Step management
 const currentStep = ref(1);
 const isLoading = ref(false);
 const loadingProduct = ref(false);
@@ -1562,10 +1542,8 @@ const steps = [
   { key: 7, label: "Merk", icon: "bi bi-tag" },
 ];
 
-// Product data
 const product = ref<Product | null>(null);
 
-// Product form
 const productForm = ref<ProductCreatePayload>({
   name: "",
   slug: "",
@@ -1597,7 +1575,6 @@ const productForm = ref<ProductCreatePayload>({
 
 const productFormErrors = ref<Record<string, string[]>>({});
 
-// Images
 const existingImages = ref<
   Array<{
     id: number;
@@ -1624,7 +1601,6 @@ const imageToDelete = ref<{
   order_number: number;
 } | null>(null);
 
-// Combine existing images with pending images for the ShopeeImageUpload component
 const existingImagesWithPending = computed(() => {
   const convertedExisting = existingImages.value.map((img) => ({
     ...img,
@@ -1702,7 +1678,6 @@ const getPendingUploads = () => {
   return uploads;
 };
 
-// Variants
 const variants = ref<
   Array<{
     id?: number;
@@ -1755,7 +1730,7 @@ const savingVariant = ref(false);
 const variantApiErrors = ref<Record<string, string[]>>({});
 
 const variantForm = ref({
-  selectedAttributeValues: {} as Record<number, number>, // attribute_id -> attribute_value_id
+  selectedAttributeValues: {} as Record<number, number>,
   attribute_value_ids: [] as number[],
   variant_name: "",
   sku: "",
@@ -1769,7 +1744,6 @@ const variantForm = ref({
   type_weight: "GRAM" as "GRAM" | "KG",
 });
 
-// Store Stock Management
 const variantStoreStocks = ref<
   Array<{
     id?: number;
@@ -1784,7 +1758,6 @@ const variantStoreStocks = ref<
   }>
 >([]);
 
-// Store Stock Management (still needed for backend API calls in edit page)
 const stores = ref<
   Array<{
     id: number;
@@ -1801,7 +1774,6 @@ const storeStockForm = ref({
 const editingStoreStockIndex = ref<number | null>(null);
 const savingStoreStock = ref(false);
 
-// Attributes
 const availableAttributes = ref<
   Array<{
     id: number;
@@ -1839,7 +1811,6 @@ const newAttributeValueForm = ref({
   sort: 0,
 });
 
-// Categories
 const availablePrimaryCategories = ref<TaxonomyItem[]>([]);
 const availableSubcategories = ref<TaxonomyItem[]>([]);
 const selectedPrimaryCategoryId = ref<number | null>(null);
@@ -1854,7 +1825,7 @@ const newCategoryForm = ref({
   taxonomy_name: "",
   taxonomy_slug: "",
   taxonomy_description: "",
-  taxonomy_type: 2, // Default to type 2 (category)
+  taxonomy_type: 2,
   taxonomy_status: "ACTIVE" as "ACTIVE" | "INACTIVE",
 });
 
@@ -1869,7 +1840,6 @@ const newBrand = ref({
   description: "",
 });
 
-// Load product data
 const loadProduct = async () => {
   loadingProduct.value = true;
   productRelationSynced.value = false;
@@ -1896,7 +1866,6 @@ const loadProduct = async () => {
       selectedBrandIds.value =
         product.value.brands?.map((brand: any) => Number(brand.id)) || [];
 
-      // Populate form
       productForm.value = {
         name: product.value.name || "",
         slug: product.value.slug || "",
@@ -1934,7 +1903,6 @@ const loadProduct = async () => {
   }
 };
 
-// Load images
 const loadImages = async () => {
   if (!product.value) return;
   loadingImages.value = true;
@@ -1966,7 +1934,6 @@ const loadImages = async () => {
   }
 };
 
-// Load variants
 const loadVariants = async () => {
   if (!product.value) return;
   loadingVariants.value = true;
@@ -1983,7 +1950,6 @@ const loadVariants = async () => {
           : [];
 
       variants.value = variantsArray.map((variant: any) => {
-        // Extract attribute_value_ids from options array if attribute_value_ids is not directly available
         let attributeValueIds: number[] = variant.attribute_value_ids || [];
         if (
           attributeValueIds.length === 0 &&
@@ -1995,7 +1961,6 @@ const loadVariants = async () => {
             .filter((id: any) => id !== null && id !== undefined);
         }
 
-        // Get store stocks from variant - check multiple possible property names
         const storeStocks =
           variant.stock_relations ||
           variant.stockRelations ||
@@ -2005,7 +1970,7 @@ const loadVariants = async () => {
         return {
           id: variant.id,
           attribute_value_ids: attributeValueIds,
-          options: variant.options || [], // Keep options for reference
+          options: variant.options || [],
           variant_name: variant.variant_name || undefined,
           sku: variant.sku || undefined,
           image_path: variant.image_path || null,
@@ -2034,7 +1999,6 @@ const loadVariants = async () => {
   }
 };
 
-// Load product categories
 const loadProductCategories = async () => {
   if (!product.value) return;
   loadingCategories.value = true;
@@ -2057,7 +2021,6 @@ const loadProductCategories = async () => {
   }
 };
 
-// Load available categories
 const loadAvailableCategories = async () => {
   loadingCategories.value = true;
   try {
@@ -2087,7 +2050,6 @@ const loadAvailableCategories = async () => {
   }
 };
 
-// Brands
 const loadBrands = async () => {
   loadingBrands.value = true;
   try {
@@ -2104,7 +2066,6 @@ const loadBrands = async () => {
   }
 };
 
-// Attributes functions
 const loadAvailableAttributes = async () => {
   loadingAttributes.value = true;
   try {
@@ -2178,8 +2139,6 @@ const getAttributeValuesList = (attributeId: number) => {
 
   const allValues = attribute.attribute_values || [];
 
-  // Show all values for all contexts in edit mode.
-  // No filtering - user can select any available value
   return allValues;
 };
 
@@ -2204,7 +2163,6 @@ const handleAddAttributeClick = () => {
   attributeModalTab.value = "select";
   resetNewAttributeForm();
 
-  // Open modal
   nextTick(() => {
     const modalElement = document.getElementById("addAttributeModal");
     if (modalElement) {
@@ -2263,7 +2221,7 @@ const handleCreateAttribute = async () => {
     const { data, error } = await createAttribute({
       name: newAttributeForm.value.name.trim(),
       sort: newAttributeForm.value.sort || 0,
-      status: "ACTIVE", // Always ACTIVE for new attributes
+      status: "ACTIVE",
     });
 
     if (error) {
@@ -2272,14 +2230,11 @@ const handleCreateAttribute = async () => {
     }
 
     if (data?.success && data.data) {
-      // Reload attributes to get the new one
       await loadAvailableAttributes();
 
-      // Automatically select and save the newly created attribute to product
       const newAttributeId = data.data.id;
       await selectAttribute(newAttributeId);
 
-      // Reset form
       resetNewAttributeForm();
     }
   } catch (err) {
@@ -2298,7 +2253,6 @@ const handleAddAttributeValueClick = async (attributeId: number) => {
   addingValueToAttributeId.value = attributeId;
   resetNewAttributeValueForm();
 
-  // Open modal
   await nextTick();
   await new Promise((resolve) => setTimeout(resolve, 50));
 
@@ -2353,7 +2307,7 @@ const handleCreateAttributeValue = async () => {
       attribute_id: addingValueToAttributeId.value,
       value: newAttributeValueForm.value.value.trim(),
       sort: newAttributeValueForm.value.sort || 0,
-      status: "ACTIVE", // Always ACTIVE for new values
+      status: "ACTIVE",
     });
 
     if (error) {
@@ -2365,17 +2319,14 @@ const handleCreateAttributeValue = async () => {
       const newValue = data.data;
       const newValueId = newValue.id;
 
-      // Reload attributes to get the new value (only ACTIVE values will appear)
       await loadAvailableAttributes();
 
-      // Auto-select the newly created value (always ACTIVE)
       const selectedAttr = selectedAttributes.value.find(
         (sa) => sa.attribute_id === addingValueToAttributeId.value,
       );
       if (selectedAttr && !selectedAttr.values.includes(newValueId)) {
         selectedAttr.values.push(newValueId);
 
-        // Save updated attributes to database immediately
         const { data: saveData, error: saveError } =
           await attachProductAttributes(
             product.value.id,
@@ -2386,7 +2337,6 @@ const handleCreateAttributeValue = async () => {
           toast.error(
             saveError.message || "Failed to save attribute value to product",
           );
-          // Rollback: remove the value from local state
           selectedAttr.values = selectedAttr.values.filter(
             (v) => v !== newValueId,
           );
@@ -2394,7 +2344,6 @@ const handleCreateAttributeValue = async () => {
         }
 
         if (saveData?.success) {
-          // Reload product attributes from database to ensure sync
           await loadProductAttributes();
           toast.success("Attribute value created and added successfully");
         }
@@ -2402,7 +2351,6 @@ const handleCreateAttributeValue = async () => {
         toast.error("Attribute not found in selected attributes");
       }
 
-      // Close modal
       const modalElement = document.getElementById("addAttributeValueModal");
       if (modalElement) {
         const modal = (window as any).bootstrap.Modal.getInstance(modalElement);
@@ -2419,7 +2367,6 @@ const handleCreateAttributeValue = async () => {
   }
 };
 
-// Step navigation
 const hasCategorySelection = computed(() => {
   return !!(selectedPrimaryCategoryId.value && selectedSubcategoryId.value);
 });
@@ -2528,7 +2475,6 @@ const handleSetFeatured = async (imageId: number) => {
     }
 
     toast.success("Featured image berhasil diatur");
-    // Reload images to reflect changes
     await loadImages();
   } catch (err) {
     console.error("Error setting featured image:", err);
@@ -2632,13 +2578,7 @@ const handleImageError = (event: Event) => {
   img.src = "/assets/img/products/placeholder.png";
 };
 
-// Variant handling
 const handleAddVariantClick = async () => {
-  if (selectedAttributes.value.length === 0) {
-    toast.error("Please select attributes in Step 5 first");
-    return;
-  }
-
   editingVariantIndex.value = null;
   variantForm.value = {
     selectedAttributeValues: {},
@@ -2685,11 +2625,9 @@ const handleAddVariantClick = async () => {
 };
 
 const updateVariantName = () => {
-  // Generate variant name from selected attribute values (only selected ones)
   const variantNameParts: string[] = [];
   const selectedValueIds: number[] = [];
 
-  // Get values from variant being edited (if any) to include in validation
   const currentEditingVariant =
     editingVariantIndex.value !== null
       ? variants.value[editingVariantIndex.value]
@@ -2700,8 +2638,6 @@ const updateVariantName = () => {
     const selectedValueId =
       variantForm.value.selectedAttributeValues[selectedAttr.attribute_id];
     if (selectedValueId) {
-      // Validate that the selected value is in the allowed list from the attributes step
-      // OR it's from the variant being edited (to allow editing existing variants)
       const isInStep3Values = selectedAttr.values.includes(selectedValueId);
       const isFromEditingVariant =
         editingVariantValueIds.includes(selectedValueId);
@@ -2716,8 +2652,6 @@ const updateVariantName = () => {
           variantNameParts.push(`${attrName}: ${value.value}`);
         }
       } else {
-        // If value is not in allowed list and not from editing variant, clear it
-        // But only if we're not editing (to prevent clearing during edit)
         if (editingVariantIndex.value === null) {
           delete variantForm.value.selectedAttributeValues[
             selectedAttr.attribute_id
@@ -2727,7 +2661,6 @@ const updateVariantName = () => {
     }
   });
 
-  // If no values selected, use default name
   if (variantNameParts.length === 0) {
     variantForm.value.variant_name = "Default Variant";
   } else {
@@ -2741,15 +2674,12 @@ const updateVariantName = () => {
 };
 
 const generateSKU = () => {
-  // Use product slug if available, otherwise use a default prefix
   const productPrefix = product.value?.slug
     ? product.value.slug.replace(/[^a-zA-Z0-9]/g, "-").toUpperCase().substring(0, 6)
     : "SKU";
 
-  // Get attribute value slugs to create unique SKU based on selected values
   const attrValueSlugs: string[] = [];
 
-  // Sort selectedAttributes by attribute_id to ensure consistent ordering
   const sortedAttrs = [...selectedAttributes.value].sort(
     (a, b) => a.attribute_id - b.attribute_id
   );
@@ -2764,23 +2694,19 @@ const generateSKU = () => {
       if (value && value.slug) {
         attrValueSlugs.push(value.slug.substring(0, 3).toUpperCase());
       } else if (value) {
-        // Fallback: use first 3 chars of value if no slug
         attrValueSlugs.push(value.value.substring(0, 3).toUpperCase());
       }
     }
   });
 
-  // If no attribute values, use timestamp-based suffix to ensure uniqueness
   if (attrValueSlugs.length === 0) {
     const timestamp = Date.now().toString(36).toUpperCase();
     return `${productPrefix}-${timestamp}`;
   }
 
-  // Combine product prefix with attribute value slugs
   const attrSuffix = attrValueSlugs.join("-");
   const baseSku = `${productPrefix}-${attrSuffix}`;
 
-  // Ensure uniqueness against existing variants (skip the one being edited)
   const existingSKUs = new Set(
     variants.value
       .filter((_, i) => i !== editingVariantIndex.value)
@@ -2796,75 +2722,78 @@ const generateSKU = () => {
 const handleSaveVariant = async (variantData: any) => {
   if (!product.value) return;
 
-  // Use the variant data from component
   variantForm.value = {
     ...variantForm.value,
     ...variantData,
   };
   variantStoreStocks.value = variantData.store_stocks || [];
 
-  // Continue with existing saveVariant logic
   await saveVariant();
 };
 
 const saveVariant = async () => {
   if (!product.value) return;
 
-  // Validate that at least one attribute value is selected
   const selectedCount = Object.keys(
     variantForm.value.selectedAttributeValues,
   ).filter(
     (attrId) => variantForm.value.selectedAttributeValues[Number(attrId)],
   ).length;
 
-  if (selectedCount === 0) {
-    toast.error("Please select at least one attribute value");
-    savingVariant.value = false;
-    return;
+  // If no attributes are selected, it's a single variant
+  const isSingleVariant = selectedCount === 0;
+
+  if (isSingleVariant) {
+    // Check if a single variant already exists
+    const hasSingleVariant = variants.value.some(v => (v.attribute_value_ids || []).length === 0);
+    if (hasSingleVariant && editingVariantIndex.value === null) {
+      toast.error("A default variant already exists");
+      savingVariant.value = false;
+      return;
+    }
+  } else {
+    // Check duplicates for attribute-based variants
+    const newAttributeValueIds = [...variantForm.value.attribute_value_ids].sort(
+      (a, b) => a - b,
+    );
+
+    const isDuplicate = variants.value.some((v, index) => {
+      if (
+        editingVariantIndex.value !== null &&
+        index === editingVariantIndex.value
+      ) {
+        return false;
+      }
+      const existingIds = [...(v.attribute_value_ids || [])].sort(
+        (a, b) => a - b,
+      );
+      return (
+        existingIds.length === newAttributeValueIds.length &&
+        existingIds.every((id, idx) => id === newAttributeValueIds[idx])
+      );
+    });
+
+    if (isDuplicate) {
+      toast.error("A variant with this combination already exists");
+      savingVariant.value = false;
+      return;
+    }
   }
 
-  // Validate required fields
   if (!variantForm.value.price || variantForm.value.price <= 0) {
     toast.error("Price is required and must be greater than 0");
     savingVariant.value = false;
     return;
   }
 
-  // Check for duplicate variant (same attribute_value_ids combination)
-  const newAttributeValueIds = [...variantForm.value.attribute_value_ids].sort(
-    (a, b) => a - b,
-  );
-  const isDuplicate = variants.value.some((v, index) => {
-    if (
-      editingVariantIndex.value !== null &&
-      index === editingVariantIndex.value
-    ) {
-      return false; // Skip current variant being edited
-    }
-    const existingIds = [...(v.attribute_value_ids || [])].sort(
-      (a, b) => a - b,
-    );
-    return (
-      existingIds.length === newAttributeValueIds.length &&
-      existingIds.every((id, idx) => id === newAttributeValueIds[idx])
-    );
-  });
-
-  if (isDuplicate) {
-    toast.error("A variant with this combination already exists");
-    return;
-  }
-
   savingVariant.value = true;
 
-  // Helper function to handle string fields
   const getStringValue = (value: string | undefined | null): string | null => {
     if (!value) return null;
     const trimmed = value.trim();
     return trimmed.length > 0 ? trimmed : null;
   };
 
-  // Upload variant image if new file is selected
   let variantImagePath = variantForm.value.image_path || null;
   if (variantForm.value.image_file && product.value) {
     try {
@@ -2897,8 +2826,8 @@ const saveVariant = async () => {
     type_weight?: "GRAM" | "KG";
   } = {
     fk_product_id: product.value.id,
-    variant_name: getStringValue(variantForm.value.variant_name) || null,
-    attribute_value_ids: variantForm.value.attribute_value_ids || [],
+    variant_name: getStringValue(variantForm.value.variant_name) || (isSingleVariant ? 'Default Variant' : null),
+    attribute_value_ids: isSingleVariant ? [] : (variantForm.value.attribute_value_ids || []),
     sku: getStringValue(variantForm.value.sku),
     image_path: variantImagePath,
     price: variantForm.value.price || 0,
@@ -2910,7 +2839,6 @@ const saveVariant = async () => {
 
   try {
     if (editingVariantIndex.value !== null) {
-      // Update existing variant
       const variant = variants.value[editingVariantIndex.value];
       if (variant && variant.id) {
         const { data, error } = await updateProductVariant(
@@ -2932,7 +2860,6 @@ const saveVariant = async () => {
         }
         variantApiErrors.value = {};
 
-        // Save store stocks
         if (variantStoreStocks.value.length > 0) {
           for (const storeStock of variantStoreStocks.value) {
             try {
@@ -2957,7 +2884,6 @@ const saveVariant = async () => {
         toast.error("Variant ID not found");
       }
     } else {
-      // Create new variant
       const { data, error } = await createProductVariant(variantData);
       if (error) {
         variantApiErrors.value = (error as any).errors ?? {};
@@ -2976,7 +2902,6 @@ const saveVariant = async () => {
 
       const newVariantId = data?.data?.variant?.id ?? data?.data?.id;
       if (newVariantId) {
-        // Save store stocks
         if (variantStoreStocks.value.length > 0) {
           for (const storeStock of variantStoreStocks.value) {
             try {
@@ -2994,8 +2919,6 @@ const saveVariant = async () => {
           }
         }
 
-        // Reload variants from backend to ensure we have the latest data
-        // This ensures we get complete data including store_stocks and image_path
         await loadVariants();
 
         toast.success("Variant created successfully");
@@ -3004,7 +2927,6 @@ const saveVariant = async () => {
       }
     }
 
-    // Close modal
     const modalElement = document.getElementById("variantModal");
     if (
       modalElement &&
@@ -3023,6 +2945,7 @@ const saveVariant = async () => {
     savingVariant.value = false;
   }
 };
+
 
 const editVariant = async (index: number) => {
   if (variants.value && variants.value[index]) {
@@ -3051,11 +2974,8 @@ const editVariant = async (index: number) => {
       variantStoreStocks.value = [];
     }
 
-    // Reconstruct selectedAttributeValues from variant options or attribute_value_ids
-    // Use options array if available (more reliable as it has attribute_id mapping)
     const selectedAttributeValues: Record<number, number> = {};
 
-    // If variant has options array, use it directly (more reliable)
     if (
       variant.options &&
       Array.isArray(variant.options) &&
@@ -3063,7 +2983,6 @@ const editVariant = async (index: number) => {
     ) {
       variant.options.forEach((opt: any) => {
         if (opt.attribute_id && opt.attribute_value_id) {
-          // Ensure attribute is in selectedAttributes
           let selectedAttr = selectedAttributes.value.find(
             (sa) => sa.attribute_id === opt.attribute_id,
           );
@@ -3074,18 +2993,15 @@ const editVariant = async (index: number) => {
               values: [opt.attribute_value_id],
             });
           } else {
-            // Add value to selectedAttr.values if not already there
             if (!selectedAttr.values.includes(opt.attribute_value_id)) {
               selectedAttr.values.push(opt.attribute_value_id);
             }
           }
 
-          // Set the selected value for this attribute
           selectedAttributeValues[opt.attribute_id] = opt.attribute_value_id;
         }
       });
     } else {
-      // Fallback: use attribute_value_ids and find attributes by searching availableAttributes
       variant.attribute_value_ids?.forEach((valueId) => {
         availableAttributes.value.forEach((attr) => {
           const value = attr.attribute_values?.find((v) => v.id === valueId);
@@ -3125,11 +3041,9 @@ const editVariant = async (index: number) => {
       type_weight: variant.type_weight || "GRAM",
     };
 
-    // Update variant name and attribute_value_ids after form is populated
     await nextTick();
     updateVariantName();
 
-    // Open modal for editing
     await nextTick();
     await new Promise((resolve) => setTimeout(resolve, 50));
 
@@ -3157,7 +3071,6 @@ const handleDeleteVariant = async (
   index: number,
 ) => {
   if (!variantId) {
-    // Remove local variant
     variants.value.splice(index, 1);
     return;
   }
@@ -3200,7 +3113,6 @@ const handleCancelVariant = () => {
   variantStoreStocks.value = [];
 };
 
-// Category handling
 const syncSelectedCategoriesFromIds = (categoryIds: number[]) => {
   const ids = categoryIds.map((id) => Number(id)).filter(Boolean);
   const primaryCategory =
@@ -3238,9 +3150,8 @@ const syncSelectedCategoriesFromIds = (categoryIds: number[]) => {
       : null;
 };
 
-// Store Stock Management Functions
 const loadStores = async () => {
-  if (stores.value.length > 0) return; // Already loaded
+  if (stores.value.length > 0) return;
 
   loadingStores.value = true;
   try {
@@ -3274,7 +3185,6 @@ const editStoreStock = async (index: number) => {
     reserved_qty: storeStock.reserved_qty || 0,
   };
 
-  // Scroll to form
   await nextTick();
   const formElement = document.querySelector(".card.border-primary");
   if (formElement) {
@@ -3286,7 +3196,6 @@ const deleteStoreStock = async (index: number) => {
   const storeStock = variantStoreStocks.value[index];
   if (!storeStock) return;
 
-  // If variant has id and store stock has id, delete from backend
   if (
     editingVariantIndex.value !== null &&
     variants.value[editingVariantIndex.value]?.id &&
@@ -3305,8 +3214,6 @@ const deleteStoreStock = async (index: number) => {
         return;
       }
 
-      // Reload store stocks from API after delete
-      // Add small delay to ensure backend has processed the delete
       await new Promise((resolve) => setTimeout(resolve, 100));
 
       try {
@@ -3319,11 +3226,9 @@ const deleteStoreStock = async (index: number) => {
         ) {
           const freshStocks = stocksData.data.map(mapStoreStock);
 
-          // Replace entire array to trigger Vue reactivity
           variantStoreStocks.value.length = 0;
           variantStoreStocks.value.push(...freshStocks);
 
-          // Update variants.value to keep it in sync
           if (
             editingVariantIndex.value !== null &&
             variants.value[editingVariantIndex.value]
@@ -3339,10 +3244,8 @@ const deleteStoreStock = async (index: number) => {
 
           await nextTick();
         } else {
-          // Fallback: remove from local state
           variantStoreStocks.value.splice(index, 1);
 
-          // Update variants.value to keep it in sync
           if (
             editingVariantIndex.value !== null &&
             variants.value[editingVariantIndex.value]
@@ -3359,7 +3262,6 @@ const deleteStoreStock = async (index: number) => {
         }
       } catch (reloadErr) {
         console.error("Error reloading store stocks after delete:", reloadErr);
-        // Fallback: remove from local state
         variantStoreStocks.value.splice(index, 1);
       }
 
@@ -3370,7 +3272,6 @@ const deleteStoreStock = async (index: number) => {
       return;
     }
   } else {
-    // New variant (not saved yet), just remove from local state
     variantStoreStocks.value.splice(index, 1);
   }
 };
@@ -3391,7 +3292,6 @@ const saveStoreStock = async () => {
     return;
   }
 
-  // Check if store already exists (when editing, skip current index)
   const existingIndex = variantStoreStocks.value.findIndex(
     (stock, idx) =>
       stock.store_id === storeStockForm.value.store_id &&
@@ -3412,7 +3312,6 @@ const saveStoreStock = async () => {
     return;
   }
 
-  // If variant has id (existing variant), save to backend
   if (
     editingVariantIndex.value !== null &&
     variants.value[editingVariantIndex.value]?.id
@@ -3434,8 +3333,6 @@ const saveStoreStock = async () => {
         return;
       }
 
-      // Always reload store stocks from API to get the latest data
-      // Add small delay to ensure backend has processed the update
       await new Promise((resolve) => setTimeout(resolve, 100));
 
       try {
@@ -3446,14 +3343,11 @@ const saveStoreStock = async () => {
           stocksData?.success &&
           Array.isArray(stocksData.data)
         ) {
-          // Clear and replace with fresh data from API
           const freshStocks = stocksData.data.map(mapStoreStock);
 
-          // Replace entire array to trigger Vue reactivity
           variantStoreStocks.value.length = 0;
           variantStoreStocks.value.push(...freshStocks);
 
-          // Update variants.value to keep it in sync
           if (
             editingVariantIndex.value !== null &&
             variants.value[editingVariantIndex.value]
@@ -3467,7 +3361,6 @@ const saveStoreStock = async () => {
             };
           }
 
-          // Force Vue reactivity update
           await nextTick();
 
           toast.success(
@@ -3476,7 +3369,6 @@ const saveStoreStock = async () => {
               : "Store stock added successfully",
           );
         } else {
-          // If reload failed, update local state with response data
           updateLocalStoreStockState(data?.data, store);
           await nextTick();
           toast.success(
@@ -3487,7 +3379,6 @@ const saveStoreStock = async () => {
         }
       } catch (reloadErr) {
         console.error("Error reloading store stocks:", reloadErr);
-        // Fallback: update local state with response data
         updateLocalStoreStockState(data?.data, store);
         await nextTick();
         toast.success(
@@ -3497,7 +3388,6 @@ const saveStoreStock = async () => {
         );
       }
 
-      // Reset form after successful save and reload
       resetStoreStockForm();
     } catch (err) {
       console.error("Error saving store stock:", err);
@@ -3508,9 +3398,7 @@ const saveStoreStock = async () => {
       savingStoreStock.value = false;
     }
   } else {
-    // New variant (not saved yet), just update local state
     if (editingStoreStockIndex.value !== null) {
-      // Update existing
       variantStoreStocks.value[editingStoreStockIndex.value] = {
         ...variantStoreStocks.value[editingStoreStockIndex.value],
         store_id: storeStockForm.value.store_id!,
@@ -3519,7 +3407,6 @@ const saveStoreStock = async () => {
         store: store,
       };
     } else {
-      // Add new
       variantStoreStocks.value.push({
         store_id: storeStockForm.value.store_id!,
         qty: storeStockForm.value.qty,
@@ -3541,7 +3428,6 @@ const resetStoreStockForm = () => {
   editingStoreStockIndex.value = null;
 };
 
-// Helper function to map store stock data
 const mapStoreStock = (stock: any) => ({
   id: stock.id,
   store_id: stock.store_id,
@@ -3550,7 +3436,6 @@ const mapStoreStock = (stock: any) => ({
   store: stock.store,
 });
 
-// Helper function to update local state with response data
 const updateLocalStoreStockState = (responseData: any, store: any) => {
   const stockData = {
     id: responseData?.id,
@@ -3722,10 +3607,8 @@ const handleCreateCategory = async () => {
     }
 
     if (data?.success && data.data) {
-      // Reload categories to get the new one
       await loadAvailableCategories();
 
-      // Automatically select the newly created category
       const newCategoryId = data.data.id;
       if (data.data.taxonomy_type === 2) {
         selectedPrimaryCategoryId.value = newCategoryId;
@@ -3735,7 +3618,6 @@ const handleCreateCategory = async () => {
         selectedSubcategoryId.value = newCategoryId;
       }
 
-      // Close modal
       const modalElement = document.getElementById("addCategoryModal");
       if (modalElement) {
         const modal = (window as any).bootstrap.Modal.getInstance(modalElement);
@@ -3753,7 +3635,6 @@ const handleCreateCategory = async () => {
   }
 };
 
-// Edit/Delete Category in Step
 const editCategoryFormData = ref<any>({
   id: null,
   parent: null,
@@ -3886,7 +3767,6 @@ const handleDeleteCategoryInStep = async () => {
   }
 };
 
-// Brands
 const resetNewBrandForm = () => {
   newBrand.value.name = "";
   newBrand.value.description = "";
@@ -3998,7 +3878,6 @@ const handleCreateBrand = async () => {
   }
 };
 
-// Update product
 const handleUpdateProduct = async () => {
   if (!product.value) {
     console.warn("Product tidak ada");
@@ -4071,7 +3950,6 @@ const handleUpdateProduct = async () => {
         (current?.data || []).map((a) => [a.attribute_id, a]),
       );
 
-      // Detach removed attributes
       const toDetach = Array.from(currentMap.keys()).filter(
         (id) =>
           !selectedAttributes.value.some(
@@ -4088,7 +3966,6 @@ const handleUpdateProduct = async () => {
         );
       }
 
-      // Attach / Update attributes
       if (selectedAttributes.value.length > 0) {
         await attachProductAttributes(
           product.value.id,
@@ -4275,13 +4152,11 @@ const handleUpdateProduct = async () => {
 const generateSlugFromName = () => {
   if (!productForm.value.name) return;
   productForm.value.slug = generateSlug(productForm.value.name);
-  // Auto-generate SEO metadata
   productForm.value.meta_title = `Buy ${productForm.value.name}`;
   productForm.value.meta_description = `Shop ${productForm.value.name} at the best price. High quality product with fast shipping and secure payment. Order now!`;
 };
 
 const getVariantTotalStock = (variant: any) => {
-  // If variant has stock accessor (from backend), use it directly
   if (variant.stock !== undefined && variant.stock !== null) {
     return formatNumber(variant.stock);
   }
@@ -4296,7 +4171,6 @@ const getVariantTotalStock = (variant: any) => {
     return formatNumber(0);
   }
 
-  // Calculate available stock (qty - reserved_qty) for each store
   const totalStock = stockRelations.reduce((sum: number, stock: any) => {
     const qty = stock.qty || 0;
     const reservedQty = stock.reserved_qty || 0;
