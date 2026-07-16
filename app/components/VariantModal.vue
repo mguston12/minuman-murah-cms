@@ -80,7 +80,7 @@
                       type="checkbox"
                       id="singleVariantToggle"
                       v-model="isSingleVariant"
-                      :disabled="editingVariantIndex !== null"
+                      :disabled="editingVariantIndex !== null || availableAttributes.length == 0"
                     />
                     <label class="form-check-label fw-bold" for="singleVariantToggle">
                       Allow variant without attributes (single variant)
@@ -719,9 +719,6 @@ const loadingStores = ref(false);
 const savingVariant = ref(false);
 const variantImageInput = ref<HTMLInputElement | null>(null);
 
-const savedSingleVariantName = ref<string | null>(null);
-const savedSingleVariantSku = ref<string | null>(null);
-
 const generateSKU = () => {
   const productPrefix = props.productSlug
     ? props.productSlug.replace(/[^a-zA-Z0-9]/g, "-").toUpperCase().substring(0, 6)
@@ -761,34 +758,22 @@ watch(isSingleVariant, (val) => {
   if (props.editingVariantIndex !== null) return;
 
   if (val) {
-    if (savedSingleVariantName.value !== null) {
-      localVariantForm.value.variant_name = savedSingleVariantName.value;
-    } else {
-      localVariantForm.value.variant_name = "No Variant";
-    }
-    if (savedSingleVariantSku.value !== null) {
-      localVariantForm.value.sku = savedSingleVariantSku.value;
-    } else {
-      localVariantForm.value.sku = generateSKU();
-    }
-
+    localVariantForm.value.variant_name = "No Variant";
+    localVariantForm.value.sku = generateSKU();
     localVariantForm.value.selectedAttributeValues = {};
     localVariantForm.value.attribute_value_ids = [];
-
-    emit("update:variantForm", { ...localVariantForm.value });
   } else {
-    savedSingleVariantName.value = localVariantForm.value.variant_name;
-    savedSingleVariantSku.value = localVariantForm.value.sku;
-
+    localVariantForm.value.variant_name = "";
     const hasSelected = props.selectedAttributes.some(
       (attr) => localVariantForm.value.selectedAttributeValues[attr.attribute_id]
     );
     if (hasSelected) {
       handleUpdateVariantName();
+    } else {
+      localVariantForm.value.sku = generateSKU();
     }
-
-    emit("update:variantForm", { ...localVariantForm.value });
   }
+  emit("update:variantForm", { ...localVariantForm.value });
 });
 
 watch(
@@ -799,11 +784,11 @@ watch(
     if (props.editingVariantIndex !== null) {
       isSingleVariant.value = (!newForm.attribute_value_ids || newForm.attribute_value_ids.length === 0);
     } else {
-      if (props.selectedAttributes.length === 0) {
-        isSingleVariant.value = true;
-      }
-      
+      // Default: toggle off. Do not auto-enable when selectedAttributes empty.
+      // If availableAttributes is empty, toggle is disabled anyway.
+      // If attributes exist but none selected, user can toggle manually.
       if (isSingleVariant.value) {
+        // If somehow true, populate defaults
         if (!localVariantForm.value.variant_name) {
           localVariantForm.value.variant_name = "No Variant";
         }
@@ -831,8 +816,6 @@ const totalReservedStock = computed(() =>
 );
 
 const totalAvailableStock = computed(() => totalVariantStock.value - totalReservedStock.value);
-
-const assignedStoresCount = computed(() => localVariantStoreStocks.value.length);
 
 const assignedStoreIds = computed(() =>
   new Set(
@@ -953,7 +936,7 @@ const handleUpdateVariantName = () => {
   });
 
   if (variantNameParts.length === 0) {
-    localVariantForm.value.variant_name = "No Variant";
+    localVariantForm.value.variant_name = "";
   } else {
     localVariantForm.value.variant_name = variantNameParts.join(" - ");
   }
@@ -1144,7 +1127,11 @@ const handleSave = () => {
 
   let hasError = false;
 
-  if (!isSingleVariant.value && selectedCount === 0) {
+  // Only require attribute selection if:
+  // - single variant is NOT enabled
+  // - no attributes are selected
+  // - there are available attributes in the system (so selection is possible)
+  if (!isSingleVariant.value && selectedCount === 0 && props.availableAttributes.length > 0) {
     formErrors.value.attributes = "Please select at least one attribute value.";
     hasError = true;
   }

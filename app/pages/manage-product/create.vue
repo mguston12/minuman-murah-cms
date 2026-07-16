@@ -453,7 +453,7 @@
 
                 <div class="mb-3">
                   <button type="button" class="btn btn-primary action-btn-dark" @click="handleAddVariantClick"
-                    :disabled="selectedAttributes.length === 0">
+                   >
                     <i class="bi bi-plus-circle me-2"></i>Add Variant
                   </button>
                 </div>
@@ -602,7 +602,7 @@
               <div class="modal-dialog modal-lg">
                 <div class="modal-content">
                   <div class="modal-header">
-                    <h5 class="modal-title" id="addAttributeModalLabel">
+                    <h5 class="modal-title  action-btn-dark" id="addAttributeModalLabel">
                       Add Attribute
                     </h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
