@@ -208,6 +208,7 @@
                       type="text"
                       class="form-control form-control-lg"
                       placeholder="Variant name"
+                      :disabled="localVariantForm.variant_name === 'No Variant' && isSingleVariant"
                     />
                   </div>
 
@@ -763,7 +764,7 @@ watch(isSingleVariant, (val) => {
     if (savedSingleVariantName.value !== null) {
       localVariantForm.value.variant_name = savedSingleVariantName.value;
     } else {
-      localVariantForm.value.variant_name = "Default Variant";
+      localVariantForm.value.variant_name = "No Variant";
     }
     if (savedSingleVariantSku.value !== null) {
       localVariantForm.value.sku = savedSingleVariantSku.value;
@@ -804,7 +805,7 @@ watch(
       
       if (isSingleVariant.value) {
         if (!localVariantForm.value.variant_name) {
-          localVariantForm.value.variant_name = "Default Variant";
+          localVariantForm.value.variant_name = "No Variant";
         }
         if (!localVariantForm.value.sku) {
           localVariantForm.value.sku = generateSKU();
@@ -952,7 +953,7 @@ const handleUpdateVariantName = () => {
   });
 
   if (variantNameParts.length === 0) {
-    localVariantForm.value.variant_name = "Default Variant";
+    localVariantForm.value.variant_name = "No Variant";
   } else {
     localVariantForm.value.variant_name = variantNameParts.join(" - ");
   }

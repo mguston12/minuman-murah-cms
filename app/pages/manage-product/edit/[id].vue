@@ -2662,7 +2662,7 @@ const updateVariantName = () => {
   });
 
   if (variantNameParts.length === 0) {
-    variantForm.value.variant_name = "Default Variant";
+    variantForm.value.variant_name = "No Variant";
   } else {
     variantForm.value.variant_name = variantNameParts.join(" - ");
   }
