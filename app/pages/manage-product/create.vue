@@ -380,7 +380,7 @@
                 <h5 class="mb-4">Product Attributes</h5>
 
                 <div class="mb-4">
-                  <button type="button" class="btn btn-success" @click="handleAddAttributeClick"
+                  <button type="button" class="btn btn-success action-btn-dark" @click="handleAddAttributeClick"
                     :disabled="loadingAttributes">
                     <i class="bi bi-plus-circle me-2"></i>Add Attribute
                   </button>
