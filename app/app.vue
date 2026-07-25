@@ -359,4 +359,10 @@ select.form-select:focus {
 .input-group:focus-within .input-group-text {
   border-color: #000 !important;
 }
+
+input.form-control,
+.form-select {
+  border-width: 2px !important;
+}
+
 </style>
