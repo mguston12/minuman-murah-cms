@@ -52,8 +52,8 @@
               <div class="mb-3">
                 <label class="text-muted small">Status</label>
                 <span :class="`ml-2 badge ${getStatusBadge(order.status)}`">
-                  {{ order.status }}
-                </span>
+                  {{ order.status === "DELIVERING" ? "SHIPPED" : order.status }} 
+                </span> 
               </div>
               <div class="mb-3">
                 <label class="text-muted small">Payment Status</label>
