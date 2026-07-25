@@ -88,9 +88,9 @@
                     <span v-else class="text-muted">Guest</span>
                   </td>
                   <td>
-                    <span :class="`badge ${getStatusBadge(order.status)}`">{{
-                      order.status
-                    }}</span>
+                    <span :class="`badge ${getStatusBadge(order.status)}`">
+                     {{ order.status === 'DELIVERING' ? "SHIPPED" : order.status }}
+                    </span>
                   </td>
                   <td>
                     <span
@@ -242,7 +242,7 @@
               <input
                 type="text"
                 class="form-control"
-                :value="orderToUpdate.status"
+                :value="orderToUpdate?.status === 'DELIVERING' ? 'SHIPPED' : orderToUpdate?.status"
                 disabled
               />
             </div>
@@ -259,7 +259,7 @@
                   v-if="orderToUpdate?.status === 'PACKING'"
                   value="DELIVERING"
                 >
-                  DELIVERING
+                  SHIPPED
                 </option>
                 <option
                   v-if="orderToUpdate?.status === 'DELIVERING'"
