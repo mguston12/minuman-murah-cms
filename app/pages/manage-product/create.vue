@@ -473,6 +473,7 @@
                         <th>Attributes</th>
                         <th>SKU</th>
                         <th>Price</th>
+                        <th>Weight</th>
                         <th>Discounted Price</th>
                         <th>Discount %</th>
                         <th>Status</th>
@@ -502,6 +503,9 @@
                         </td>
                         <td>{{ variant.sku || "N/A" }}</td>
                         <td>Rp {{ formatNumber(variant.price || 0) }}</td>
+                        <td class="text-nowrap">
+                            {{ variant.weight }} {{ variant.type_weight === "GRAM" ? "g" : "kg" }}
+                          </td>
                         <td class="text-nowrap">
                           <span v-if="variant.strike_price">
                             Rp {{ formatNumber(variant.strike_price) }}

@@ -362,7 +362,7 @@
                     <option value="INACTIVE">Inactive</option>
                   </select>
                 </div>
-                <div class="col-md-6" style="display: none;">
+                <div class="col-md-6">
                   <label class="form-label"
                     >Weight ({{
                       localVariantForm.type_weight === "GRAM" ? "g" : "kg"
@@ -377,7 +377,7 @@
                     placeholder="0.00"
                   />
                 </div>
-                <div class="col-md-6" style="display: none;">
+                <div class="col-md-6" >
                   <label class="form-label">Weight Type</label>
                   <select
                     v-model="localVariantForm.type_weight"
