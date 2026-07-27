@@ -265,12 +265,7 @@
                     </button>
                   </div>
                   <div class="col-12">
-                    <textarea
-                      v-model="newCategory.description"
-                      class="form-control form-control-sm"
-                      rows="2"
-                      placeholder="Description (optional)"
-                    ></textarea>
+                    <TiptapEditor v-model="newCategory.description" placeholder="Description (optional)" />
                   </div>
                 </div>
               </div>

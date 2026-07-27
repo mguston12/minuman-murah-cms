@@ -83,18 +83,8 @@
               <label for="blog_short_desc" class="form-label fw-medium">
                 Short Description (Excerpt) <span class="text-danger">*</span>
               </label>
-              <textarea
-                id="blog_short_desc"
-                v-model="form.short_desc"
-                class="form-control"
-                rows="3"
-                required
-                :class="{ 'is-invalid': errors.short_desc }"
-                placeholder="Short summary of the blog post"
-              ></textarea>
-              <div v-if="errors.short_desc" class="invalid-feedback d-block">
-                {{ errors.short_desc[0] }}
-              </div>
+              <TiptapEditor v-model="form.short_desc" placeholder="Short summary of the blog post"
+                :error-message="errors.short_desc ? errors.short_desc[0] : ''" />
             </div>
 
             <!-- Content (Long Description) -->

@@ -483,9 +483,9 @@ onBeforeUnmount(() => {
 }
 
 .editor-toolbar .btn.active {
-  background-color: #0d6efd;
+  background-color: #1E1E1E;
   color: white;
-  border-color: #0d6efd;
+  border-color: #1E1E1E;
 }
 
 .editor-toolbar .btn:disabled {
@@ -597,7 +597,7 @@ onBeforeUnmount(() => {
 }
 
 .editor-content :deep(.ProseMirror blockquote) {
-  border-left: 4px solid #0d6efd;
+  border-left: 4px solid #1E1E1E;
   padding-left: 1rem;
   margin: 1rem 0;
   font-style: italic;
@@ -641,14 +641,14 @@ onBeforeUnmount(() => {
 }
 
 .editor-content :deep(.ProseMirror img.ProseMirror-selectednode) {
-  outline: 2px solid #0d6efd;
+  outline: 2px solid #1E1E1E;
   outline-offset: 2px;
 }
 
 /* Image Resize Handles - Tiptap Built-in */
 .editor-content :deep([data-resize-handle]) {
   position: absolute;
-  background: #0d6efd;
+  background: #1E1E1E;
   border: 2px solid white;
   border-radius: 2px;
   width: 10px;
