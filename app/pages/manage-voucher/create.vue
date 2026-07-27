@@ -259,12 +259,7 @@
             <!-- Description -->
             <div class="col-12">
               <label class="form-label fw-medium">Description</label>
-              <textarea
-                v-model="form.description"
-                class="form-control"
-                rows="3"
-                placeholder="Optional description..."
-              ></textarea>
+              <TiptapEditor v-model="form.description" placeholder="Optional description..." />
             </div>
 
             <!-- Message -->

@@ -49,12 +49,7 @@
 
             <div class="col-12">
               <label class="form-label">Description</label>
-              <textarea
-                v-model="form.description"
-                class="form-control"
-                rows="3"
-                placeholder="Deskripsi singkat product group"
-              ></textarea>
+              <TiptapEditor v-model="form.description" placeholder="Deskripsi singkat product group" />
             </div>
 
             <div class="col-md-6">
