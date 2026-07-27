@@ -42,6 +42,14 @@ export interface Order {
   shipping_postal_code: string
   shipping_label_place?: string | null
   shipping_note_address?: string | null
+  shipping: {
+    first_name: string
+    last_name?: string | null
+    address: string
+    city: string
+    province: string
+    postal_code: string
+  }
 
   // Billing Address (optional)
   billing_country?: string | null
@@ -89,7 +97,7 @@ export interface Order {
   // Status
   status: 'PENDING' | 'PACKING' | 'DELIVERING' | 'DELIVERED' | 'COMPLETED' | 'CANCELLED'
 
-  items?: OrderItem[]
+  order_items?: OrderItem[]
 
   created_at: string
   updated_at: string

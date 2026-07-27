@@ -27,9 +27,14 @@
           <h4 class="mb-0">Order Details</h4>
           <p class="text-muted mb-0">{{ order.order_number }}</p>
         </div>
-        <NuxtLink to="/manage-order" class="btn btn-secondary">
-          <i class="bi bi-arrow-left me-2"></i>Back to Orders
-        </NuxtLink>
+        <div>
+          <button class="btn btn-primary me-2 " @click="downloadPDF">
+            <i class="bi bi-download me-2"></i>Download PDF
+          </button>
+          <NuxtLink to="/manage-order" class="btn btn-secondary">
+            <i class="bi bi-arrow-left me-2"></i>Back
+          </NuxtLink>
+        </div>
       </div>
 
       <!-- Order Info Cards -->
@@ -222,9 +227,55 @@
       </div>
     </div>
   </div>
+  <div ref="pdfContent" style="display: none; padding: 20px; font-family: Arial, sans-serif; max-width: 800px; margin: auto; background: white;">
+      <div style="text-align: center; margin-bottom: 20px;">
+        <img 
+      v-if="formData.store_logo_website" 
+      :src="formData.store_logo_website" 
+      alt="Logo" 
+      style="height: 60px;" 
+      />
+        <h2 style="margin-top: 10px;">INVOICE</h2>
+        <p style="font-size: 14px; color: #666;">Order #{{ order?.order_number }}</p>
+      </div>
+
+      <div style="margin-bottom: 20px;">
+        <h4>Informasi Penerima</h4>
+        <p><strong>Nama:</strong> {{ order?.shipping.first_name }} {{ order?.shipping.last_name || '' }}</p>
+        <p><strong>Alamat:</strong> {{ order?.shipping.address }}, {{ order?.shipping.city }}, {{ order?.shipping.province }} {{ order?.shipping.postal_code }}</p>
+        <p><strong>No. Telepon:</strong> {{ order?.contact_phone || '-' }}</p>
+      </div>
+
+      <div style="margin-bottom: 20px;">
+        <h4 style="padding-bottom: 30px;">Daftar Produk</h4>
+        <table style="width: 100%; border-collapse: collapse; ">
+          <thead>
+            <tr style="background: #f0f0f0;">
+              <th style="border: 1px solid #ddd; padding: 8px; text-align: left;">Produk</th>
+              <th style="border: 1px solid #ddd; padding: 8px; text-align: left;">Warna</th>
+              <th style="border: 1px solid #ddd; padding: 8px; text-align: center;">Jumlah</th>
+              <th style="border: 1px solid #ddd; padding: 8px; text-align: center;">Harga</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr v-for="item in order?.order_items" :key="item.id">
+              <td style="border: 1px solid #ddd; padding: 8px; ">{{ item.product_name }}</td>
+              <td style="border: 1px solid #ddd; padding: 8px;  ">{{ extractColor(item) || '-' }}</td>
+              <td style="border: 1px solid #ddd; padding: 8px;  text-align: center;">{{ item.qty }}</td>
+              <td style="border: 1px solid #ddd; padding: 8px;  text-align: center;">{{ formatPrice(item.subtotal * item.qty)  }}</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div style="text-align: right; margin-top: 20px; border-top: 1px solid #ccc; padding-top: 10px;">
+        <p><strong>Total:</strong> {{ formatPrice(order?.total_amount || 0) }}</p>
+      </div>
+    </div>
 </template>
 
 <script setup lang="ts">
+import { nextTick } from 'vue'
 import type { Order } from "~/types/order";
 
 definePageMeta({
@@ -238,14 +289,23 @@ const route = useRoute();
 const router = useRouter();
 const { getOrder } = useOrderApi();
 const toast = useToast();
-
+const { token } = useApiBase();
+const { fetchAllConfigs} = useConfig();
 const order = ref<Order | null>(null);
+const pdfContent = ref<HTMLElement | null>(null);
 const loading = ref(true);
 const error = ref<string | null>(null);
 
 const orderId = computed(() => {
   const id = route.params.id;
   return id ? parseInt(id as string) : null;
+});
+const config = useRequestURL();
+
+const url = config.origin + "/storage/";
+const formData = ref<any>({
+  store_logo_website: "",
+  store_favicon: "",
 });
 
 const loadOrder = async () => {
@@ -322,6 +382,114 @@ const getStatusBadge = (status: Order["status"]) => {
       return "bg-secondary";
   }
 };
+const extractColor = (item: any): string => {
+  if (item.variant_description) {
+    const match = item.variant_description.match(/Warna:\s*([^,]+)/i);
+    if (match) return match[1].trim();
+  }
+  return item.color || item.variant_color || '';
+};
+
+const downloadPDF = async () => {
+  if (!order.value) return;
+  const element = pdfContent.value;
+  if (!element) return;
+
+  const originalDisplay = element.style.display;
+  element.style.display = 'block';
+  element.style.position = 'absolute';
+  element.style.left = '-9999px';
+  element.style.top = '0';
+  element.style.width = '800px';
+  element.style.background = 'white';
+  element.style.padding = '20px';
+  element.style.zIndex = '9999';
+
+  await nextTick();
+
+  try {
+    const html2canvas = (await import('html2canvas')).default;
+    const jsPDF = (await import('jspdf')).default;
+
+    const canvas = await html2canvas(element, {
+      scale: 2,
+      useCORS: true,
+      logging: true,
+      backgroundColor: '#ffffff',
+    });
+    const imgData = canvas.toDataURL('image/png');
+    const pdf = new jsPDF('p', 'mm', 'a4');
+    const pdfWidth = pdf.internal.pageSize.getWidth();
+    const pdfHeight = (canvas.height * pdfWidth) / canvas.width;
+    pdf.addImage(imgData, 'PNG', 0, 0, pdfWidth, pdfHeight);
+    pdf.save(`invoice-${order.value.order_number}.pdf`);
+  } catch (err) {
+    console.error('PDF generation error:', err);
+    toast.error('Gagal membuat PDF');
+  } finally {
+    element.style.display = originalDisplay;
+    element.style.position = '';
+    element.style.left = '';
+    element.style.top = '';
+    element.style.width = '';
+    element.style.background = '';
+    element.style.padding = '';
+    element.style.zIndex = '';
+  }
+};
+
+const loadSettings = async () => {
+  try {
+    if (!token.value) return;
+
+    const res = await fetchAllConfigs(token.value);
+
+    const configs = Array.isArray(res?.data)
+      ? res.data
+      : Array.isArray(res)
+        ? res
+        : [];
+
+    const incoming: Record<string, any> = {};
+    const imageUrls: Record<string, string> = {};
+
+    for (const cfg of configs) {
+      if (!cfg.key) continue;
+
+      const val = cfg.hasOwnProperty("casted_value")
+        ? cfg.casted_value
+        : cfg.value;
+      if (cfg.type === "boolean") {
+        incoming[cfg.key] = val === true || val === "true";
+      } else if (cfg.type === "integer") {
+        incoming[cfg.key] = val !== null && val !== undefined ? Number(val) : 0;
+      } else {
+        incoming[cfg.key] = val ?? "";
+      }
+
+      if (cfg.value_image) {
+        imageUrls[cfg.key] = cfg.value_image;
+      }
+    }
+
+    formData.value = {
+      ...formData.value,
+      ...incoming,
+    };
+    if (incoming.store_logo_website) {
+      formData.value.store_logo_website = incoming.store_logo_website;
+      if (!formData.value.app_logo)
+        formData.value.app_logo = incoming.store_logo_website;
+    } else if (incoming.app_logo) {
+      formData.value.app_logo = incoming.app_logo;
+      if (!formData.value.store_logo_website)
+        formData.value.store_logo_website = incoming.app_logo;
+    }
+    formData.value.store_logo_website = await urlToBase64(url + formData.value.store_logo_website);
+  } catch (err) {;
+    toast.error("Failed to load settings");
+  }
+};
 
 const getPaymentBadge = (status?: string) => {
   switch (status) {
@@ -338,12 +506,25 @@ const getPaymentBadge = (status?: string) => {
   }
 };
 
+const urlToBase64 = async (url:string) => {
+  const response = await fetch(url);
+  const blob = await response.blob();
+  
+  return new Promise((resolve, reject) => {
+    const reader = new FileReader();
+    reader.onloadend = () => resolve(reader.result);
+    reader.onerror = reject;
+    reader.readAsDataURL(blob);
+  });
+};
+
 const openUpdateStatusModal = () => {
   toast.info("Update status feature coming soon");
 };
 
-onMounted(() => {
+onMounted(async() => {
   loadOrder();
+  await loadSettings();
 });
 </script>
 
