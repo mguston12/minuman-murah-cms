@@ -166,8 +166,7 @@
                 </div>
                 <div class="col-12">
                   <label class="form-label">Description</label>
-                  <textarea v-model="brandForm.description" class="form-control" rows="3"
-                    placeholder="Brand description"></textarea>
+                  <TiptapEditor v-model="brandForm.description" placeholder="Brand description" />
                 </div>
               </div>
             </div>
@@ -238,7 +237,7 @@
                 </div>
                 <div class="col-12">
                   <label class="form-label">Description</label>
-                  <textarea v-model="brandForm.description" class="form-control" rows="3"></textarea>
+                  <TiptapEditor v-model="brandForm.description" placeholder="Brand description" />
                 </div>
               </div>
             </div>

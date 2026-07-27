@@ -308,8 +308,7 @@
                   </div>
                   <div class="col-12">
                     <label class="form-label">Information</label>
-                    <textarea v-model="productForm.product_information" class="form-control" rows="4"
-                      placeholder="Product information"></textarea>
+                    <TiptapEditor v-model="productForm.product_information" placeholder="Product information" />
                   </div>
 
                   <!-- Pricing -->
@@ -851,7 +850,7 @@
 
             <div class="mb-3">
               <label class="form-label">Description (optional)</label>
-              <textarea v-model="newBrand.description" class="form-control" rows="3" />
+              <TiptapEditor v-model="newBrand.description" placeholder="Brand description (optional)" />
             </div>
           </div>
 

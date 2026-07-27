@@ -107,13 +107,7 @@
               <!-- Description -->
               <div class="mb-3">
                 <label for="roleDesc" class="form-label">Description</label>
-                <textarea
-                  v-model="formData.description"
-                  class="form-control"
-                  id="roleDesc"
-                  rows="3"
-                  placeholder="Role description..."
-                ></textarea>
+              <TiptapEditor v-model="formData.description" placeholder="Role description..." />
               </div>
 
               <!-- Permissions -->

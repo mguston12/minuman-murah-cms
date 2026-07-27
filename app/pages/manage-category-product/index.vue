@@ -206,21 +206,8 @@
               <label for="taxonomy_description" class="form-label">
                 Description
               </label>
-              <textarea
-                id="taxonomy_description"
-                v-model="form.taxonomy_description"
-                class="form-control"
-                :class="{ 'is-invalid': formErrors.taxonomy_description }"
-                rows="3"
-                placeholder="Enter category description (optional)"
-                :disabled="isLoading"
-              ></textarea>
-              <div
-                v-if="formErrors.taxonomy_description"
-                class="invalid-feedback"
-              >
-                {{ formErrors.taxonomy_description[0] }}
-              </div>
+              <TiptapEditor v-model="form.taxonomy_description" placeholder="Enter category description (optional)"
+                :error-message="formErrors.taxonomy_description ? formErrors.taxonomy_description[0] : ''" />
             </div>
           </div>
           <div class="modal-footer">
@@ -335,12 +322,7 @@
             <!-- Description -->
             <div class="mb-3">
               <label class="form-label">Description</label>
-              <textarea
-                v-model="editForm.taxonomy_description"
-                class="form-control"
-                rows="3"
-                placeholder="Enter category description (optional)"
-              ></textarea>
+              <TiptapEditor v-model="editForm.taxonomy_description" placeholder="Enter category description (optional)" />
             </div>
           </div>
 

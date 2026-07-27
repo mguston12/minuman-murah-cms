@@ -99,7 +99,7 @@
                   <td>
                     <strong>{{ truncate(blog.title, 40) }}</strong>
                     <br />
-                    <small class="text-muted">{{ truncate(blog.short_desc || '', 50) }}</small>
+                    <small class="text-muted" v-html="blog.short_desc || ''"></small>
                   </td>
                   <td>
                     <span v-if="blog.category" class="badge bg-info">{{ blog.category.name }}</span>

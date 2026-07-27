@@ -331,12 +331,7 @@
                 </div>
                 <div class="col-12">
                   <label class="form-label">Description</label>
-                  <textarea
-                    v-model="storeForm.description"
-                    class="form-control"
-                    rows="3"
-                    placeholder="Store description"
-                  ></textarea>
+                  <TiptapEditor v-model="storeForm.description" placeholder="Store description" />
                 </div>
               </div>
             </div>
@@ -515,11 +510,7 @@
                 </div>
                 <div class="col-12">
                   <label class="form-label">Description</label>
-                  <textarea
-                    v-model="storeForm.description"
-                    class="form-control"
-                    rows="3"
-                  ></textarea>
+                  <TiptapEditor v-model="storeForm.description" placeholder="Store description" />
                 </div>
               </div>
             </div>
@@ -619,11 +610,7 @@
 
               <div class="mb-3">
                 <label class="form-label">Description</label>
-                <textarea
-                  v-model="popupBannerForm.description"
-                  class="form-control"
-                  rows="3"
-                />
+                <TiptapEditor v-model="popupBannerForm.description" placeholder="Popup banner description" />
               </div>
 
               <div class="row">
@@ -722,11 +709,7 @@
 
               <div class="mb-3">
                 <label class="form-label">Description</label>
-                <textarea
-                  v-model="popupBannerForm.description"
-                  class="form-control"
-                  rows="3"
-                />
+                <TiptapEditor v-model="popupBannerForm.description" placeholder="Popup banner description" />
               </div>
 
               <div class="row">

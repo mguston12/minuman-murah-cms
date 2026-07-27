@@ -101,13 +101,7 @@
               <!-- Description -->
               <div class="mb-3">
                 <label for="permissionDesc" class="form-label">Description</label>
-                <textarea
-                  v-model="formData.description"
-                  class="form-control"
-                  id="permissionDesc"
-                  rows="3"
-                  placeholder="Permission description..."
-                ></textarea>
+              <TiptapEditor v-model="formData.description" placeholder="Permission description..." />
               </div>
             </form>
           </div>

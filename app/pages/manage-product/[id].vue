@@ -83,7 +83,7 @@
               </div>
               <div class="row mb-3" v-if="product.product_information">
                 <div class="col-sm-4"><strong>Information:</strong></div>
-                <div class="col-sm-8">{{ product.product_information }}</div>
+                <div class="col-sm-8" v-html="product.product_information "></div>
               </div>
               <div class="row mb-3" v-if="product.tags">
                 <div class="col-sm-4"><strong>Tags:</strong></div>
