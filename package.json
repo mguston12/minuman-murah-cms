@@ -27,6 +27,8 @@
     "@unhead/vue": "^2.0.19",
     "better-sqlite3": "^12.4.1",
     "eslint": "^9.39.1",
+    "html2canvas": "^1.4.1",
+    "jspdf": "^4.2.1",
     "luxon": "^3.7.2",
     "nuxt": "^4.2.0",
     "pinia": "^3.0.4",

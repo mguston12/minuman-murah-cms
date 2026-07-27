@@ -4,12 +4,21 @@ import tailwindcss from '@tailwindcss/vite'
 export default defineNuxtConfig({
   srcDir: 'app',
   compatibilityDate: '2025-07-15',
-  devtools: { enabled: true },
+  nitro: {
+    devProxy: {
+      '/storage': {
+        target: process.env.NUXT_PUBLIC_API_URL + '/storage',
+        changeOrigin: true,
+      },
+    },
+  },
   runtimeConfig: {
     public: {
-      apiBase: process.env.NUXT_PUBLIC_API_BASE
+      apiBase: process.env.NUXT_PUBLIC_API_BASE,
+      customerFrontendUrl: process.env.NUXT_PUBLIC_CUSTOMER_FRONTEND_URL || 'http://localhost:3000'
     }
   },
+  
   modules: [
     '@nuxt/content',
     '@nuxt/eslint',
