@@ -262,13 +262,14 @@
               <td style="border: 1px solid #ddd; padding: 8px; ">{{ item.product_name }}</td>
               <td style="border: 1px solid #ddd; padding: 8px;  ">{{ extractColor(item) || '-' }}</td>
               <td style="border: 1px solid #ddd; padding: 8px;  text-align: center;">{{ item.qty }}</td>
-              <td style="border: 1px solid #ddd; padding: 8px;  text-align: center;">{{ formatPrice(item.subtotal * item.qty)  }}</td>
+              <td style="border: 1px solid #ddd; padding: 8px;  text-align: center;">{{ formatPrice(item.purchase_price * item.qty) }}</td>
             </tr>
           </tbody>
         </table>
       </div>
 
       <div style="text-align: right; margin-top: 20px; border-top: 1px solid #ccc; padding-top: 10px;">
+        <p><strong>Discount:</strong> <span class="text-danger">-{{ formatPrice(order?.discount_amount || 0) }}</span></p>
         <p><strong>Total:</strong> {{ formatPrice(order?.total_amount || 0) }}</p>
       </div>
     </div>
