@@ -27,8 +27,8 @@
           <h4 class="mb-0">Order Details</h4>
           <p class="text-muted mb-0">{{ order.order_number }}</p>
         </div>
-        <div>
-          <button class="btn btn-primary me-2 " @click="downloadPDF">
+        <div >
+          <button class="btn btn-primary me-2 action-btn-dark" @click="downloadPDF" >
             <i class="bi bi-download me-2"></i>Download PDF
           </button>
           <NuxtLink to="/manage-order" class="btn btn-secondary">
