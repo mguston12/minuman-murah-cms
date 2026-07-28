@@ -247,7 +247,7 @@
       </div>
 
       <div style="margin-bottom: 20px;">
-        <h4 style="padding-bottom: 30px;">Daftar Produk</h4>
+        <h4 style="padding-bottom: 20px;">Daftar Produk</h4>
         <table style="width: 100%; border-collapse: collapse; ">
           <thead>
             <tr style="background: #f0f0f0;">
