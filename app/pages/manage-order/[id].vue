@@ -255,6 +255,7 @@
               <th style="border: 1px solid #ddd; padding: 8px; text-align: left;">Warna</th>
               <th style="border: 1px solid #ddd; padding: 8px; text-align: center;">Jumlah</th>
               <th style="border: 1px solid #ddd; padding: 8px; text-align: center;">Harga</th>
+              <th style="border: 1px solid #ddd; padding: 8px; text-align: center;">Subtotal</th>
             </tr>
           </thead>
           <tbody>
@@ -262,6 +263,7 @@
               <td style="border: 1px solid #ddd; padding: 8px; ">{{ item.product_name }}</td>
               <td style="border: 1px solid #ddd; padding: 8px;  ">{{ extractColor(item) || '-' }}</td>
               <td style="border: 1px solid #ddd; padding: 8px;  text-align: center;">{{ item.qty }}</td>
+              <td style="border: 1px solid #ddd; padding: 8px;  text-align: center;">{{ formatPrice(item.purchase_price) }}</td>
               <td style="border: 1px solid #ddd; padding: 8px;  text-align: center;">{{ formatPrice(item.purchase_price * item.qty) }}</td>
             </tr>
           </tbody>
