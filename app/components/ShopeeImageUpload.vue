@@ -1,9 +1,18 @@
 <template>
   <div class="shopee-image-upload">
     <div>
-      <label class="form-label fw-bold">Product Images</label>
+      <label class="form-label fw-bold">
+        Product Images
+        <span
+          class="badge ms-1"
+          :class="atMaxImages ? 'text-bg-danger' : 'text-bg-secondary'"
+        >
+          {{ imagesModel.length }}/{{ MAX_IMAGES }}
+        </span>
+      </label>
       <small class="text-muted d-block mb-2">
         The leftmost image is automatically set as featured. Drag and drop images to change the featured image.
+        Max {{ MAX_IMAGES }} Images.
       </small>
 
       <div class="product-images-upload">
@@ -59,7 +68,9 @@
           </div>
 
           <div
+            v-if="!atMaxImages"
             class="image-upload-box"
+            :class="{ 'is-disabled': disabled }"
             @click="!disabled && triggerMultiFileInput()"
             role="button"
             tabindex="0"
@@ -84,13 +95,17 @@
 
       <small class="text-muted d-block mt-2" v-if="!disabled">
         <i class="bi bi-info-circle me-1"></i>
-        Supported formats: JPG, PNG, GIF. Max size: 5MB per image.
+        Supported formats: JPG, PNG, GIF. Max size: 5MB per image. Max {{ MAX_IMAGES }} images.
       </small>
     </div>
   </div>
 </template>
 
 <script setup>
+import { useToast } from "~/composables/useToast";
+
+const toast = useToast();
+
 const emit = defineEmits([
   "update:featured",
   "update:images",
@@ -115,10 +130,14 @@ const props = defineProps({
   },
 });
 
+const MAX_IMAGES = 7;
+
 const multiFileInputRef = ref(null);
 const imagesModel = ref([]);
 const draggedIndex = ref(null);
 const dragOverIndex = ref(null);
+
+const atMaxImages = computed(() => imagesModel.value.length >= MAX_IMAGES);
 
 const getImageKey = (image) => {
   if (!image) return null;
@@ -141,6 +160,7 @@ const normalizeImages = (images) => {
   const seen = new Set();
 
   for (const image of images || []) {
+    if (uniqueImages.length >= MAX_IMAGES) break;
     const key = getImageKey(image);
     if (!key || seen.has(key)) continue;
     seen.add(key);
@@ -202,27 +222,76 @@ const handleMultipleImageSelect = (event) => {
 };
 
 const processMultipleFiles = (files) => {
-  const validFiles = [];
+  if (props.disabled) return;
 
-  for (let i = 0; i < files.length; i++) {
-    if (validateImage(files[i])) {
-      validFiles.push(files[i]);
-    }
+  const remainingSlots = MAX_IMAGES - imagesModel.value.length;
+  if (remainingSlots <= 0) {
+    toast.warning(
+      `Maksimal ${MAX_IMAGES} gambar. Hapus gambar terlebih dahulu untuk menambah gambar baru.`,
+    );
+    return;
   }
 
-  validFiles.forEach((file) => {
+  // Kumpulan key gambar yang sudah ada (untuk pengecekan duplikat)
+  const existingKeys = new Set(
+    imagesModel.value.map((image) => getImageKey(image)).filter(Boolean),
+  );
+
+  const validFiles = [];
+  let skippedDuplicate = 0;
+
+  for (let i = 0; i < files.length; i++) {
+    const file = files[i];
+    if (!validateImage(file)) continue;
+
+    const key = getImageKey({ file });
+    if (existingKeys.has(key)) {
+      skippedDuplicate++;
+      continue;
+    }
+    existingKeys.add(key);
+    validFiles.push(file);
+  }
+
+  if (validFiles.length === 0) {
+    if (skippedDuplicate > 0) {
+      toast.warning(
+        "Gambar yang dipilih sudah ada. Tidak ada gambar baru yang ditambahkan.",
+      );
+    }
+    return;
+  }
+
+  const filesToAdd = validFiles.slice(0, remainingSlots);
+  const skippedLimit = validFiles.length - filesToAdd.length;
+
+  if (skippedLimit > 0) {
+    toast.warning(
+      `Maksimal ${MAX_IMAGES} gambar. Sisa slot ${remainingSlots}, ${skippedLimit} gambar tidak ditambahkan.`,
+    );
+  }
+
+  filesToAdd.forEach((file) => {
     const reader = new FileReader();
     reader.onload = (e) => {
-      imagesModel.value = [
-        ...normalizeImages(imagesModel.value),
+      // Cek ulang duplikat saat callback selesai untuk mencegah race condition
+      const currentKeys = new Set(
+        imagesModel.value.map((image) => getImageKey(image)).filter(Boolean),
+      );
+      if (currentKeys.has(getImageKey({ file }))) return;
+
+      imagesModel.value = normalizeImages([
+        ...imagesModel.value,
         {
           file,
           preview: e.target.result,
           name: file.name,
           is_featured: false,
         },
-      ];
-      imagesModel.value = normalizeImages(imagesModel.value);
+      ]);
+    };
+    reader.onerror = () => {
+      toast.error(`Gagal membaca file ${file.name}. Coba lagi.`);
     };
     reader.readAsDataURL(file);
   });
@@ -233,12 +302,12 @@ const validateImage = (file) => {
   const maxSize = 5 * 1024 * 1024;
 
   if (!validTypes.includes(file.type)) {
-    alert("Invalid file type. Please use JPG, PNG, GIF, or WEBP.");
+    toast.error("Invalid file type. Please use JPG, PNG, GIF, or WEBP.");
     return false;
   }
 
   if (file.size > maxSize) {
-    alert(`File ${file.name} is too large. Maximum size is 5MB.`);
+    toast.error(`File ${file.name} is too large. Maximum size is 5MB.`);
     return false;
   }
 
@@ -389,6 +458,11 @@ defineExpose({
 .image-upload-box:focus-visible {
   outline: 2px solid #000;
   outline-offset: 2px;
+}
+
+.image-upload-box.is-disabled {
+  opacity: 0.45;
+  cursor: not-allowed;
 }
 
 .image-upload-box .upload-icon {

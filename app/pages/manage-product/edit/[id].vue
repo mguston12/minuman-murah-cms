@@ -1577,6 +1577,7 @@ const existingImages = ref<
     is_featured: boolean;
   }>
 >([]);
+const MAX_PRODUCT_IMAGES = 7;
 const pendingImages = ref<
   Array<{
     file: File;
@@ -1660,7 +1661,7 @@ const getPendingUploads = () => {
     });
   }
 
-  const uploads = Array.from(imageMap.values());
+  const uploads = Array.from(imageMap.values()).slice(0, MAX_PRODUCT_IMAGES);
 
   if (uploads.length > 0 && !uploads.some((image) => image.is_featured)) {
     const firstUpload = uploads[0];
@@ -2511,8 +2512,9 @@ const handleRemoveFeaturedFromUpload = async (image: any) => {
 
 const handleImageChange = ({ images }: { images: any }) => {
   if (images && Array.isArray(images)) {
-    const existing = images.filter((img) => img.path && !img.file);
-    const pending = images.filter((img) => img.file);
+    const cappedImages = images.slice(0, MAX_PRODUCT_IMAGES);
+    const existing = cappedImages.filter((img) => img.path && !img.file);
+    const pending = cappedImages.filter((img) => img.file);
 
     existingImages.value = existing.map((img, index) => ({
       id: img.id,

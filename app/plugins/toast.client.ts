@@ -30,7 +30,7 @@ export default defineNuxtPlugin(() => {
         container = document.createElement('div')
         container.id = 'toast-container'
         container.className = 'toast-container position-fixed top-0 end-0 p-3'
-        container.style.zIndex = '9999'
+        container.style.zIndex = '1055'
         document.body.appendChild(container)
       }
       return container
@@ -62,6 +62,8 @@ export default defineNuxtPlugin(() => {
         const toastEl = document.createElement('div')
         toastEl.id = toastId
         toastEl.className = 'toast'
+        toastEl.style.backgroundColor = '#ffffff'
+        toastEl.style.backdropFilter = 'none'
         toastEl.setAttribute('role', 'alert')
         toastEl.setAttribute('aria-live', 'assertive')
         toastEl.setAttribute('aria-atomic', 'true')

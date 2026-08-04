@@ -970,6 +970,7 @@ const productForm = ref<ProductCreatePayload>({
 const productFormErrors = ref<Record<string, string[]>>({});
 
 // Images
+const MAX_PRODUCT_IMAGES = 7;
 const pendingImages = ref<
   Array<{ file: File; preview: string; is_featured?: boolean; name?: string }>
 >([]);
@@ -1595,7 +1596,10 @@ const getImagesForUpload = () => {
     });
   }
 
-  const imagesToUpload = Array.from(imageMap.values());
+  const imagesToUpload = Array.from(imageMap.values()).slice(
+    0,
+    MAX_PRODUCT_IMAGES,
+  );
 
   if (
     imagesToUpload.length > 0 &&
@@ -1612,7 +1616,7 @@ const getImagesForUpload = () => {
 
 const handleImageChange = ({ images }: { images: any }) => {
   pendingImages.value = Array.isArray(images)
-    ? images.map((img, index) => ({
+    ? images.slice(0, MAX_PRODUCT_IMAGES).map((img, index) => ({
       file: img.file,
       preview: img.preview,
       is_featured: index === 0,
