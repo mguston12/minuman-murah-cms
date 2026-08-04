@@ -326,7 +326,7 @@
                 <div class="col-md-6">
                   <label class="form-label">
                     <i class="bi bi-tag me-1"></i>
-                    Original Price
+                    Strike Price 
                     <span
                       v-if="discountPercentage !== null"
                       class="badge bg-danger ms-2"
@@ -704,7 +704,7 @@ const fieldLabel = (field: string): string => {
   const labels: Record<string, string> = {
     sku: "SKU",
     price: "Selling Price",
-    strike_price: "Original Price",
+    strike_price: "Strike Price",
     variant_name: "Variant Name",
     attribute_value_ids: "Attribute",
     qty: "Stock Qty",
