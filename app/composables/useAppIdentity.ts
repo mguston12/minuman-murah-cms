@@ -1,7 +1,7 @@
 import type { MaybeRefOrGetter } from "vue";
 
-const DEFAULT_APP_NAME = "APP_NAME";
-const DEFAULT_APP_LOGO = "/assets/img/images.png";
+const DEFAULT_APP_NAME = "Minuman Murah";
+const DEFAULT_APP_LOGO = "/assets/img/logo.png";
 
 const getConfigImageOrValue = (configData: any): string | null => {
   if (!configData) return null;

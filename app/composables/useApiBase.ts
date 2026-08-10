@@ -4,7 +4,7 @@
  */
 export const useApiBase = () => {
   const config = useRuntimeConfig();
-  const baseURL = config.public.apiBase || "http://localhost:8000/api";
+  const baseURL = config.public.apiBase || "http://127.0.0.1:8000/api";
   const token = useCookie("auth_token");
 
   const getHeaders = (isFormData = false) => {

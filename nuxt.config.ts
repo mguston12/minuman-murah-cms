@@ -43,14 +43,14 @@ export default defineNuxtConfig({
       htmlAttrs: {
         lang: 'id'
       },
-      title: 'APP_NAME',
+      title: 'Minuman Murah',
       meta: [
         { charset: 'utf-8' },
         { name: 'viewport', content: 'width=device-width, initial-scale=1' },
-        { key: 'description', name: 'description', content: 'APP_NAME - Toko Online Terpercaya' },
+        { key: 'description', name: 'description', content: 'Minuman Murah - Toko Online Terpercaya' },
         { key: 'og:image', property: 'og:image', content: '/assets/img/images.png' },
-        { key: 'og:title', property: 'og:title', content: 'APP_NAME' },
-        { key: 'og:description', property: 'og:description', content: 'APP_NAME - Toko Online Terpercaya' }
+        { key: 'og:title', property: 'og:title', content: 'Minuman Murah' },
+        { key: 'og:description', property: 'og:description', content: 'Minuman Murah - Toko Online Terpercaya' }
       ],
       link: [
         // Favicons

@@ -21,7 +21,7 @@
       </button>
       <NuxtLink to="/dashboard" class="logo d-flex align-items-center h-full">
         <img 
-          :src="logoUrl || '/assets/img/images.png'" 
+          :src="logoUrl || '/assets/img/logo.png'" 
           :alt="`${appName} Logo`" 
           @error="handleLogoError"
         />
@@ -100,7 +100,7 @@ const { isOpen: isSidebarOpen, toggle: toggleSidebar } = useSidebar()
 
 // Logo management
 const handleLogoError = () => {
-  logoUrl.value = '/assets/img/images.png'
+  logoUrl.value = '/assets/img/logo.png'
 }
 
 const loadLogo = async () => {
