@@ -54,8 +54,8 @@ export default defineNuxtConfig({
       ],
       link: [
         // Favicons
-        { rel: 'icon', type: 'image/x-icon', href: '/assets/img/images.png' },
-        { rel: 'apple-touch-icon', href: '/assets/img/images.png' },
+        { rel: 'icon', type: 'image/x-icon', href: '/assets/img/logo.png' },
+        { rel: 'apple-touch-icon', href: '/assets/img/logo.png' },
         
         // Google Fonts
         { rel: 'preconnect', href: 'https://fonts.gstatic.com' },

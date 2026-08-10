@@ -16,7 +16,7 @@
                     class="logo d-flex align-items-center w-auto"
                   >
                     <img
-                      :src="logoUrl || '/assets/img/images.png'"
+                      :src="logoUrl || '/assets/img/logo.png'"
                       :alt="`${appName} Logo`"
                       @error="handleLogoError"
                     />
@@ -209,7 +209,7 @@ const togglePassword = () => {
 };
 
 const handleLogoError = () => {
-  logoUrl.value = "/assets/img/images.png";
+  logoUrl.value = "/assets/img/logo.png";
 };
 
 const loadLogo = async () => {
