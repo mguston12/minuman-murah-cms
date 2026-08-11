@@ -48,7 +48,7 @@ export default defineNuxtConfig({
         { charset: 'utf-8' },
         { name: 'viewport', content: 'width=device-width, initial-scale=1' },
         { key: 'description', name: 'description', content: 'Minuman Murah - Toko Online Terpercaya' },
-        { key: 'og:image', property: 'og:image', content: '/assets/img/images.png' },
+        { key: 'og:image', property: 'og:image', content: '/assets/img/logo.png' },
         { key: 'og:title', property: 'og:title', content: 'Minuman Murah' },
         { key: 'og:description', property: 'og:description', content: 'Minuman Murah - Toko Online Terpercaya' }
       ],

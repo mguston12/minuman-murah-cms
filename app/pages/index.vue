@@ -1,4 +1,4 @@
-<script setup lang="ts">
+<!-- <script setup lang="ts">
 const auth = useAuth()
 
 const token = useCookie('auth_token')
@@ -12,5 +12,12 @@ await navigateTo('/dashboard')
 <template>
   <div>
   </div>
-</template>
+</template> -->
 
+<script setup lang="ts">
+await navigateTo('/login')
+</script>
+
+<template>
+  <div></div>
+</template>
