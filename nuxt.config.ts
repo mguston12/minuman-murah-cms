@@ -4,41 +4,10 @@ import tailwindcss from '@tailwindcss/vite'
 export default defineNuxtConfig({
   srcDir: 'app',
   compatibilityDate: '2025-07-15',
-  nitro: {
-    devProxy: {
-      '/storage': {
-        target: process.env.NUXT_PUBLIC_API_URL + '/storage',
-        changeOrigin: true,
-      },
-    },
-  },
-  runtimeConfig: {
-    public: {
-      apiBase: process.env.NUXT_PUBLIC_API_BASE,
-      customerFrontendUrl: process.env.NUXT_PUBLIC_CUSTOMER_FRONTEND_URL || 'http://localhost:3000'
-    }
-  },
-  
-  modules: [
-    '@nuxt/content',
-    '@nuxt/eslint',
-    '@nuxt/image',
-    '@nuxt/scripts',
-    '@nuxt/test-utils',
-    '@pinia/nuxt'
-  ],
-  vite: {
-    plugins: [tailwindcss()],
-    server: {
-      allowedHosts: true
-    },
-  },
-  
-  css: [
-    '@/assets/css/tailwind.css'
-  ],
   
   app: {
+    baseURL: '/',
+    buildAssetsDir: '/_nuxt/',
     head: {
       htmlAttrs: {
         lang: 'id'
@@ -53,16 +22,52 @@ export default defineNuxtConfig({
         { key: 'og:description', property: 'og:description', content: 'Minuman Murah - Toko Online Terpercaya' }
       ],
       link: [
-        // Favicons
-        { rel: 'icon', type: 'image/x-icon', href: '/assets/img/logo.png' },
-        { rel: 'apple-touch-icon', href: '/assets/img/logo.png' },
+        { rel: 'icon', type: 'image/x-icon', href: '/favicon.ico' },
+        { rel: 'apple-touch-icon', href: '/favicon.ico' },
         
-        // Google Fonts
         { rel: 'preconnect', href: 'https://fonts.gstatic.com' },
-        { rel: 'stylesheet', href: 'https://fonts.googleapis.com/css?family=Open+Sans:300,300i,400,400i,600,600i,700,700i|Nunito:300,300i,400,400i,600,600i,700,700i|Poppins:300,300i,400,400i,500,500i,600,600i,700,700i' }
+        { rel: 'stylesheet', href: 'https://fonts.googleapis.com/css?family=Open+Sans:300,300i,400,400i,600,600i,700,700i|Nunito:300,300i,400,400i,600,600i,700,700i|Poppins:300,300i,400,400i,500,500i,600,600i,700,700i' },
         
+        { rel: 'stylesheet', href: 'https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css' }
       ]
     }
   },
+
+  nitro: {
+    devProxy: {
+      '/storage': {
+        target: (process.env.NUXT_PUBLIC_API_URL || '') + '/storage',
+        changeOrigin: true,
+      },
+    },
+  },
+
+  runtimeConfig: {
+    public: {
+      apiBase: process.env.NUXT_PUBLIC_API_BASE || '',
+      customerFrontendUrl: process.env.NUXT_PUBLIC_CUSTOMER_FRONTEND_URL || ''
+    }
+  },
+  
+  modules: [
+    '@nuxt/content',
+    '@nuxt/eslint',
+    '@nuxt/image',
+    '@nuxt/scripts',
+    '@nuxt/test-utils',
+    '@pinia/nuxt'
+  ],
+
+  vite: {
+    plugins: [tailwindcss()],
+    server: {
+      allowedHosts: true
+    },
+  },
+  
+  css: [
+    '@/assets/css/tailwind.css'
+  ],
+
   components: true
 })
