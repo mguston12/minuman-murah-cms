@@ -16,23 +16,10 @@
       <div class="card">
         <div class="card-body">
           <div class="overflow-auto">
-            <ul
-              class="nav nav-tabs flex-nowrap"
-              id="settingsTabs"
-              role="tablist"
-            >
-              <li
-                class="nav-item"
-                role="presentation"
-                v-for="tab in tabs"
-                :key="tab.key"
-              >
-                <button
-                  class="nav-link text-nowrap"
-                  :class="{ active: activeTab === tab.key }"
-                  @click="activeTab = tab.key"
-                  type="button"
-                >
+            <ul class="nav nav-tabs flex-nowrap" id="settingsTabs" role="tablist">
+              <li class="nav-item" role="presentation" v-for="tab in tabs" :key="tab.key">
+                <button class="nav-link text-nowrap" :class="{ active: activeTab === tab.key }"
+                  @click="activeTab = tab.key" type="button">
                   {{ tab.label }}
                 </button>
               </li>
@@ -46,87 +33,44 @@
 
           <div class="tab-content">
             <!-- Store Tab -->
-            <StoreTab
-              v-if="activeTab === 'store' && hasPermission('stores.read')"
-              :stores="stores"
-              :loading-stores="loadingStores"
-              :is-active="activeTab === 'store'"
-              @edit-store="handleEditClick"
-              @delete-store="handleDeleteClick"
-              @load-provinces="loadProvinces"
-            />
+            <StoreTab v-if="activeTab === 'store' && hasPermission('stores.read')" :stores="stores"
+              :loading-stores="loadingStores" :is-active="activeTab === 'store'" @edit-store="handleEditClick"
+              @delete-store="handleDeleteClick" @load-provinces="loadProvinces" />
 
             <!-- Product Protection Tab -->
-            <ProductProtectionTab
-              v-if="
-                activeTab === 'productProtection' &&
-                hasPermission('configs.read')
-              "
-              :form-data="formData"
-              :is-loading="isLoading"
-              :is-active="activeTab === 'productProtection'"
-              @save-settings="saveSettings"
-            />
+            <ProductProtectionTab v-if="
+              activeTab === 'productProtection' &&
+              hasPermission('configs.read')
+            " :form-data="formData" :is-loading="isLoading" :is-active="activeTab === 'productProtection'"
+              @save-settings="saveSettings" />
 
             <!-- Email Tab -->
-            <EmailTab
-              v-if="activeTab === 'email' && hasPermission('configs.read')"
-              :form-data="formData"
-              :is-loading="isLoading"
-              :is-active="activeTab === 'email'"
-              @save-settings="saveSettings"
-            />
+            <EmailTab v-if="activeTab === 'email' && hasPermission('configs.read')" :form-data="formData"
+              :is-loading="isLoading" :is-active="activeTab === 'email'" @save-settings="saveSettings" />
 
             <!-- App Tab -->
-            <AppTab
-              v-if="activeTab === 'app' && hasPermission('configs.read')"
-              :form-data="formData"
-              :is-loading="isLoading"
-              :app-logo-preview="appLogoPreview"
-              :app-favicon-preview="appFaviconPreview"
-              :is-active="activeTab === 'app'"
-              @save-settings="saveSettings"
-              @file-change="onFileChange"
-            />
+            <AppTab v-if="activeTab === 'app' && hasPermission('configs.read')" :form-data="formData"
+              :is-loading="isLoading" :app-logo-preview="appLogoPreview" :app-favicon-preview="appFaviconPreview"
+              :is-active="activeTab === 'app'" @save-settings="saveSettings" @file-change="onFileChange" />
 
             <!-- Payment Tab -->
-            <PaymentTab
-              v-if="activeTab === 'payment' && hasPermission('configs.read')"
-              :form-data="formData"
-              :is-loading="isLoading"
-              :is-active="activeTab === 'payment'"
-              @save-settings="saveSettings"
-              @toggle-method="togglePaymentMethod"
-            />
+            <PaymentTab v-if="activeTab === 'payment' && hasPermission('configs.read')" :form-data="formData"
+              :is-loading="isLoading" :is-active="activeTab === 'payment'" @save-settings="saveSettings"
+              @toggle-method="togglePaymentMethod" />
 
             <!-- Gojek Instant Tab -->
-            <GojekInstantTab
-              v-if="activeTab === 'gojek_instant' && hasPermission('configs.read')"
-              :form-data="formData"
-              :is-loading="isLoading"
-              :is-active="activeTab === 'gojek_instant'"
-              @save-settings="saveSettings"
-            />
+            <GojekInstantTab v-if="activeTab === 'gojek_instant' && hasPermission('configs.read')" :form-data="formData"
+              :is-loading="isLoading" :is-active="activeTab === 'gojek_instant'" @save-settings="saveSettings" />
 
             <!-- Social Tab -->
-            <SocialTab
-              v-if="activeTab === 'social' && hasPermission('configs.read')"
-              :form-data="formData"
-              :is-loading="isLoading"
-              :is-active="activeTab === 'social'"
-              @save-settings="saveSettings"
-            />
+            <SocialTab v-if="activeTab === 'social' && hasPermission('configs.read')" :form-data="formData"
+              :is-loading="isLoading" :is-active="activeTab === 'social'" @save-settings="saveSettings" />
 
             <!-- Notification Tab -->
-            <NotificationTab
-              v-if="
-                activeTab === 'notification' && hasPermission('configs.read')
-              "
-              :form-data="formData"
-              :is-loading="isLoading"
-              :is-active="activeTab === 'notification'"
-              @save-settings="saveSettings"
-            />
+            <NotificationTab v-if="
+              activeTab === 'notification' && hasPermission('configs.read')
+            " :form-data="formData" :is-loading="isLoading" :is-active="activeTab === 'notification'"
+              @save-settings="saveSettings" />
 
             <!-- Point Tab (hidden) -->
             <!-- <PointTab
@@ -137,145 +81,86 @@
               @save-settings="saveSettings"
             /> -->
 
-            <!-- Top Banner Tab -->
-            <TopBannerTab
-              v-if="activeTab === 'topbanner' && hasPermission('configs.read')"
-              :form-data="formData"
-              :is-loading="isLoading"
-              :is-active="activeTab === 'topbanner'"
-              @save-settings="saveSettings"
-            />
+            <!-- Middle Banner Tab -->
+            <TopBannerTab v-if="activeTab === 'topbanner' && hasPermission('configs.read')" :form-data="formData"
+              :is-loading="isLoading" :is-active="activeTab === 'topbanner'" @save-settings="saveSettings" />
 
             <!-- Main Banner Tab -->
-            <MainBannerTab
-              v-if="activeTab === 'mainBanner' && hasPermission('configs.read')"
-              :is-active="activeTab === 'mainBanner'"
-            />
+            <MainBannerTab v-if="activeTab === 'mainBanner' && hasPermission('configs.read')"
+              :is-active="activeTab === 'mainBanner'" />
 
             <!-- Popup Banner Tab -->
-            <PopupBannerTab
-              v-if="
-                activeTab === 'popupBanner' && hasPermission('configs.read')
-              "
-              :popup-banners="popupBanners"
-              :loading-popup-banners="loadingPopupBanners"
-              :is-active="activeTab === 'popupBanner'"
-              @create-banner="handleCreatePopupBannerClick"
-              @edit-banner="handleEditPopupBannerClick"
-              @delete-banner="handleDeletePopupBannerClick"
-            />
+            <PopupBannerTab v-if="
+              activeTab === 'popupBanner' && hasPermission('configs.read')
+            " :popup-banners="popupBanners" :loading-popup-banners="loadingPopupBanners"
+              :is-active="activeTab === 'popupBanner'" @create-banner="handleCreatePopupBannerClick"
+              @edit-banner="handleEditPopupBannerClick" @delete-banner="handleDeletePopupBannerClick" />
           </div>
         </div>
       </div>
     </section>
 
     <!-- Create Store Modal -->
-    <div
-      id="createStoreModal"
-      class="modal fade"
-      tabindex="-1"
-      aria-labelledby="createStoreModalLabel"
-      aria-hidden="true"
-    >
+    <div id="createStoreModal" class="modal fade" tabindex="-1" aria-labelledby="createStoreModalLabel"
+      aria-hidden="true">
       <div class="modal-dialog modal-lg">
         <div class="modal-content">
           <div class="modal-header">
             <h5 class="modal-title" id="createStoreModalLabel">
               Create New Store
             </h5>
-            <button
-              type="button"
-              class="btn-close"
-              data-bs-dismiss="modal"
-              aria-label="Close"
-              @click="resetStoreForm"
-            ></button>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"
+              @click="resetStoreForm"></button>
           </div>
           <form @submit.prevent="handleCreateStore">
             <div class="modal-body">
               <div class="row g-3">
                 <div class="col-md-6">
-                  <label class="form-label"
-                    >Store Name <span class="text-danger">*</span></label
-                  >
-                  <input
-                    v-model="storeForm.name"
-                    type="text"
-                    required
-                    class="form-control"
-                    :class="{ 'is-invalid': storeFormErrors.name }"
-                    placeholder="Store Name"
-                  />
+                  <label class="form-label">Store Name <span class="text-danger">*</span></label>
+                  <input v-model="storeForm.name" type="text" required class="form-control"
+                    :class="{ 'is-invalid': storeFormErrors.name }" placeholder="Store Name" />
                   <div v-if="storeFormErrors.name" class="invalid-feedback">
                     {{ storeFormErrors.name[0] }}
                   </div>
                 </div>
                 <div class="col-md-6">
                   <label class="form-label">Code</label>
-                  <input
-                    v-model="storeForm.code"
-                    type="text"
-                    class="form-control"
-                    :class="{ 'is-invalid': storeFormErrors.code }"
-                    placeholder="STORE001"
-                  />
+                  <input v-model="storeForm.code" type="text" class="form-control"
+                    :class="{ 'is-invalid': storeFormErrors.code }" placeholder="STORE001" />
                   <div v-if="storeFormErrors.code" class="invalid-feedback">
                     {{ storeFormErrors.code[0] }}
                   </div>
                 </div>
                 <div class="col-md-6">
                   <label class="form-label">Email</label>
-                  <input
-                    v-model="storeForm.email"
-                    type="email"
-                    class="form-control"
-                    :class="{ 'is-invalid': storeFormErrors.email }"
-                    placeholder="store@example.com"
-                  />
+                  <input v-model="storeForm.email" type="email" class="form-control"
+                    :class="{ 'is-invalid': storeFormErrors.email }" placeholder="store@example.com" />
                   <div v-if="storeFormErrors.email" class="invalid-feedback">
                     {{ storeFormErrors.email[0] }}
                   </div>
                 </div>
                 <div class="col-md-6">
                   <label class="form-label">Phone</label>
-                  <input
-                    v-model="storeForm.phone"
-                    type="text"
-                    class="form-control"
-                    :class="{ 'is-invalid': storeFormErrors.phone }"
-                    placeholder="62812345678"
-                  />
+                  <input v-model="storeForm.phone" type="text" class="form-control"
+                    :class="{ 'is-invalid': storeFormErrors.phone }" placeholder="62812345678" />
                   <div v-if="storeFormErrors.phone" class="invalid-feedback">
                     {{ storeFormErrors.phone[0] }}
                   </div>
                 </div>
                 <div class="col-12">
                   <label class="form-label">Address</label>
-                  <textarea
-                    v-model="storeForm.address"
-                    class="form-control"
-                    :class="{ 'is-invalid': storeFormErrors.address }"
-                    rows="2"
-                    placeholder="Full Address"
-                  ></textarea>
+                  <textarea v-model="storeForm.address" class="form-control"
+                    :class="{ 'is-invalid': storeFormErrors.address }" rows="2" placeholder="Full Address"></textarea>
                   <div v-if="storeFormErrors.address" class="invalid-feedback">
                     {{ storeFormErrors.address[0] }}
                   </div>
                 </div>
                 <div class="col-md-6">
                   <label class="form-label">Province</label>
-                  <select
-                    v-model="storeForm.selectedProvinceId"
-                    @change="onProvinceChange"
-                    class="form-select"
-                    :disabled="loadingProvinces"
-                  >
+                  <select v-model="storeForm.selectedProvinceId" @change="onProvinceChange" class="form-select"
+                    :disabled="loadingProvinces">
                     <option :value="null">Pilih Provinsi</option>
-                    <option
-                      v-for="province in provinces"
-                      :key="province.id"
-                      :value="province.id"
-                    >
+                    <option v-for="province in provinces" :key="province.id" :value="province.id">
                       {{ province.name }}
                     </option>
                   </select>
@@ -283,18 +168,10 @@
                 </div>
                 <div class="col-md-6">
                   <label class="form-label">City/Kabupaten</label>
-                  <select
-                    v-model="storeForm.selectedCityId"
-                    @change="onCityChange"
-                    class="form-select"
-                    :disabled="loadingCities || !storeForm.selectedProvinceId"
-                  >
+                  <select v-model="storeForm.selectedCityId" @change="onCityChange" class="form-select"
+                    :disabled="loadingCities || !storeForm.selectedProvinceId">
                     <option :value="null">Pilih Kota/Kabupaten</option>
-                    <option
-                      v-for="city in cities"
-                      :key="city.id"
-                      :value="city.id"
-                    >
+                    <option v-for="city in cities" :key="city.id" :value="city.id">
                       {{ city.name }}
                     </option>
                   </select>
@@ -306,21 +183,11 @@
                 </div>
                 <div class="col-md-6">
                   <label class="form-label">Country</label>
-                  <input
-                    v-model="storeForm.country"
-                    type="text"
-                    class="form-control"
-                    placeholder="Indonesia"
-                  />
+                  <input v-model="storeForm.country" type="text" class="form-control" placeholder="Indonesia" />
                 </div>
                 <div class="col-md-6">
                   <label class="form-label">Postal Code</label>
-                  <input
-                    v-model="storeForm.postal_code"
-                    type="text"
-                    class="form-control"
-                    placeholder="12345"
-                  />
+                  <input v-model="storeForm.postal_code" type="text" class="form-control" placeholder="12345" />
                 </div>
                 <div class="col-md-6">
                   <label class="form-label">Status</label>
@@ -336,19 +203,10 @@
               </div>
             </div>
             <div class="modal-footer">
-              <button
-                type="button"
-                class="btn btn-secondary"
-                data-bs-dismiss="modal"
-                @click="resetStoreForm"
-              >
+              <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" @click="resetStoreForm">
                 Cancel
               </button>
-              <button
-                type="submit"
-                class="btn btn-primary"
-                :disabled="isLoading"
-              >
+              <button type="submit" class="btn btn-primary" :disabled="isLoading">
                 {{ isLoading ? "Creating..." : "Create Store" }}
               </button>
             </div>
@@ -358,105 +216,63 @@
     </div>
 
     <!-- Edit Store Modal -->
-    <div
-      id="editStoreModal"
-      class="modal fade"
-      tabindex="-1"
-      aria-labelledby="editStoreModalLabel"
-      aria-hidden="true"
-    >
+    <div id="editStoreModal" class="modal fade" tabindex="-1" aria-labelledby="editStoreModalLabel" aria-hidden="true">
       <div class="modal-dialog modal-lg">
         <div class="modal-content">
           <div class="modal-header">
             <h5 class="modal-title" id="editStoreModalLabel">Edit Store</h5>
-            <button
-              type="button"
-              class="btn-close"
-              data-bs-dismiss="modal"
-              aria-label="Close"
-              @click="resetStoreForm"
-            ></button>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"
+              @click="resetStoreForm"></button>
           </div>
           <form @submit.prevent="handleUpdateStore">
             <div class="modal-body">
               <div class="row g-3">
                 <div class="col-md-6">
-                  <label class="form-label"
-                    >Store Name <span class="text-danger">*</span></label
-                  >
-                  <input
-                    v-model="storeForm.name"
-                    type="text"
-                    required
-                    class="form-control"
-                    :class="{ 'is-invalid': storeFormErrors.name }"
-                  />
+                  <label class="form-label">Store Name <span class="text-danger">*</span></label>
+                  <input v-model="storeForm.name" type="text" required class="form-control"
+                    :class="{ 'is-invalid': storeFormErrors.name }" />
                   <div v-if="storeFormErrors.name" class="invalid-feedback">
                     {{ storeFormErrors.name[0] }}
                   </div>
                 </div>
                 <div class="col-md-6">
                   <label class="form-label">Code</label>
-                  <input
-                    v-model="storeForm.code"
-                    type="text"
-                    class="form-control"
-                    :class="{ 'is-invalid': storeFormErrors.code }"
-                  />
+                  <input v-model="storeForm.code" type="text" class="form-control"
+                    :class="{ 'is-invalid': storeFormErrors.code }" />
                   <div v-if="storeFormErrors.code" class="invalid-feedback">
                     {{ storeFormErrors.code[0] }}
                   </div>
                 </div>
                 <div class="col-md-6">
                   <label class="form-label">Email</label>
-                  <input
-                    v-model="storeForm.email"
-                    type="email"
-                    class="form-control"
-                    :class="{ 'is-invalid': storeFormErrors.email }"
-                  />
+                  <input v-model="storeForm.email" type="email" class="form-control"
+                    :class="{ 'is-invalid': storeFormErrors.email }" />
                   <div v-if="storeFormErrors.email" class="invalid-feedback">
                     {{ storeFormErrors.email[0] }}
                   </div>
                 </div>
                 <div class="col-md-6">
                   <label class="form-label">Phone</label>
-                  <input
-                    v-model="storeForm.phone"
-                    type="text"
-                    class="form-control"
-                    :class="{ 'is-invalid': storeFormErrors.phone }"
-                  />
+                  <input v-model="storeForm.phone" type="text" class="form-control"
+                    :class="{ 'is-invalid': storeFormErrors.phone }" />
                   <div v-if="storeFormErrors.phone" class="invalid-feedback">
                     {{ storeFormErrors.phone[0] }}
                   </div>
                 </div>
                 <div class="col-12">
                   <label class="form-label">Address</label>
-                  <textarea
-                    v-model="storeForm.address"
-                    class="form-control"
-                    :class="{ 'is-invalid': storeFormErrors.address }"
-                    rows="2"
-                  ></textarea>
+                  <textarea v-model="storeForm.address" class="form-control"
+                    :class="{ 'is-invalid': storeFormErrors.address }" rows="2"></textarea>
                   <div v-if="storeFormErrors.address" class="invalid-feedback">
                     {{ storeFormErrors.address[0] }}
                   </div>
                 </div>
                 <div class="col-md-6">
                   <label class="form-label">Province</label>
-                  <select
-                    v-model="storeForm.selectedProvinceId"
-                    @change="onProvinceChange"
-                    class="form-select"
-                    :disabled="loadingProvinces"
-                  >
+                  <select v-model="storeForm.selectedProvinceId" @change="onProvinceChange" class="form-select"
+                    :disabled="loadingProvinces">
                     <option :value="null">Pilih Provinsi</option>
-                    <option
-                      v-for="province in provinces"
-                      :key="province.id"
-                      :value="province.id"
-                    >
+                    <option v-for="province in provinces" :key="province.id" :value="province.id">
                       {{ province.name }}
                     </option>
                   </select>
@@ -464,18 +280,10 @@
                 </div>
                 <div class="col-md-6">
                   <label class="form-label">City/Kabupaten</label>
-                  <select
-                    v-model="storeForm.selectedCityId"
-                    @change="onCityChange"
-                    class="form-select"
-                    :disabled="loadingCities || !storeForm.selectedProvinceId"
-                  >
+                  <select v-model="storeForm.selectedCityId" @change="onCityChange" class="form-select"
+                    :disabled="loadingCities || !storeForm.selectedProvinceId">
                     <option :value="null">Pilih Kota/Kabupaten</option>
-                    <option
-                      v-for="city in cities"
-                      :key="city.id"
-                      :value="city.id"
-                    >
+                    <option v-for="city in cities" :key="city.id" :value="city.id">
                       {{ city.name }}
                     </option>
                   </select>
@@ -487,19 +295,11 @@
                 </div>
                 <div class="col-md-6">
                   <label class="form-label">Country</label>
-                  <input
-                    v-model="storeForm.country"
-                    type="text"
-                    class="form-control"
-                  />
+                  <input v-model="storeForm.country" type="text" class="form-control" />
                 </div>
                 <div class="col-md-6">
                   <label class="form-label">Postal Code</label>
-                  <input
-                    v-model="storeForm.postal_code"
-                    type="text"
-                    class="form-control"
-                  />
+                  <input v-model="storeForm.postal_code" type="text" class="form-control" />
                 </div>
                 <div class="col-md-6">
                   <label class="form-label">Status</label>
@@ -515,19 +315,10 @@
               </div>
             </div>
             <div class="modal-footer">
-              <button
-                type="button"
-                class="btn btn-secondary"
-                data-bs-dismiss="modal"
-                @click="resetStoreForm"
-              >
+              <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" @click="resetStoreForm">
                 Cancel
               </button>
-              <button
-                type="submit"
-                class="btn btn-success"
-                :disabled="isLoading"
-              >
+              <button type="submit" class="btn btn-success" :disabled="isLoading">
                 {{ isLoading ? "Updating..." : "Update Store" }}
               </button>
             </div>
@@ -537,45 +328,25 @@
     </div>
 
     <!-- Delete Store Modal -->
-    <div
-      id="deleteStoreModal"
-      class="modal fade"
-      tabindex="-1"
-      aria-labelledby="deleteStoreModalLabel"
-      aria-hidden="true"
-    >
+    <div id="deleteStoreModal" class="modal fade" tabindex="-1" aria-labelledby="deleteStoreModalLabel"
+      aria-hidden="true">
       <div class="modal-dialog">
         <div class="modal-content">
           <div class="modal-header">
             <h5 class="modal-title" id="deleteStoreModalLabel">Delete Store</h5>
-            <button
-              type="button"
-              class="btn-close"
-              data-bs-dismiss="modal"
-              aria-label="Close"
-            ></button>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
           </div>
           <div class="modal-body">
             <p>
               Are you sure you want to delete
-              <strong>{{ storeToDelete?.name }}</strong
-              >? This action cannot be undone.
+              <strong>{{ storeToDelete?.name }}</strong>? This action cannot be undone.
             </p>
           </div>
           <div class="modal-footer">
-            <button
-              type="button"
-              class="btn btn-secondary"
-              data-bs-dismiss="modal"
-            >
+            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
               Cancel
             </button>
-            <button
-              type="button"
-              class="btn btn-danger"
-              @click="handleDeleteStore"
-              :disabled="isLoading"
-            >
+            <button type="button" class="btn btn-danger" @click="handleDeleteStore" :disabled="isLoading">
               {{ isLoading ? "Deleting..." : "Delete Store" }}
             </button>
           </div>
@@ -589,23 +360,14 @@
         <div class="modal-content">
           <div class="modal-header">
             <h5 class="modal-title">Create Popup Banner</h5>
-            <button
-              type="button"
-              class="btn-close"
-              data-bs-dismiss="modal"
-            ></button>
+            <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
           </div>
 
           <div class="modal-body">
             <form @submit.prevent="handleCreatePopupBanner">
               <div class="mb-3">
                 <label class="form-label">Title</label>
-                <input
-                  v-model="popupBannerForm.title"
-                  type="text"
-                  class="form-control"
-                  required
-                />
+                <input v-model="popupBannerForm.title" type="text" class="form-control" required />
               </div>
 
               <div class="mb-3">
@@ -616,63 +378,34 @@
               <div class="row">
                 <div class="col-md-6 mb-3">
                   <label class="form-label">Start Date</label>
-                  <input
-                    v-model="popupBannerForm.start_date"
-                    type="date"
-                    class="form-control"
-                  />
+                  <input v-model="popupBannerForm.start_date" type="date" class="form-control" />
                 </div>
 
                 <div class="col-md-6 mb-3">
                   <label class="form-label">End Date</label>
-                  <input
-                    v-model="popupBannerForm.end_date"
-                    type="date"
-                    class="form-control"
-                  />
+                  <input v-model="popupBannerForm.end_date" type="date" class="form-control" />
                 </div>
               </div>
 
               <div class="mb-3">
                 <label class="form-label">Url</label>
-                <input
-                  v-model="popupBannerForm.url"
-                  type="text"
-                  class="form-control"
-                />
+                <input v-model="popupBannerForm.url" type="text" class="form-control" />
               </div>
 
               <div class="mb-3">
                 <label class="form-label">Image</label>
-                <input
-                  type="file"
-                  class="form-control"
-                  @change="handlePopupBannerImageChange"
-                  required
-                />
+                <input type="file" class="form-control" @change="handlePopupBannerImageChange" required />
               </div>
 
               <div v-if="popupBannerImagePreview" class="mb-3">
-                <img
-                  :src="popupBannerImagePreview"
-                  class="img-fluid rounded"
-                  style="max-height: 150px"
-                />
+                <img :src="popupBannerImagePreview" class="img-fluid rounded" style="max-height: 150px" />
               </div>
 
               <div class="text-end">
-                <button
-                  type="button"
-                  class="btn btn-secondary me-2"
-                  data-bs-dismiss="modal"
-                >
+                <button type="button" class="btn btn-secondary me-2" data-bs-dismiss="modal">
                   Cancel
                 </button>
-                <button
-                  type="submit"
-                  class="btn btn-primary"
-                  :disabled="isLoading"
-                >
+                <button type="submit" class="btn btn-primary" :disabled="isLoading">
                   Save
                 </button>
               </div>
@@ -688,23 +421,14 @@
         <div class="modal-content">
           <div class="modal-header">
             <h5 class="modal-title">Edit Popup Banner</h5>
-            <button
-              type="button"
-              class="btn-close"
-              data-bs-dismiss="modal"
-            ></button>
+            <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
           </div>
 
           <div class="modal-body">
             <form @submit.prevent="handleUpdatePopupBanner">
               <div class="mb-3">
                 <label class="form-label">Title</label>
-                <input
-                  v-model="popupBannerForm.title"
-                  type="text"
-                  class="form-control"
-                  required
-                />
+                <input v-model="popupBannerForm.title" type="text" class="form-control" required />
               </div>
 
               <div class="mb-3">
@@ -715,62 +439,34 @@
               <div class="row">
                 <div class="col-md-6 mb-3">
                   <label class="form-label">Start Date</label>
-                  <input
-                    v-model="popupBannerForm.start_date"
-                    type="date"
-                    class="form-control"
-                  />
+                  <input v-model="popupBannerForm.start_date" type="date" class="form-control" />
                 </div>
 
                 <div class="col-md-6 mb-3">
                   <label class="form-label">End Date</label>
-                  <input
-                    v-model="popupBannerForm.end_date"
-                    type="date"
-                    class="form-control"
-                  />
+                  <input v-model="popupBannerForm.end_date" type="date" class="form-control" />
                 </div>
               </div>
 
               <div class="mb-3">
                 <label class="form-label">Url</label>
-                <input
-                  v-model="popupBannerForm.url"
-                  type="text"
-                  class="form-control"
-                />
+                <input v-model="popupBannerForm.url" type="text" class="form-control" />
               </div>
 
               <div class="mb-3">
                 <label class="form-label">Image</label>
-                <input
-                  type="file"
-                  class="form-control"
-                  @change="handlePopupBannerImageChange"
-                />
+                <input type="file" class="form-control" @change="handlePopupBannerImageChange" />
               </div>
 
               <div v-if="popupBannerImagePreview" class="mb-3">
-                <img
-                  :src="popupBannerImagePreview"
-                  class="img-fluid rounded"
-                  style="max-height: 150px"
-                />
+                <img :src="popupBannerImagePreview" class="img-fluid rounded" style="max-height: 150px" />
               </div>
 
               <div class="text-end">
-                <button
-                  type="button"
-                  class="btn btn-secondary me-2"
-                  data-bs-dismiss="modal"
-                >
+                <button type="button" class="btn btn-secondary me-2" data-bs-dismiss="modal">
                   Cancel
                 </button>
-                <button
-                  type="submit"
-                  class="btn btn-success"
-                  :disabled="isLoading"
-                >
+                <button type="submit" class="btn btn-success" :disabled="isLoading">
                   Update
                 </button>
               </div>
@@ -780,47 +476,27 @@
       </div>
     </div>
     <!-- Delete Popup Banner Modal -->
-    <div
-      id="deletePopupBannerModal"
-      class="modal fade"
-      tabindex="-1"
-      aria-labelledby="deletePopupBannerModalLabel"
-      aria-hidden="true"
-    >
+    <div id="deletePopupBannerModal" class="modal fade" tabindex="-1" aria-labelledby="deletePopupBannerModalLabel"
+      aria-hidden="true">
       <div class="modal-dialog">
         <div class="modal-content">
           <div class="modal-header">
             <h5 class="modal-title" id="deletePopupBannerModalLabel">
               Delete Popup Banner
             </h5>
-            <button
-              type="button"
-              class="btn-close"
-              data-bs-dismiss="modal"
-              aria-label="Close"
-            ></button>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
           </div>
           <div class="modal-body">
             <p>
               Are you sure you want to delete
-              <strong>{{ popupBannerToDelete?.title }}</strong
-              >? This action cannot be undone.
+              <strong>{{ popupBannerToDelete?.title }}</strong>? This action cannot be undone.
             </p>
           </div>
           <div class="modal-footer">
-            <button
-              type="button"
-              class="btn btn-secondary"
-              data-bs-dismiss="modal"
-            >
+            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
               Cancel
             </button>
-            <button
-              type="button"
-              class="btn btn-danger"
-              @click="handleDeletePopupBanner"
-              :disabled="isLoading"
-            >
+            <button type="button" class="btn btn-danger" @click="handleDeletePopupBanner" :disabled="isLoading">
               {{ isLoading ? "Deleting..." : "Delete Popup Banner" }}
             </button>
           </div>
@@ -935,7 +611,7 @@ const allTabs = [
   { key: "social", label: "Social Media" },
   { key: "notification", label: "Notifications" },
   // { key: "point", label: "Point System" },
-  { key: "topbanner", label: "Top Banner" },
+  { key: "topbanner", label: "Middle Banner" },
   { key: "mainBanner", label: "Main Banner" },
   { key: "popupBanner", label: "Popup Banner" },
 ];
