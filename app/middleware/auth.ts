@@ -1,6 +1,4 @@
-// middleware/auth.ts
 export default defineNuxtRouteMiddleware(async (to, from) => {
-  // Hanya jalankan logika di client side
   if (import.meta.server) return;
 
   const { user, fetchUser } = useAuth();
@@ -17,7 +15,7 @@ export default defineNuxtRouteMiddleware(async (to, from) => {
     try {
       await fetchUser();
     } catch (err) {
-      console.error("Fetch user failed:", err);
+      console.error("Auth middleware error:", err);
     }
   }
 

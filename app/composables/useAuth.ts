@@ -68,14 +68,17 @@ export const useAuth = () => {
     const { data, error: apiError } = await getMe(ssrHeaders);
 
     if (apiError || !data?.success) {
-      if (apiError?.status === 401) {
+      const status =
+        apiError?.status || apiError?.statusCode || apiError?.response?.status;
+      if (status === 401) {
         token.value = null;
         user.value = null;
       }
       return;
     }
 
-    user.value = data.data?.user || null;
+    // Pastikan pemetaan mengarah langsung ke user object
+    user.value = data.data?.user || data.data || null;
   };
 
   const initAuth = async () => {
@@ -87,7 +90,7 @@ export const useAuth = () => {
   };
 
   return {
-    user: readonly(user),
+    user,
     isAuthenticated,
     login,
     logout,
