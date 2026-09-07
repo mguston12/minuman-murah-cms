@@ -1,19 +1,23 @@
-export default defineNuxtRouteMiddleware(async (to, from) => {
+export default defineNuxtRouteMiddleware(async (to) => {
   const auth = useAuth()
-
-  // Always initialize auth state first (will validate token with backend)
   const token = useCookie('auth_token')
-  
-  // If we have a token, always verify it with backend first
-  if (token.value) {
-    // This will call backend API to validate token
-    // If token is invalid/random, backend will return 401 and fetchUser() will clear token & user
-    await auth.initAuth()
+
+  // Hanya jalankan initAuth jika ada token DAN user belum terisi di state
+  if (token.value && !auth.user.value) {
+    try {
+      await auth.initAuth()
+    } catch (e) {
+      console.error('Failed to restore auth session:', e)
+    }
   }
 
-  // After validation, check if user is authenticated
-  // If token was random/invalid, isAuthenticated will be false (token & user already cleared)
-  if (!auth.isAuthenticated.value) {
+  // Jika TIDAK terautentikasi dan mencoba akses halaman terproteksi
+  if (!auth.isAuthenticated.value && to.path !== '/login') {
     return navigateTo('/login')
+  }
+
+  // JIKA SUDAH terautentikasi tapi malah buka halaman /login -> lempar ke dashboard
+  if (auth.isAuthenticated.value && to.path === '/login') {
+    return navigateTo('/dashboard')
   }
 })

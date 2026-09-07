@@ -1,40 +1,24 @@
-/**
- * Admin Only Middleware
- * 
- * Melindungi routes yang hanya bisa diakses oleh admin/manager
- * Redirect ke dashboard jika user bukan admin
- */
-
-export default defineNuxtRouteMiddleware(async (to, from) => {
+export default defineNuxtRouteMiddleware(async (to) => {
   const auth = useAuth()
-
-  // Initialize auth first
   const token = useCookie('auth_token')
-  if (token.value) {
+
+  // Cukup pastikan auth initialized
+  if (token.value && !auth.user.value) {
     await auth.initAuth()
   }
 
-  // Check jika user tidak authenticated
   if (!auth.isAuthenticated.value) {
     return navigateTo('/login')
   }
 
-  // Check jika user bukan admin
   const user = auth.user.value
-  if (!user?.roles) {
-    return navigateTo('/dashboard')
-  }
-
-  const userRoles = user.roles.map((r: any) => {
-    if (typeof r === 'string') return r
-    return r.name || String(r)
-  })
-
+  const userRoles = user?.roles?.map((r: any) => typeof r === 'string' ? r : (r.name || String(r))) || []
   const adminRoles = ['Super Admin', 'Admin', 'Manager']
-  const hasAdminAccess = userRoles.some(role => adminRoles.includes(role))
 
-  if (!hasAdminAccess) {
+  const hasAdminAccess = userRoles.some((role: string) => adminRoles.includes(role))
+
+  // Jika bukan admin DAN bukan sedang di /dashboard -> arahkan ke /dashboard
+  if (!hasAdminAccess && to.path !== '/dashboard') {
     return navigateTo('/dashboard')
   }
 })
-
