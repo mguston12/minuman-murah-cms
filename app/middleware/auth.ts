@@ -1,23 +1,29 @@
-export default defineNuxtRouteMiddleware(async (to) => {
-  const auth = useAuth()
-  const token = useCookie('auth_token')
+export default defineNuxtRouteMiddleware(async (to, from) => {
+  if (import.meta.server) return;
 
-  // Hanya jalankan initAuth jika ada token DAN user belum terisi di state
-  if (token.value && !auth.user.value) {
+  const { user, fetchUser } = useAuth();
+  const authToken = useCookie("auth_token");
+
+  if (!authToken.value) {
+    if (to.path !== "/login") {
+      return navigateTo("/login");
+    }
+    return;
+  }
+
+  if (authToken.value && !user.value) {
     try {
-      await auth.initAuth()
-    } catch (e) {
-      console.error('Failed to restore auth session:', e)
+      await fetchUser();
+    } catch (err) {
+      console.error("Auth middleware error:", err);
     }
   }
 
-  // Jika TIDAK terautentikasi dan mencoba akses halaman terproteksi
-  if (!auth.isAuthenticated.value && to.path !== '/login') {
-    return navigateTo('/login')
+  if (!user.value && to.path !== "/login") {
+    return navigateTo("/login");
   }
 
-  // JIKA SUDAH terautentikasi tapi malah buka halaman /login -> lempar ke dashboard
-  if (auth.isAuthenticated.value && to.path === '/login') {
-    return navigateTo('/dashboard')
+  if (user.value && to.path === "/login") {
+    return navigateTo("/dashboard");
   }
-})
+});

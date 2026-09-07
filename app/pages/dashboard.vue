@@ -20,37 +20,22 @@
           <div class="row g-3">
             <div class="col-12 col-md-4">
               <NuxtLink to="/manage-product">
-                <DashboardStatsCard
-                  title="Total Products"
-                  subtitle="In Catalog"
-                  :value="formatNumber(dashboardStats.totalProducts)"
-                  icon="bi-bag"
-                  :loading="isLoading"
-                />
+                <DashboardStatsCard title="Total Products" subtitle="In Catalog"
+                  :value="formatNumber(dashboardStats.totalProducts)" icon="bi-bag" :loading="isLoading" />
               </NuxtLink>
             </div>
 
             <div class="col-12 col-md-4">
               <NuxtLink to="/manage-order">
-                <DashboardStatsCard
-                  title="Total Orders"
-                  subtitle="All Orders"
-                  :value="formatNumber(dashboardStats.totalOrders)"
-                  icon="bi-cart"
-                  :loading="isLoading"
-                />
+                <DashboardStatsCard title="Total Orders" subtitle="All Orders"
+                  :value="formatNumber(dashboardStats.totalOrders)" icon="bi-cart" :loading="isLoading" />
               </NuxtLink>
             </div>
 
             <div class="col-12 col-md-4">
               <NuxtLink to="/users">
-                <DashboardStatsCard
-                  title="Total Users"
-                  subtitle="All Customers"
-                  :value="formatNumber(dashboardStats.totalUsers)"
-                  icon="bi-people"
-                  :loading="isLoading"
-                />
+                <DashboardStatsCard title="Total Users" subtitle="All Customers"
+                  :value="formatNumber(dashboardStats.totalUsers)" icon="bi-people" :loading="isLoading" />
               </NuxtLink>
             </div>
           </div>
@@ -81,16 +66,14 @@
                     <td>{{ order.user?.email }}</td>
                     <td>Rp {{ formatNumber(order.total_amount) }}</td>
                     <td>
-                      <span
-                        :class="[
-                          'badge',
-                          order.payment?.status === 'PAID'
-                            ? 'bg-success'
-                            : order.payment?.status === 'PENDING'
-                              ? 'bg-warning'
-                              : 'bg-secondary',
-                        ]"
-                      >
+                      <span :class="[
+                        'badge',
+                        order.payment?.status === 'PAID'
+                          ? 'bg-success'
+                          : order.payment?.status === 'PENDING'
+                            ? 'bg-warning'
+                            : 'bg-secondary',
+                      ]">
                         {{ order.payment?.status ?? "-" }}
                       </span>
                     </td>
@@ -132,10 +115,7 @@
                     <td>{{ user.email }}</td>
                     <td>{{ user.phone }}</td>
                     <td>
-                      <span
-                        v-if="user.email_verified_at"
-                        class="badge bg-success"
-                      >
+                      <span v-if="user.email_verified_at" class="badge bg-success">
                         Verified
                       </span>
                       <span v-else class="badge bg-warning"> Unverified </span>
@@ -167,6 +147,7 @@ definePageMeta({
 const userManagement = useUserManagement();
 const { getOrders } = useOrderApi();
 const { getSummary } = useDashboardApi();
+const { user, fetchUser } = useAuth();
 
 const isLoading = ref(false);
 
@@ -191,6 +172,10 @@ const loadDashboardData = async () => {
   isLoading.value = true;
 
   try {
+    if (!user.value) {
+      await fetchUser();
+    }
+
     // SUMMARY
     const summaryRes = await getSummary();
     if (summaryRes.data?.success) {
@@ -293,6 +278,7 @@ onMounted(() => {
   padding-bottom: 1.5rem;
   border-bottom: 1px solid #eee;
 }
+
 .activity-item:last-child {
   border-bottom: none;
 }

@@ -72,18 +72,24 @@ export const useAuthApi = () => {
     }
   };
 
-  const getMe = async () => {
+  // getMe tunggal dengan dukungan customHeaders & penanganan status code
+  const getMe = async (customHeaders: Record<string, string> = {}) => {
     try {
       const response = await $fetch<UserResponse>(`${baseURL}/auth/me`, {
         method: "GET",
-        headers: getHeaders(),
+        headers: {
+          ...getHeaders(),
+          ...customHeaders,
+        },
       });
       return { data: response, error: null };
     } catch (error: any) {
       return {
         data: null,
-        error: error.data || {
-          message: error.message || "An error occurred",
+        error: {
+          status: error.status || error.statusCode || error.response?.status,
+          message: error.data?.message || error.message || "An error occurred",
+          data: error.data || null,
         },
       };
     }
