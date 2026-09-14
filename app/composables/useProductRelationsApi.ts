@@ -852,19 +852,27 @@ export const useProductRelationsApi = () => {
 
   const updateTaxoList = async (
     id: number,
-    data: {
-      parent?: number | null;
-      taxonomy_ref_key?: number | null;
-      taxonomy_name?: string;
-      taxonomy_description?: string | null;
-      taxonomy_slug?: string | null;
-      taxonomy_type?: number;
-      taxonomy_image?: string | null;
-      taxonomy_sort?: number | null;
-      taxonomy_status?: "ACTIVE" | "INACTIVE";
-    },
+    data:
+      | {
+          parent?: number | null;
+          taxonomy_ref_key?: number | null;
+          taxonomy_name?: string;
+          taxonomy_description?: string | null;
+          taxonomy_slug?: string | null;
+          taxonomy_type?: number;
+          taxonomy_image?: string | null;
+          taxonomy_sort?: number | null;
+          taxonomy_status?: "ACTIVE" | "INACTIVE";
+        }
+      | FormData,
   ) => {
     try {
+      const isFormData = data instanceof FormData;
+      const headers = getHeaders();
+      // Untuk FormData, hapus Content-Type biar browser yang set (dengan boundary-nya)
+      const { "Content-Type": _, ...headersWithoutContentType } =
+        headers as any;
+
       const response = await $fetch<{
         success: boolean;
         message: string;
@@ -881,9 +889,9 @@ export const useProductRelationsApi = () => {
           taxonomy_status?: string | null;
         };
       }>(`${baseURL}/taxo-lists/${id}`, {
-        method: "PUT",
+        method: isFormData ? "POST" : "PUT",
         body: data,
-        headers: getHeaders(),
+        headers: isFormData ? headersWithoutContentType : headers,
       });
 
       return { data: response, error: null };
