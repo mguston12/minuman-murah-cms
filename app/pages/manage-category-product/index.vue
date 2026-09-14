@@ -53,7 +53,7 @@
                 <td>
                   <img
                     v-if="category.taxonomy_image"
-                    :src="category.taxonomy_image"
+                    :src="resolveImageUrl(category.taxonomy_image)"
                     alt="Category Image"
                     class="img-thumbnail"
                     style="max-width: 50px; max-height: 50px; object-fit: cover"
@@ -434,6 +434,31 @@ const { getTaxoListsByType, createTaxoList, updateTaxoList, deleteTaxoList } =
 const { hasPermission } = usePermission();
 const toast = useToast();
 
+// --- Image URL resolver -----------------------------------------------
+// API mengembalikan `taxonomy_image` sebagai path relatif (mis.
+// "taxonomy-images/xxx.webp"), bukan URL lengkap. Kalau langsung dipakai
+// sebagai <img src>, browser menganggapnya relatif terhadap domain admin
+// yang sedang dibuka, sehingga request nyasar & 404.
+//
+// TODO: sesuaikan `runtimeConfig.public` key di bawah dengan yang ada di
+// nuxt.config.ts project kamu (mis. apiBase / storageBaseUrl / dll).
+const config = useRuntimeConfig();
+const STORAGE_BASE_URL =
+  (config.public as any)?.storageBaseUrl ||
+  (config.public as any)?.apiBase?.replace(/\/api\/?$/, "/storage/") ||
+  "https://api.minumanmurah.com/storage/";
+
+const resolveImageUrl = (path?: string | null): string => {
+  if (!path) return "";
+  if (/^https?:\/\//i.test(path)) return path; // sudah full URL
+  if (path.startsWith("blob:")) return path; // preview lokal dari file input
+  const base = STORAGE_BASE_URL.endsWith("/")
+    ? STORAGE_BASE_URL
+    : STORAGE_BASE_URL + "/";
+  return base + path.replace(/^\/+/, "");
+};
+// ------------------------------------------------------------------------
+
 const categories = ref<Category[]>([]);
 const categoryProducts = ref<any[]>([]);
 const loadingCategories = ref(false);
@@ -651,7 +676,7 @@ const openEditCategoryModal = async (category: any) => {
 
   editFormErrors.value = {};
   editImageFile.value = null;
-  editImagePreview.value = category.taxonomy_image || "";
+  editImagePreview.value = resolveImageUrl(category.taxonomy_image);
 
   await nextTick();
   const modal = new (window as any).bootstrap.Modal(
