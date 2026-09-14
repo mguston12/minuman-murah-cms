@@ -34,9 +34,9 @@
             <thead>
               <tr>
                 <th>ID</th>
+                <th>Image</th>
                 <th>Category Name</th>
                 <th>Category Slug</th>
-                <!-- <th>Products Count</th> -->
                 <th class="text-end">Actions</th>
               </tr>
             </thead>
@@ -51,6 +51,16 @@
                   }}</span>
                 </td>
                 <td>
+                  <img
+                    v-if="category.taxonomy_image"
+                    :src="category.taxonomy_image"
+                    alt="Category Image"
+                    class="img-thumbnail"
+                    style="max-width: 50px; max-height: 50px; object-fit: cover"
+                  />
+                  <span v-else class="text-muted small">No image</span>
+                </td>
+                <td>
                   <strong>{{ category.taxonomy_name || "N/A" }}</strong>
                 </td>
                 <td>
@@ -58,21 +68,7 @@
                     category.taxonomy_slug || "N/A"
                   }}</code>
                 </td>
-                <!-- <td>
-                  <span class="badge bg-info">
-                    {{ category.product_count || 0 }} products
-                  </span>
-                </td> -->
                 <td class="text-end">
-                  <!-- <NuxtLink
-                    v-if="hasPermission('products.read')"
-                    :to="`/manage-category-product/edit/${category.id}`"
-                    class="btn btn-sm btn-outline-primary me-2"
-                    title="Manage Products"
-                  >
-                    <i class="bi bi-pencil me-1"></i>Manage Products
-                  </NuxtLink> -->
-
                   <button
                     v-if="hasPermission('products.update')"
                     class="btn btn-sm btn-outline-warning me-2"
@@ -162,26 +158,6 @@
               </small>
             </div>
 
-            <!-- <div class="mb-3">
-              <label for="taxonomy_type" class="form-label">
-                Category Type <span class="text-danger">*</span>
-              </label>
-              <select
-                id="taxonomy_type"
-                v-model="form.taxonomy_type"
-                class="form-select"
-                :class="{ 'is-invalid': formErrors.taxonomy_type }"
-                :disabled="isLoading"
-                required
-              >
-                <option :value="2">Category (Type 2)</option>
-                <option :value="3">Collection (Type 3)</option>
-              </select>
-              <div v-if="formErrors.taxonomy_type" class="invalid-feedback">
-                {{ formErrors.taxonomy_type[0] }}
-              </div>
-            </div> -->
-
             <div class="mb-3">
               <label for="taxonomy_status" class="form-label">
                 Status <span class="text-danger">*</span>
@@ -206,8 +182,42 @@
               <label for="taxonomy_description" class="form-label">
                 Description
               </label>
-              <TiptapEditor v-model="form.taxonomy_description" placeholder="Enter category description (optional)"
-                :error-message="formErrors.taxonomy_description ? formErrors.taxonomy_description[0] : ''" />
+              <TiptapEditor
+                v-model="form.taxonomy_description"
+                placeholder="Enter category description (optional)"
+                :error-message="
+                  formErrors.taxonomy_description
+                    ? formErrors.taxonomy_description[0]
+                    : ''
+                "
+              />
+            </div>
+
+            <!-- Category Image -->
+            <div class="mb-3">
+              <label for="taxonomy_image" class="form-label">
+                Category Image
+              </label>
+              <input
+                id="taxonomy_image"
+                type="file"
+                accept="image/*"
+                class="form-control"
+                :class="{ 'is-invalid': formErrors.taxonomy_image }"
+                :disabled="isLoading"
+                @change="handleImageChange($event, 'add')"
+              />
+              <div v-if="formErrors.taxonomy_image" class="invalid-feedback">
+                {{ formErrors.taxonomy_image[0] }}
+              </div>
+              <div v-if="imagePreview" class="mt-2">
+                <img
+                  :src="imagePreview"
+                  alt="Preview"
+                  class="img-thumbnail"
+                  style="max-width: 150px; max-height: 150px; object-fit: cover"
+                />
+              </div>
             </div>
           </div>
           <div class="modal-footer">
@@ -230,6 +240,7 @@
         </div>
       </div>
     </div>
+
     <!-- Edit Taxolist Modal -->
     <div
       class="modal fade"
@@ -252,7 +263,6 @@
           </div>
 
           <div class="modal-body">
-            <!-- SAME FIELDS AS CREATE -->
             <!-- Category Name -->
             <div class="mb-3">
               <label class="form-label">Category Name *</label>
@@ -282,23 +292,6 @@
               />
             </div>
 
-            <!-- Type -->
-            <!-- <div class="mb-3">
-              <label class="form-label">Category Type *</label>
-              <select
-                v-model="editForm.taxonomy_type"
-                class="form-select"
-                :class="{ 'is-invalid': editFormErrors.taxonomy_type }"
-                required
-              >
-                <option :value="2">Category (Type 2)</option>
-                <option :value="3">Collection (Type 3)</option>
-              </select>
-              <div v-if="editFormErrors.taxonomy_type" class="invalid-feedback">
-                {{ editFormErrors.taxonomy_type[0] }}
-              </div>
-            </div> -->
-
             <!-- Status -->
             <div class="mb-3">
               <label class="form-label">Status *</label>
@@ -322,7 +315,36 @@
             <!-- Description -->
             <div class="mb-3">
               <label class="form-label">Description</label>
-              <TiptapEditor v-model="editForm.taxonomy_description" placeholder="Enter category description (optional)" />
+              <TiptapEditor
+                v-model="editForm.taxonomy_description"
+                placeholder="Enter category description (optional)"
+              />
+            </div>
+
+            <!-- Category Image -->
+            <div class="mb-3">
+              <label class="form-label">Category Image</label>
+              <input
+                type="file"
+                accept="image/*"
+                class="form-control"
+                :class="{ 'is-invalid': editFormErrors.taxonomy_image }"
+                @change="handleImageChange($event, 'edit')"
+              />
+              <div
+                v-if="editFormErrors.taxonomy_image"
+                class="invalid-feedback"
+              >
+                {{ editFormErrors.taxonomy_image[0] }}
+              </div>
+              <div v-if="editImagePreview" class="mt-2">
+                <img
+                  :src="editImagePreview"
+                  alt="Preview"
+                  class="img-thumbnail"
+                  style="max-width: 150px; max-height: 150px; object-fit: cover"
+                />
+              </div>
             </div>
           </div>
 
@@ -341,6 +363,7 @@
         </div>
       </div>
     </div>
+
     <!-- Delete TaxoList Modal -->
     <div
       class="modal fade"
@@ -401,6 +424,7 @@ interface Category {
   id: number;
   taxonomy_name: string;
   taxonomy_slug: string;
+  taxonomy_image?: string | null;
   product_count?: number;
 }
 
@@ -434,6 +458,28 @@ const editForm = ref<any>({
 const editFormErrors = ref<Record<string, string[]>>({});
 const deleteTarget = ref<any>(null);
 
+// Image handling - Add
+const imageFile = ref<File | null>(null);
+const imagePreview = ref<string>("");
+
+// Image handling - Edit
+const editImageFile = ref<File | null>(null);
+const editImagePreview = ref<string>("");
+
+const handleImageChange = (e: Event, mode: "add" | "edit") => {
+  const input = e.target as HTMLInputElement;
+  if (!input?.files?.[0]) return;
+
+  const file = input.files[0];
+  if (mode === "add") {
+    imageFile.value = file;
+    imagePreview.value = URL.createObjectURL(file);
+  } else {
+    editImageFile.value = file;
+    editImagePreview.value = URL.createObjectURL(file);
+  }
+};
+
 const categoriesWithCount = computed(() => {
   return categories.value.map((category) => {
     const count = categoryProducts.value.filter(
@@ -461,24 +507,18 @@ const generateSlug = (target: any) => {
 const loadCategories = async () => {
   loadingCategories.value = true;
   try {
-    // Load categories from type 2 and 3 (product categories)
-    // Same structure as frontend products page
-    const [type2, type3] = await Promise.all([
-      getTaxoListsByType(2),
-      getTaxoListsByType(3),
-    ]);
+    const [type2] = await Promise.all([getTaxoListsByType(2)]);
 
     const categories2 = type2.data?.data?.taxo_lists || [];
-    const categories3 = type3.data?.data?.taxo_lists || [];
 
-    // Combine and filter only ACTIVE categories, same as frontend
-    const allCategories = [...categories2, ...categories3]
+    const allCategories = [...categories2]
       .filter((cat: any) => cat.taxonomy_status === "ACTIVE")
       .map((cat: any) => ({
         id: cat.id,
         taxonomy_name: cat.taxonomy_name,
         taxonomy_slug: cat.taxonomy_slug,
         taxonomy_description: cat.taxonomy_description,
+        taxonomy_image: cat.taxonomy_image || null,
       }));
 
     categories.value = allCategories;
@@ -507,11 +547,13 @@ const openAddCategoryProductModal = async () => {
   form.value = {
     taxonomy_name: "",
     taxonomy_slug: "",
-    taxonomy_type: 2, // Default to type 2 (Category)
+    taxonomy_type: 2,
     taxonomy_status: "ACTIVE" as "ACTIVE" | "INACTIVE",
     taxonomy_description: "",
   };
   formErrors.value = {};
+  imageFile.value = null;
+  imagePreview.value = "";
 
   await nextTick();
   const modal = new (window as any).bootstrap.Modal(
@@ -530,18 +572,33 @@ const handleAddCategoryProduct = async () => {
   formErrors.value = {};
 
   try {
-    const payload: any = {
-      taxonomy_name: form.value.taxonomy_name,
-      taxonomy_type: form.value.taxonomy_type,
-      taxonomy_status: form.value.taxonomy_status,
-    };
+    let payload: any;
 
-    // Add optional fields if provided
-    if (form.value.taxonomy_slug) {
-      payload.taxonomy_slug = form.value.taxonomy_slug;
-    }
-    if (form.value.taxonomy_description) {
-      payload.taxonomy_description = form.value.taxonomy_description;
+    if (imageFile.value) {
+      const fd = new FormData();
+      fd.append("taxonomy_name", form.value.taxonomy_name);
+      fd.append("taxonomy_type", String(form.value.taxonomy_type));
+      fd.append("taxonomy_status", form.value.taxonomy_status);
+      if (form.value.taxonomy_slug) {
+        fd.append("taxonomy_slug", form.value.taxonomy_slug);
+      }
+      if (form.value.taxonomy_description) {
+        fd.append("taxonomy_description", form.value.taxonomy_description);
+      }
+      fd.append("taxonomy_image", imageFile.value);
+      payload = fd;
+    } else {
+      payload = {
+        taxonomy_name: form.value.taxonomy_name,
+        taxonomy_type: form.value.taxonomy_type,
+        taxonomy_status: form.value.taxonomy_status,
+      };
+      if (form.value.taxonomy_slug) {
+        payload.taxonomy_slug = form.value.taxonomy_slug;
+      }
+      if (form.value.taxonomy_description) {
+        payload.taxonomy_description = form.value.taxonomy_description;
+      }
     }
 
     const { data, error } = await createTaxoList(payload);
@@ -569,9 +626,9 @@ const handleAddCategoryProduct = async () => {
         taxonomy_description: "",
       };
       formErrors.value = {};
-      // Reload categories to show the new category
+      imageFile.value = null;
+      imagePreview.value = "";
       await loadCategories();
-      // Reload category products to refresh the count
       await loadCategoryProducts();
     }
   } catch (err) {
@@ -593,6 +650,8 @@ const openEditCategoryModal = async (category: any) => {
   };
 
   editFormErrors.value = {};
+  editImageFile.value = null;
+  editImagePreview.value = category.taxonomy_image || "";
 
   await nextTick();
   const modal = new (window as any).bootstrap.Modal(
@@ -606,20 +665,33 @@ const handleUpdateCategory = async () => {
   editFormErrors.value = {};
 
   try {
-    const payload = {
-      taxonomy_name: editForm.value.taxonomy_name,
-      taxonomy_slug: editForm.value.taxonomy_slug,
-      taxonomy_status: editForm.value.taxonomy_status,
-      taxonomy_description: editForm.value.taxonomy_description,
-    };
-
-    if (
+    const finalSlug =
       editForm.value.taxonomy_slug &&
       editForm.value.taxonomy_slug !== editForm.value.original_slug
-    ) {
-      payload.taxonomy_slug = editForm.value.taxonomy_slug;
+        ? editForm.value.taxonomy_slug
+        : editForm.value.taxonomy_name;
+
+    let payload: any;
+
+    if (editImageFile.value) {
+      const fd = new FormData();
+      fd.append("taxonomy_name", editForm.value.taxonomy_name);
+      fd.append("taxonomy_slug", finalSlug);
+      fd.append("taxonomy_status", editForm.value.taxonomy_status);
+      fd.append(
+        "taxonomy_description",
+        editForm.value.taxonomy_description || "",
+      );
+      fd.append("taxonomy_image", editImageFile.value);
+      fd.append("_method", "PUT");
+      payload = fd;
     } else {
-      payload.taxonomy_slug = editForm.value.taxonomy_name;
+      payload = {
+        taxonomy_name: editForm.value.taxonomy_name,
+        taxonomy_slug: finalSlug,
+        taxonomy_status: editForm.value.taxonomy_status,
+        taxonomy_description: editForm.value.taxonomy_description,
+      };
     }
 
     const { data, error } = await updateTaxoList(editForm.value.id, payload);
@@ -636,6 +708,8 @@ const handleUpdateCategory = async () => {
     );
     modal?.hide();
 
+    editImageFile.value = null;
+    editImagePreview.value = "";
     await loadCategories();
     await loadCategoryProducts();
   } catch (e) {

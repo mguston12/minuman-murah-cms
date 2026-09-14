@@ -36,7 +36,7 @@
         </NuxtLink>
       </li>
       <!-- Category Products (hidden - merged into product search) -->
-      <!-- <li v-if="hasPermission('products.read')" class="nav-item">
+      <li v-if="hasPermission('products.read')" class="nav-item">
         <NuxtLink
           to="/manage-category-product"
           class="nav-link"
@@ -45,7 +45,7 @@
           <i class="bi bi-tag"></i>
           <span>Category Products</span>
         </NuxtLink>
-      </li> -->
+      </li>
       <!-- Product Groups -->
       <li v-if="hasPermission('products.read')" class="nav-item">
         <NuxtLink
@@ -146,10 +146,7 @@
       <!-- Settings -->
       <li class="nav-item">
         <NuxtLink
-          v-if="
-            hasPermission('stores.read') ||
-            hasPermission('configs.read')
-          "
+          v-if="hasPermission('stores.read') || hasPermission('configs.read')"
           to="/setting"
           class="nav-link"
           :class="{ active: isActive('/setting') || isActive('/settings') }"
@@ -179,7 +176,7 @@ const isActive = (path: string) => {
 .sidebar-nav .nav-link {
   background-color: #ffffff;
   transition: all 0.3s ease;
-  font-family: var(--font-poppins), 'Open Sans', sans-serif;
+  font-family: var(--font-poppins), "Open Sans", sans-serif;
   color: #000000;
 }
 
@@ -218,7 +215,7 @@ const isActive = (path: string) => {
 }
 
 .sidebar-nav .nav-heading {
-  font-family: var(--font-poppins), 'Open Sans', sans-serif;
+  font-family: var(--font-poppins), "Open Sans", sans-serif;
   font-size: 11px;
   text-transform: uppercase;
   letter-spacing: 1px;

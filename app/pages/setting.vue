@@ -125,7 +125,7 @@
                 </div>
                 <div class="col-md-6">
                   <label class="form-label">Code</label>
-                  <input v-model="storeForm.code" type="text" class="form-control"
+                  <input v-model="storeForm.code" type="text" required class="form-control"
                     :class="{ 'is-invalid': storeFormErrors.code }" placeholder="STORE001" />
                   <div v-if="storeFormErrors.code" class="invalid-feedback">
                     {{ storeFormErrors.code[0] }}
@@ -133,7 +133,7 @@
                 </div>
                 <div class="col-md-6">
                   <label class="form-label">Email</label>
-                  <input v-model="storeForm.email" type="email" class="form-control"
+                  <input v-model="storeForm.email" type="email" required class="form-control"
                     :class="{ 'is-invalid': storeFormErrors.email }" placeholder="store@example.com" />
                   <div v-if="storeFormErrors.email" class="invalid-feedback">
                     {{ storeFormErrors.email[0] }}
@@ -141,7 +141,7 @@
                 </div>
                 <div class="col-md-6">
                   <label class="form-label">Phone</label>
-                  <input v-model="storeForm.phone" type="text" class="form-control"
+                  <input v-model="storeForm.phone" type="text" required class="form-control"
                     :class="{ 'is-invalid': storeFormErrors.phone }" placeholder="62812345678" />
                   <div v-if="storeFormErrors.phone" class="invalid-feedback">
                     {{ storeFormErrors.phone[0] }}
@@ -149,7 +149,7 @@
                 </div>
                 <div class="col-12">
                   <label class="form-label">Address</label>
-                  <textarea v-model="storeForm.address" class="form-control"
+                  <textarea v-model="storeForm.address" required class="form-control"
                     :class="{ 'is-invalid': storeFormErrors.address }" rows="2" placeholder="Full Address"></textarea>
                   <div v-if="storeFormErrors.address" class="invalid-feedback">
                     {{ storeFormErrors.address[0] }}
@@ -157,7 +157,7 @@
                 </div>
                 <div class="col-md-6">
                   <label class="form-label">Province</label>
-                  <select v-model="storeForm.selectedProvinceId" @change="onProvinceChange" class="form-select"
+                  <select v-model="storeForm.selectedProvinceId" @change="onProvinceChange" required class="form-select"
                     :disabled="loadingProvinces">
                     <option :value="null">Pilih Provinsi</option>
                     <option v-for="province in provinces" :key="province.id" :value="province.id">
@@ -168,7 +168,7 @@
                 </div>
                 <div class="col-md-6">
                   <label class="form-label">City/Kabupaten</label>
-                  <select v-model="storeForm.selectedCityId" @change="onCityChange" class="form-select"
+                  <select v-model="storeForm.selectedCityId" @change="onCityChange" required class="form-select"
                     :disabled="loadingCities || !storeForm.selectedProvinceId">
                     <option :value="null">Pilih Kota/Kabupaten</option>
                     <option v-for="city in cities" :key="city.id" :value="city.id">
@@ -183,15 +183,15 @@
                 </div>
                 <div class="col-md-6">
                   <label class="form-label">Country</label>
-                  <input v-model="storeForm.country" type="text" class="form-control" placeholder="Indonesia" />
+                  <input v-model="storeForm.country" type="text" class="form-control" required placeholder="Indonesia" />
                 </div>
                 <div class="col-md-6">
                   <label class="form-label">Postal Code</label>
-                  <input v-model="storeForm.postal_code" type="text" class="form-control" placeholder="12345" />
+                  <input v-model="storeForm.postal_code" type="text" class="form-control" required placeholder="12345" />
                 </div>
                 <div class="col-md-6">
                   <label class="form-label">Status</label>
-                  <select v-model="storeForm.status" class="form-select">
+                  <select v-model="storeForm.status" required class="form-select">
                     <option value="ACTIVE">Active</option>
                     <option value="INACTIVE">Inactive</option>
                   </select>
