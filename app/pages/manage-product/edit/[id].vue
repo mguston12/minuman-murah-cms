@@ -103,7 +103,9 @@
 
                       <div
                         class="list-group category-selection-list"
-                        :class="{ 'is-empty': filteredPrimaryCategories.length === 0 }"
+                        :class="{
+                          'is-empty': filteredPrimaryCategories.length === 0,
+                        }"
                       >
                         <button
                           v-for="category in filteredPrimaryCategories"
@@ -116,7 +118,9 @@
                           @click="selectPrimaryCategory(category.id)"
                         >
                           <div class="text-start">
-                            <div class="fw-semibold d-flex align-items-center gap-2">
+                            <div
+                              class="fw-semibold d-flex align-items-center gap-2"
+                            >
                               {{ category.taxonomy_name }}
                             </div>
                             <small
@@ -130,18 +134,28 @@
                             <button
                               type="button"
                               class="btn btn-sm btn-outline-warning py-0 px-1"
-                              @click.stop="openEditCategoryModalInStep(category)"
+                              @click.stop="
+                                openEditCategoryModalInStep(category)
+                              "
                               title="Edit Category"
                             >
-                              <i class="bi bi-pencil" style="font-size: 0.7rem;"></i>
+                              <i
+                                class="bi bi-pencil"
+                                style="font-size: 0.7rem"
+                              ></i>
                             </button>
                             <button
                               type="button"
                               class="btn btn-sm btn-outline-danger py-0 px-1"
-                              @click.stop="openDeleteCategoryModalInStep(category)"
+                              @click.stop="
+                                openDeleteCategoryModalInStep(category)
+                              "
                               title="Delete Category"
                             >
-                              <i class="bi bi-trash" style="font-size: 0.7rem;"></i>
+                              <i
+                                class="bi bi-trash"
+                                style="font-size: 0.7rem"
+                              ></i>
                             </button>
                           </div>
                         </button>
@@ -156,10 +170,14 @@
                     </div>
 
                     <div class="category-summary border rounded p-3">
-                      <div class="d-flex flex-wrap align-items-center gap-2 mb-2">
+                      <div
+                        class="d-flex flex-wrap align-items-center gap-2 mb-2"
+                      >
                         <div class="fw-semibold mb-0">Selected Category</div>
                       </div>
-                      <div class="d-flex flex-column flex-md-row gap-2 gap-md-4">
+                      <div
+                        class="d-flex flex-column flex-md-row gap-2 gap-md-4"
+                      >
                         <div>
                           Category:
                           <strong>{{
@@ -188,7 +206,9 @@
                       class="spinner-border spinner-border-sm text-primary"
                       role="status"
                     ></div>
-                    <p class="mt-2 text-muted small">Loading subcategories...</p>
+                    <p class="mt-2 text-muted small">
+                      Loading subcategories...
+                    </p>
                   </div>
 
                   <div v-else class="category-flow">
@@ -226,10 +246,24 @@
                         Select a category first to show its subcategories.
                       </div>
 
+                      <!-- NEW: info when the selected category simply has no subcategories -->
+                      <div
+                        v-else-if="
+                          filteredSubcategories.length === 0 &&
+                          !subcategorySearchQuery.trim()
+                        "
+                        class="alert alert-light border mb-0"
+                      >
+                        This category has no subcategories. You can skip this
+                        step and continue.
+                      </div>
+
                       <div
                         v-else
                         class="list-group category-selection-list"
-                        :class="{ 'is-empty': filteredSubcategories.length === 0 }"
+                        :class="{
+                          'is-empty': filteredSubcategories.length === 0,
+                        }"
                       >
                         <button
                           v-for="category in filteredSubcategories"
@@ -256,18 +290,28 @@
                             <button
                               type="button"
                               class="btn btn-sm btn-outline-warning py-0 px-1"
-                              @click.stop="openEditCategoryModalInStep(category)"
+                              @click.stop="
+                                openEditCategoryModalInStep(category)
+                              "
                               title="Edit Category"
                             >
-                              <i class="bi bi-pencil" style="font-size: 0.7rem;"></i>
+                              <i
+                                class="bi bi-pencil"
+                                style="font-size: 0.7rem"
+                              ></i>
                             </button>
                             <button
                               type="button"
                               class="btn btn-sm btn-outline-danger py-0 px-1"
-                              @click.stop="openDeleteCategoryModalInStep(category)"
+                              @click.stop="
+                                openDeleteCategoryModalInStep(category)
+                              "
                               title="Delete Category"
                             >
-                              <i class="bi bi-trash" style="font-size: 0.7rem;"></i>
+                              <i
+                                class="bi bi-trash"
+                                style="font-size: 0.7rem"
+                              ></i>
                             </button>
                           </div>
                         </button>
@@ -282,10 +326,14 @@
                     </div>
 
                     <div class="category-summary border rounded p-3">
-                      <div class="d-flex flex-wrap align-items-center gap-2 mb-2">
+                      <div
+                        class="d-flex flex-wrap align-items-center gap-2 mb-2"
+                      >
                         <div class="fw-semibold mb-0">Selected Category</div>
                       </div>
-                      <div class="d-flex flex-column flex-md-row gap-2 gap-md-4">
+                      <div
+                        class="d-flex flex-column flex-md-row gap-2 gap-md-4"
+                      >
                         <div>
                           Category:
                           <strong>{{
@@ -382,18 +430,19 @@
 
                     <!-- Information -->
                     <div class="col-12 mt-4">
-                      <div class="border-bottom pb-2 mb-3">
-                      </div>
+                      <div class="border-bottom pb-2 mb-3"></div>
                     </div>
                     <div class="col-12">
                       <label class="form-label">Information</label>
-                      <TiptapEditor v-model="productForm.product_information" placeholder="Product information" />
+                      <TiptapEditor
+                        v-model="productForm.product_information"
+                        placeholder="Product information"
+                      />
                     </div>
 
                     <!-- Pricing -->
                     <div class="col-12 mt-4">
-                      <div class="border-bottom pb-2 mb-3">
-                      </div>
+                      <div class="border-bottom pb-2 mb-3"></div>
                     </div>
 
                     <div class="col-md-6">
@@ -428,14 +477,18 @@
                         <div
                           class="d-flex flex-column flex-md-row justify-content-between gap-2 mb-2"
                         >
-                          <div class="d-flex align-items-center text-muted small fw-semibold">
+                          <div
+                            class="d-flex align-items-center text-muted small fw-semibold"
+                          >
                             <i class="bi bi-search me-2"></i>SEO Metadata
                           </div>
                         </div>
                         <div class="row g-2">
                           <div class="col-md-5">
                             <div class="seo-meta-item rounded px-2 py-2">
-                              <div class="small text-muted mb-1">Meta Title</div>
+                              <div class="small text-muted mb-1">
+                                Meta Title
+                              </div>
                               <p class="mb-0 small text-dark">
                                 {{ productForm.meta_title || "—" }}
                               </p>
@@ -443,7 +496,9 @@
                           </div>
                           <div class="col-md-7">
                             <div class="seo-meta-item rounded px-2 py-2">
-                              <div class="small text-muted mb-1">Meta Description</div>
+                              <div class="small text-muted mb-1">
+                                Meta Description
+                              </div>
                               <p class="mb-0 small text-dark">
                                 {{ productForm.meta_description || "—" }}
                               </p>
@@ -465,7 +520,7 @@
                 <!-- Step 4: Images -->
                 <div v-if="currentStep === 4" class="tab-pane fade show active">
                   <h5 class="mb-4">Product Images</h5>
-                  
+
                   <ShopeeImageUpload
                     v-if="!loadingImages"
                     :images="existingImagesWithPending"
@@ -475,7 +530,7 @@
                     @remove-image="handleRemoveImageFromUpload"
                     @remove-featured="handleRemoveFeaturedFromUpload"
                   />
-                  
+
                   <!-- Loading State -->
                   <div v-else class="text-center py-3">
                     <div
@@ -694,8 +749,9 @@
                           </td>
 
                           <td>Rp {{ formatNumber(variant.price || 0) }}</td>
-                                                    <td class="text-nowrap">
-                            {{ variant.weight }} {{ variant.type_weight === "GRAM" ? "g" : "kg" }}
+                          <td class="text-nowrap">
+                            {{ variant.weight }}
+                            {{ variant.type_weight === "GRAM" ? "g" : "kg" }}
                           </td>
                           <td class="text-nowrap">
                             <span v-if="variant.strike_price">
@@ -761,7 +817,6 @@
                         placeholder="Search brands..."
                       />
                     </div>
-
                   </div>
 
                   <div v-if="loadingBrands" class="text-center py-3">
@@ -1158,7 +1213,11 @@
             <form @submit.prevent="handleCreateCategory">
               <div class="mb-3">
                 <label class="form-label"
-                  >{{ newCategoryForm.taxonomy_type === 2 ? "Category" : "Subcategory" }}
+                  >{{
+                    newCategoryForm.taxonomy_type === 2
+                      ? "Category"
+                      : "Subcategory"
+                  }}
                   <span class="text-danger">*</span></label
                 >
                 <input
@@ -1279,12 +1338,21 @@
       <div class="modal-dialog">
         <div class="modal-content">
           <div class="modal-header">
-            <h5 class="modal-title" id="editCategoryInStepModalLabel">Edit Category</h5>
-            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            <h5 class="modal-title" id="editCategoryInStepModalLabel">
+              Edit Category
+            </h5>
+            <button
+              type="button"
+              class="btn-close"
+              data-bs-dismiss="modal"
+              aria-label="Close"
+            ></button>
           </div>
           <div class="modal-body">
             <div class="mb-3">
-              <label class="form-label">Category Name <span class="text-danger">*</span></label>
+              <label class="form-label"
+                >Category Name <span class="text-danger">*</span></label
+              >
               <input
                 v-model="editCategoryFormData.taxonomy_name"
                 type="text"
@@ -1304,21 +1372,30 @@
             </div>
             <div class="mb-3">
               <label class="form-label">Status</label>
-              <select v-model="editCategoryFormData.taxonomy_status" class="form-select">
+              <select
+                v-model="editCategoryFormData.taxonomy_status"
+                class="form-select"
+              >
                 <option value="ACTIVE">Active</option>
                 <option value="INACTIVE">Inactive</option>
               </select>
             </div>
           </div>
           <div class="modal-footer">
-            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+            <button
+              type="button"
+              class="btn btn-secondary"
+              data-bs-dismiss="modal"
+            >
+              Cancel
+            </button>
             <button
               type="button"
               class="btn btn-success"
               @click="handleEditCategoryInStep"
               :disabled="editingCategoryInStep"
             >
-              {{ editingCategoryInStep ? 'Updating...' : 'Update Category' }}
+              {{ editingCategoryInStep ? "Updating..." : "Update Category" }}
             </button>
           </div>
         </div>
@@ -1336,22 +1413,38 @@
       <div class="modal-dialog modal-dialog-centered">
         <div class="modal-content">
           <div class="modal-header bg-danger text-white">
-            <h5 class="modal-title" id="deleteCategoryInStepModalLabel">Delete Category</h5>
-            <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+            <h5 class="modal-title" id="deleteCategoryInStepModalLabel">
+              Delete Category
+            </h5>
+            <button
+              type="button"
+              class="btn-close btn-close-white"
+              data-bs-dismiss="modal"
+            ></button>
           </div>
           <div class="modal-body">
-            <p>Are you sure you want to delete <strong>{{ categoryToDeleteInStep?.taxonomy_name }}</strong>?</p>
+            <p>
+              Are you sure you want to delete
+              <strong>{{ categoryToDeleteInStep?.taxonomy_name }}</strong
+              >?
+            </p>
             <p class="text-muted mb-0">This action cannot be undone.</p>
           </div>
           <div class="modal-footer">
-            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+            <button
+              type="button"
+              class="btn btn-secondary"
+              data-bs-dismiss="modal"
+            >
+              Cancel
+            </button>
             <button
               type="button"
               class="btn btn-danger"
               @click="handleDeleteCategoryInStep"
               :disabled="deletingCategoryInStep"
             >
-              {{ deletingCategoryInStep ? 'Deleting...' : 'Delete' }}
+              {{ deletingCategoryInStep ? "Deleting..." : "Delete" }}
             </button>
           </div>
         </div>
@@ -1397,7 +1490,10 @@
               </div>
               <div class="mb-3">
                 <label class="form-label">Description</label>
-                <TiptapEditor v-model="newBrand.description" placeholder="Brand description (optional)" />
+                <TiptapEditor
+                  v-model="newBrand.description"
+                  placeholder="Brand description (optional)"
+                />
                 <small class="text-muted">
                   Brief description of the brand
                 </small>
@@ -1885,8 +1981,11 @@ const loadProduct = async () => {
         tags: product.value.tags || "",
         product_protection_percent:
           product.value.product_protection_percent || 0,
-        meta_title: product.value.meta_title || `Buy ${product.value.name || ''}`,
-        meta_description: product.value.meta_description || `Shop ${product.value.name || ''} at the best price. High quality product with fast shipping and secure payment. Order now!`,
+        meta_title:
+          product.value.meta_title || `Buy ${product.value.name || ""}`,
+        meta_description:
+          product.value.meta_description ||
+          `Shop ${product.value.name || ""} at the best price. High quality product with fast shipping and secure payment. Order now!`,
         meta_keywords: product.value.meta_keywords || "",
       };
     }
@@ -2362,8 +2461,22 @@ const handleCreateAttributeValue = async () => {
   }
 };
 
+/**
+ * FIX: subcategory is only required when the selected primary category
+ * actually HAS subcategories. If a category has none, requiring one made
+ * it impossible to ever save the product (permanently locked steps/button).
+ */
+const primaryCategoryHasSubcategories = computed(() => {
+  if (!selectedPrimaryCategoryId.value) return false;
+  return availableSubcategories.value.some(
+    (c) => Number(c.parent) === selectedPrimaryCategoryId.value,
+  );
+});
+
 const hasCategorySelection = computed(() => {
-  return !!(selectedPrimaryCategoryId.value && selectedSubcategoryId.value);
+  if (!selectedPrimaryCategoryId.value) return false;
+  if (!primaryCategoryHasSubcategories.value) return true;
+  return !!selectedSubcategoryId.value;
 });
 
 const goToStep = async (step: number) => {
@@ -2401,7 +2514,6 @@ const goToStep = async (step: number) => {
       await loadVariants();
       variantsLoaded.value = true;
     }
-
   } catch (err) {
     console.error("Error loading step data:", err);
   }
@@ -2442,6 +2554,8 @@ const canProceedToNextStep = computed(() => {
     return !!selectedPrimaryCategoryId.value;
   }
   if (currentStep.value === 2) {
+    // FIX: don't block "Next" when the category simply has no subcategories
+    if (!primaryCategoryHasSubcategories.value) return true;
     return !!selectedSubcategoryId.value;
   }
   if (currentStep.value === 3) {
@@ -2479,7 +2593,8 @@ const handleSetFeatured = async (imageId: number) => {
   }
 };
 
-const isExistingProductImage = (image: any) => Boolean(image?.id && !image?.file);
+const isExistingProductImage = (image: any) =>
+  Boolean(image?.id && !image?.file);
 
 const handleSetFeaturedFromUpload = async (image: any) => {
   if (!isExistingProductImage(image)) return;
@@ -2628,7 +2743,8 @@ const updateVariantName = () => {
     editingVariantIndex.value !== null
       ? variants.value[editingVariantIndex.value]
       : undefined;
-  const editingVariantValueIds = currentEditingVariant?.attribute_value_ids || [];
+  const editingVariantValueIds =
+    currentEditingVariant?.attribute_value_ids || [];
 
   selectedAttributes.value.forEach((selectedAttr) => {
     const selectedValueId =
@@ -2671,13 +2787,16 @@ const updateVariantName = () => {
 
 const generateSKU = () => {
   const productPrefix = product.value?.slug
-    ? product.value.slug.replace(/[^a-zA-Z0-9]/g, "-").toUpperCase().substring(0, 6)
+    ? product.value.slug
+        .replace(/[^a-zA-Z0-9]/g, "-")
+        .toUpperCase()
+        .substring(0, 6)
     : "SKU";
 
   const attrValueSlugs: string[] = [];
 
   const sortedAttrs = [...selectedAttributes.value].sort(
-    (a, b) => a.attribute_id - b.attribute_id
+    (a, b) => a.attribute_id - b.attribute_id,
   );
 
   sortedAttrs.forEach((selectedAttr) => {
@@ -2741,7 +2860,9 @@ const saveVariant = async () => {
 
   if (isSingleVariant) {
     // Check if a single variant already exists
-    const hasSingleVariant = variants.value.some(v => (v.attribute_value_ids || []).length === 0);
+    const hasSingleVariant = variants.value.some(
+      (v) => (v.attribute_value_ids || []).length === 0,
+    );
     if (hasSingleVariant && editingVariantIndex.value === null) {
       toast.error("A default variant already exists");
       savingVariant.value = false;
@@ -2749,9 +2870,9 @@ const saveVariant = async () => {
     }
   } else {
     // Check duplicates for attribute-based variants
-    const newAttributeValueIds = [...variantForm.value.attribute_value_ids].sort(
-      (a, b) => a - b,
-    );
+    const newAttributeValueIds = [
+      ...variantForm.value.attribute_value_ids,
+    ].sort((a, b) => a - b);
 
     const isDuplicate = variants.value.some((v, index) => {
       if (
@@ -2822,8 +2943,12 @@ const saveVariant = async () => {
     type_weight?: "GRAM" | "KG";
   } = {
     fk_product_id: product.value.id,
-    variant_name: getStringValue(variantForm.value.variant_name) || (isSingleVariant ? 'Default Variant' : null),
-    attribute_value_ids: isSingleVariant ? [] : (variantForm.value.attribute_value_ids || []),
+    variant_name:
+      getStringValue(variantForm.value.variant_name) ||
+      (isSingleVariant ? "Default Variant" : null),
+    attribute_value_ids: isSingleVariant
+      ? []
+      : variantForm.value.attribute_value_ids || [],
     sku: getStringValue(variantForm.value.sku),
     image_path: variantImagePath,
     price: variantForm.value.price || 0,
@@ -2941,7 +3066,6 @@ const saveVariant = async () => {
     savingVariant.value = false;
   }
 };
-
 
 const editVariant = async (index: number) => {
   if (variants.value && variants.value[index]) {
@@ -3112,12 +3236,14 @@ const handleCancelVariant = () => {
 const syncSelectedCategoriesFromIds = (categoryIds: number[]) => {
   const ids = categoryIds.map((id) => Number(id)).filter(Boolean);
   const primaryCategory =
-    availablePrimaryCategories.value.find((category) => ids.includes(category.id)) ||
-    null;
+    availablePrimaryCategories.value.find((category) =>
+      ids.includes(category.id),
+    ) || null;
 
   let subcategory =
-    availableSubcategories.value.find((category) => ids.includes(category.id)) ||
-    null;
+    availableSubcategories.value.find((category) =>
+      ids.includes(category.id),
+    ) || null;
 
   if (!primaryCategory && subcategory?.parent) {
     const parentCategory = availablePrimaryCategories.value.find(
@@ -3141,7 +3267,8 @@ const syncSelectedCategoriesFromIds = (categoryIds: number[]) => {
 
   selectedPrimaryCategoryId.value = primaryCategory?.id || null;
   selectedSubcategoryId.value =
-    subcategory && (!primaryCategory || Number(subcategory.parent) === primaryCategory.id)
+    subcategory &&
+    (!primaryCategory || Number(subcategory.parent) === primaryCategory.id)
       ? subcategory.id
       : null;
 };
@@ -3500,10 +3627,9 @@ const selectedSubcategory = computed(() => {
 });
 
 const selectedCategoryIds = computed(() => {
-  return [
-    selectedPrimaryCategoryId.value,
-    selectedSubcategoryId.value,
-  ].filter((id): id is number => typeof id === "number");
+  return [selectedPrimaryCategoryId.value, selectedSubcategoryId.value].filter(
+    (id): id is number => typeof id === "number",
+  );
 });
 
 const selectPrimaryCategory = (categoryId: number) => {
@@ -3577,7 +3703,10 @@ const handleCreateCategory = async () => {
     return;
   }
 
-  if (newCategoryForm.value.taxonomy_type === 3 && !newCategoryForm.value.parent) {
+  if (
+    newCategoryForm.value.taxonomy_type === 3 &&
+    !newCategoryForm.value.parent
+  ) {
     toast.error("Parent jenis barang harus dipilih untuk sub kategori");
     return;
   }
@@ -3610,7 +3739,8 @@ const handleCreateCategory = async () => {
         selectedPrimaryCategoryId.value = newCategoryId;
         selectedSubcategoryId.value = null;
       } else {
-        selectedPrimaryCategoryId.value = data.data.parent || selectedPrimaryCategoryId.value;
+        selectedPrimaryCategoryId.value =
+          data.data.parent || selectedPrimaryCategoryId.value;
         selectedSubcategoryId.value = newCategoryId;
       }
 
@@ -3653,7 +3783,9 @@ const openCreateCategoryModal = (type: "primary" | "sub") => {
   nextTick(() => {
     const modalEl = document.getElementById("addCategoryModal");
     if (modalEl) {
-      const modal = (window as any).bootstrap.Modal.getOrCreateInstance(modalEl);
+      const modal = (window as any).bootstrap.Modal.getOrCreateInstance(
+        modalEl,
+      );
       modal.show();
     }
   });
@@ -3661,10 +3793,11 @@ const openCreateCategoryModal = (type: "primary" | "sub") => {
 
 const generateEditCategorySlug = () => {
   if (!editCategoryFormData.value.taxonomy_name) return;
-  editCategoryFormData.value.taxonomy_slug = editCategoryFormData.value.taxonomy_name
-    .toLowerCase()
-    .replace(/[^a-z0-9]+/g, "-")
-    .replace(/(^-|-$)/g, "");
+  editCategoryFormData.value.taxonomy_slug =
+    editCategoryFormData.value.taxonomy_name
+      .toLowerCase()
+      .replace(/[^a-z0-9]+/g, "-")
+      .replace(/(^-|-$)/g, "");
 };
 
 const openEditCategoryModalInStep = async (category: any) => {
@@ -3697,13 +3830,17 @@ const handleEditCategoryInStep = async () => {
     };
     if (
       editCategoryFormData.value.taxonomy_slug &&
-      editCategoryFormData.value.taxonomy_slug !== editCategoryFormData.value.original_slug
+      editCategoryFormData.value.taxonomy_slug !==
+        editCategoryFormData.value.original_slug
     ) {
       payload.taxonomy_slug = editCategoryFormData.value.taxonomy_slug;
     } else {
       payload.taxonomy_slug = editCategoryFormData.value.taxonomy_name;
     }
-    const { data, error } = await updateTaxoList(editCategoryFormData.value.id, payload);
+    const { data, error } = await updateTaxoList(
+      editCategoryFormData.value.id,
+      payload,
+    );
     if (error) {
       toast.error(error.message || "Failed to update category");
       return;
@@ -3736,7 +3873,9 @@ const handleDeleteCategoryInStep = async () => {
   if (!categoryToDeleteInStep.value?.id) return;
   deletingCategoryInStep.value = true;
   try {
-    const { data, error } = await deleteTaxoList(categoryToDeleteInStep.value.id);
+    const { data, error } = await deleteTaxoList(
+      categoryToDeleteInStep.value.id,
+    );
     if (error) {
       toast.error(error.message || "Failed to delete category");
       return;
@@ -3812,7 +3951,9 @@ const getProductSaveErrorMessage = (message?: string) => {
   return message;
 };
 
-const formatApiValidationErrors = (errors?: Record<string, string[] | string>) => {
+const formatApiValidationErrors = (
+  errors?: Record<string, string[] | string>,
+) => {
   if (!errors || Object.keys(errors).length === 0) return "";
 
   return Object.entries(errors)
@@ -3912,11 +4053,11 @@ const handleUpdateProduct = async () => {
 
           const { data: uploadedImage, error: uploadError } =
             await uploadProductImage(
-            product.value.id,
-            img.file,
-            (existingImages.value?.length || 0) + i + 1,
-            Boolean(img.is_featured),
-          );
+              product.value.id,
+              img.file,
+              (existingImages.value?.length || 0) + i + 1,
+              Boolean(img.is_featured),
+            );
 
           if (uploadError || !uploadedImage?.success) {
             const errorMsg =
@@ -3927,7 +4068,9 @@ const handleUpdateProduct = async () => {
         }
 
         if (uploadErrors.length > 0) {
-          toast.warning(`Beberapa gambar gagal diupload: ${uploadErrors.join(", ")}`);
+          toast.warning(
+            `Beberapa gambar gagal diupload: ${uploadErrors.join(", ")}`,
+          );
         } else {
           pendingImages.value = [];
           await loadImages();
@@ -3956,9 +4099,7 @@ const handleUpdateProduct = async () => {
       if (toDetach.length > 0) {
         const productId = product.value.id;
         await Promise.all(
-          toDetach.map((id) =>
-            detachProductAttributes(productId, Number(id)),
-          ),
+          toDetach.map((id) => detachProductAttributes(productId, Number(id))),
         );
       }
 
@@ -4016,7 +4157,8 @@ const handleUpdateProduct = async () => {
       );
 
       const toRemoveBrands = Array.from(currentBrandIds).filter(
-        (id): id is number => typeof id === "number" && !selectedBrandIds.value.includes(id),
+        (id): id is number =>
+          typeof id === "number" && !selectedBrandIds.value.includes(id),
       );
 
       if (toAddBrands.length > 0) {
@@ -4043,7 +4185,9 @@ const handleUpdateProduct = async () => {
           .filter((id): id is number => typeof id === "number"),
       );
 
-      const toDelete = dbVariants.filter((v: any) => !localVariantIds.has(v.id));
+      const toDelete = dbVariants.filter(
+        (v: any) => !localVariantIds.has(v.id),
+      );
 
       for (const v of toDelete) {
         await deleteProductVariant(v.id);
@@ -4181,9 +4325,11 @@ const formatNumber = (num: number) => {
   return new Intl.NumberFormat("id-ID").format(num);
 };
 
-useAppTitle(computed(() =>
-  product.value ? `Edit ${product.value.name}` : "Edit Product",
-));
+useAppTitle(
+  computed(() =>
+    product.value ? `Edit ${product.value.name}` : "Edit Product",
+  ),
+);
 
 onMounted(async () => {
   await loadProduct();
