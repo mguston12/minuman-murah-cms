@@ -80,9 +80,15 @@
                       type="checkbox"
                       id="singleVariantToggle"
                       v-model="isSingleVariant"
-                      :disabled="editingVariantIndex !== null || availableAttributes.length == 0"
+                      :disabled="
+                        editingVariantIndex !== null ||
+                        availableAttributes.length == 0
+                      "
                     />
-                    <label class="form-check-label fw-bold" for="singleVariantToggle">
+                    <label
+                      class="form-check-label fw-bold"
+                      for="singleVariantToggle"
+                    >
                       Allow variant without attributes (single variant)
                     </label>
                   </div>
@@ -170,7 +176,8 @@
                                         selectedAttr.attribute_id
                                       ] === value.id,
                                     'cursor-not-allowed':
-                                      value.status === 'INACTIVE' || isSingleVariant,
+                                      value.status === 'INACTIVE' ||
+                                      isSingleVariant,
                                   }"
                                 >
                                   {{ value.value }}
@@ -197,7 +204,14 @@
                       </div>
                     </div>
                   </div>
-
+                  <div
+                    v-if="formErrors.attributes"
+                    class="alert alert-danger d-flex align-items-center gap-2 py-2 mt-3 mb-0"
+                    role="alert"
+                  >
+                    <i class="bi bi-exclamation-triangle-fill"></i>
+                    <span>{{ formErrors.attributes }}</span>
+                  </div>
                   <div class="col-12 mt-3">
                     <label class="form-label fw-bold">
                       <i class="bi bi-pencil-square me-1"></i>
@@ -208,18 +222,19 @@
                       type="text"
                       class="form-control form-control-lg"
                       placeholder="Variant name"
-                      :disabled="localVariantForm.variant_name === 'No Variant' && isSingleVariant"
+                      :disabled="
+                        localVariantForm.variant_name === 'No Variant' &&
+                        isSingleVariant
+                      "
                     />
                   </div>
-
                 </div>
               </div>
             </div>
 
             <div class="tab-pane fade" id="details-pane" role="tabpanel">
               <div class="row g-3">
-                <div class="col-12">
-                </div>
+                <div class="col-12"></div>
                 <div class="col-12">
                   <div class="variant-image-upload">
                     <input
@@ -283,8 +298,7 @@
                 </div>
 
                 <div class="col-12 mt-4">
-                  <div class="border-bottom pb-2 mb-3">
-                  </div>
+                  <div class="border-bottom pb-2 mb-3"></div>
                 </div>
                 <div class="col-md-6">
                   <label class="form-label">
@@ -294,12 +308,18 @@
                   <input
                     v-model="localVariantForm.sku"
                     type="text"
-                    :class="['form-control', { 'is-invalid': formErrors.sku || apiErrors.sku }]"
+                    :class="[
+                      'form-control',
+                      { 'is-invalid': formErrors.sku || apiErrors.sku },
+                    ]"
                     placeholder="SKU-001"
                     @input="clearError('sku')"
                   />
-                  <div v-if="formErrors.sku || apiErrors.sku" class="invalid-feedback d-block">
-                    {{ formErrors.sku || (apiErrors.sku || []).join(', ') }}
+                  <div
+                    v-if="formErrors.sku || apiErrors.sku"
+                    class="invalid-feedback d-block"
+                  >
+                    {{ formErrors.sku || (apiErrors.sku || []).join(", ") }}
                   </div>
                 </div>
                 <div class="col-md-6">
@@ -307,26 +327,37 @@
                     <i class="bi bi-currency-dollar me-1"></i>
                     Selling Price <span class="text-danger">*</span>
                   </label>
-                  <div class="input-group" :class="{ 'is-invalid': formErrors.price || apiErrors.price }">
+                  <div
+                    class="input-group"
+                    :class="{
+                      'is-invalid': formErrors.price || apiErrors.price,
+                    }"
+                  >
                     <span class="input-group-text">Rp</span>
                     <input
                       v-model.number="localVariantForm.price"
                       type="number"
                       step="0.01"
                       required
-                      :class="['form-control', { 'is-invalid': formErrors.price || apiErrors.price }]"
+                      :class="[
+                        'form-control',
+                        { 'is-invalid': formErrors.price || apiErrors.price },
+                      ]"
                       placeholder="0.00"
                       @input="clearError('price')"
                     />
                   </div>
-                  <div v-if="formErrors.price || apiErrors.price" class="invalid-feedback d-block">
-                    {{ formErrors.price || (apiErrors.price || []).join(', ') }}
+                  <div
+                    v-if="formErrors.price || apiErrors.price"
+                    class="invalid-feedback d-block"
+                  >
+                    {{ formErrors.price || (apiErrors.price || []).join(", ") }}
                   </div>
                 </div>
                 <div class="col-md-6">
                   <label class="form-label">
                     <i class="bi bi-tag me-1"></i>
-                    Strike Price 
+                    Strike Price
                     <span
                       v-if="discountPercentage !== null"
                       class="badge bg-danger ms-2"
@@ -377,7 +408,7 @@
                     placeholder="0.00"
                   />
                 </div>
-                <div class="col-md-6" >
+                <div class="col-md-6">
                   <label class="form-label">Weight Type</label>
                   <select
                     v-model="localVariantForm.type_weight"
@@ -393,14 +424,16 @@
             <div class="tab-pane fade" id="store-pane" role="tabpanel">
               <div class="row g-3">
                 <div class="col-12">
-
                   <div
                     class="card mb-4"
-                    :class="{ 'border-primary': localEditingStoreStockIndex !== null }"
+                    :class="{
+                      'border-primary': localEditingStoreStockIndex !== null,
+                    }"
                   >
                     <div class="card-header bg-white">
-                      <div class="d-flex justify-content-between align-items-center">
-                        
+                      <div
+                        class="d-flex justify-content-between align-items-center"
+                      >
                         <button
                           v-if="localEditingStoreStockIndex !== null"
                           type="button"
@@ -414,8 +447,12 @@
                     <div class="card-body">
                       <div class="row g-3 align-items-end">
                         <div class="col-lg-4 col-md-6">
-                          <div class="stock-form-field h-100 d-flex flex-column">
-                            <label class="form-label fw-semibold">Store <span class="text-danger">*</span></label>
+                          <div
+                            class="stock-form-field h-100 d-flex flex-column"
+                          >
+                            <label class="form-label fw-semibold"
+                              >Store <span class="text-danger">*</span></label
+                            >
                             <select
                               v-model.number="localStoreStockForm.store_id"
                               class="form-select"
@@ -428,14 +465,20 @@
                                 :key="store.id"
                                 :value="store.id"
                               >
-                                {{ store.name }}{{ store.code ? ` (${store.code})` : "" }}
+                                {{ store.name
+                                }}{{ store.code ? ` (${store.code})` : "" }}
                               </option>
                             </select>
                           </div>
                         </div>
                         <div class="col-lg-2 col-md-3 col-6">
-                          <div class="stock-form-field h-100 d-flex flex-column">
-                            <label class="form-label fw-semibold">Stock Qty <span class="text-danger">*</span></label>
+                          <div
+                            class="stock-form-field h-100 d-flex flex-column"
+                          >
+                            <label class="form-label fw-semibold"
+                              >Stock Qty
+                              <span class="text-danger">*</span></label
+                            >
                             <input
                               v-model.number="localStoreStockForm.qty"
                               type="number"
@@ -447,8 +490,12 @@
                           </div>
                         </div>
                         <div class="col-lg-2 col-md-3 col-6">
-                          <div class="stock-form-field h-100 d-flex flex-column">
-                            <label class="form-label fw-semibold">Reserved Qty</label>
+                          <div
+                            class="stock-form-field h-100 d-flex flex-column"
+                          >
+                            <label class="form-label fw-semibold"
+                              >Reserved Qty</label
+                            >
                             <input
                               v-model.number="localStoreStockForm.reserved_qty"
                               type="number"
@@ -460,9 +507,15 @@
                           </div>
                         </div>
                         <div class="col-lg-4 col-md-6 col-12">
-                          <div class="stock-form-field h-100 d-flex flex-column">
-                            <label class="form-label fw-semibold">Available</label>
-                            <div class="form-control bg-light">{{ stockFormAvailableQty }}</div>
+                          <div
+                            class="stock-form-field h-100 d-flex flex-column"
+                          >
+                            <label class="form-label fw-semibold"
+                              >Available</label
+                            >
+                            <div class="form-control bg-light">
+                              {{ stockFormAvailableQty }}
+                            </div>
                           </div>
                         </div>
                       </div>
@@ -491,30 +544,58 @@
                     <table class="table table-sm table-bordered">
                       <thead class="table-light">
                         <tr>
-                          <th style="width: 32%;">Store</th>
-                          <th class="text-center" style="width: 14%;">Stock</th>
-                          <th class="text-center" style="width: 14%;">Reserved</th>
-                          <th class="text-center" style="width: 14%;">Available</th>
-                          <th class="text-center" style="width: 16%;">Status</th>
-                          <th class="text-center" style="width: 10%;">Actions</th>
+                          <th style="width: 32%">Store</th>
+                          <th class="text-center" style="width: 14%">Stock</th>
+                          <th class="text-center" style="width: 14%">
+                            Reserved
+                          </th>
+                          <th class="text-center" style="width: 14%">
+                            Available
+                          </th>
+                          <th class="text-center" style="width: 16%">Status</th>
+                          <th class="text-center" style="width: 10%">
+                            Actions
+                          </th>
                         </tr>
                       </thead>
                       <tbody>
                         <tr
-                          v-for="({ storeStock, index }) in sortedVariantStoreStocks"
-                          :key="storeStock.id || `store-${storeStock.store_id}-${index}`"
+                          v-for="{
+                            storeStock,
+                            index,
+                          } in sortedVariantStoreStocks"
+                          :key="
+                            storeStock.id ||
+                            `store-${storeStock.store_id}-${index}`
+                          "
                         >
                           <td>
-                            <div class="fw-semibold">{{ storeStock.store?.name || "N/A" }}</div>
-                            <small v-if="storeStock.store?.code" class="text-muted">{{ storeStock.store.code }}</small>
+                            <div class="fw-semibold">
+                              {{ storeStock.store?.name || "N/A" }}
+                            </div>
+                            <small
+                              v-if="storeStock.store?.code"
+                              class="text-muted"
+                              >{{ storeStock.store.code }}</small
+                            >
                           </td>
-                          <td class="text-center fw-semibold">{{ storeStock.qty }}</td>
-                          <td class="text-center">{{ storeStock.reserved_qty || 0 }}</td>
                           <td class="text-center fw-semibold">
-                            {{ (storeStock.qty || 0) - (storeStock.reserved_qty || 0) }}
+                            {{ storeStock.qty }}
                           </td>
                           <td class="text-center">
-                            <span class="badge" :class="getStockStatusBadgeClass(storeStock)">
+                            {{ storeStock.reserved_qty || 0 }}
+                          </td>
+                          <td class="text-center fw-semibold">
+                            {{
+                              (storeStock.qty || 0) -
+                              (storeStock.reserved_qty || 0)
+                            }}
+                          </td>
+                          <td class="text-center">
+                            <span
+                              class="badge"
+                              :class="getStockStatusBadgeClass(storeStock)"
+                            >
                               {{ getStockStatusLabel(storeStock) }}
                             </span>
                           </td>
@@ -559,13 +640,13 @@
                 </div>
               </div>
             </div>
-
           </div>
         </div>
         <div class="modal-footer flex-column align-items-stretch gap-2">
           <div v-if="hasApiErrors" class="alert alert-danger mb-0 py-2 w-100">
             <div class="fw-semibold mb-1 d-flex align-items-center gap-1">
-              <i class="bi bi-exclamation-triangle-fill"></i> Failed to save variant:
+              <i class="bi bi-exclamation-triangle-fill"></i> Failed to save
+              variant:
             </div>
             <ul class="mb-0 ps-3">
               <template v-for="(msgs, field) in apiErrors" :key="field">
@@ -721,13 +802,16 @@ const variantImageInput = ref<HTMLInputElement | null>(null);
 
 const generateSKU = () => {
   const productPrefix = props.productSlug
-    ? props.productSlug.replace(/[^a-zA-Z0-9]/g, "-").toUpperCase().substring(0, 6)
+    ? props.productSlug
+        .replace(/[^a-zA-Z0-9]/g, "-")
+        .toUpperCase()
+        .substring(0, 6)
     : "SKU";
 
   const attrValueSlugs: string[] = [];
 
   const sortedAttrs = [...props.selectedAttributes].sort(
-    (a, b) => a.attribute_id - b.attribute_id
+    (a, b) => a.attribute_id - b.attribute_id,
   );
 
   sortedAttrs.forEach((selectedAttr) => {
@@ -756,6 +840,7 @@ const generateSKU = () => {
 
 watch(isSingleVariant, (val) => {
   if (props.editingVariantIndex !== null) return;
+  delete formErrors.value.attributes;
 
   if (val) {
     localVariantForm.value.variant_name = "No Variant";
@@ -765,7 +850,8 @@ watch(isSingleVariant, (val) => {
   } else {
     localVariantForm.value.variant_name = "";
     const hasSelected = props.selectedAttributes.some(
-      (attr) => localVariantForm.value.selectedAttributeValues[attr.attribute_id]
+      (attr) =>
+        localVariantForm.value.selectedAttributeValues[attr.attribute_id],
     );
     if (hasSelected) {
       handleUpdateVariantName();
@@ -778,11 +864,13 @@ watch(isSingleVariant, (val) => {
 
 watch(
   () => props.variantForm,
-  (newForm) => { 
-    localVariantForm.value = { ...newForm }; 
-    
+  (newForm) => {
+    localVariantForm.value = { ...newForm };
+
     if (props.editingVariantIndex !== null) {
-      isSingleVariant.value = (!newForm.attribute_value_ids || newForm.attribute_value_ids.length === 0);
+      isSingleVariant.value =
+        !newForm.attribute_value_ids ||
+        newForm.attribute_value_ids.length === 0;
     } else {
       // Default: toggle off. Do not auto-enable when selectedAttributes empty.
       // If availableAttributes is empty, toggle is disabled anyway.
@@ -803,7 +891,9 @@ watch(
 
 watch(
   () => props.variantStoreStocks,
-  (newStocks) => { localVariantStoreStocks.value = [...newStocks]; },
+  (newStocks) => {
+    localVariantStoreStocks.value = [...newStocks];
+  },
   { deep: true },
 );
 
@@ -812,17 +902,23 @@ const totalVariantStock = computed(() =>
 );
 
 const totalReservedStock = computed(() =>
-  localVariantStoreStocks.value.reduce((sum, s) => sum + (s.reserved_qty || 0), 0),
+  localVariantStoreStocks.value.reduce(
+    (sum, s) => sum + (s.reserved_qty || 0),
+    0,
+  ),
 );
 
-const totalAvailableStock = computed(() => totalVariantStock.value - totalReservedStock.value);
+const totalAvailableStock = computed(
+  () => totalVariantStock.value - totalReservedStock.value,
+);
 
-const assignedStoreIds = computed(() =>
-  new Set(
-    localVariantStoreStocks.value
-      .filter((_, idx) => idx !== localEditingStoreStockIndex.value)
-      .map((s) => s.store_id),
-  ),
+const assignedStoreIds = computed(
+  () =>
+    new Set(
+      localVariantStoreStocks.value
+        .filter((_, idx) => idx !== localEditingStoreStockIndex.value)
+        .map((s) => s.store_id),
+    ),
 );
 
 const availableStoreOptions = computed(() =>
@@ -849,9 +945,10 @@ const isStoreStockDuplicate = computed(() => {
   );
 });
 
-const isReservedExceedingQty = computed(() =>
-  (Number(localStoreStockForm.value.reserved_qty) || 0) >
-  (Number(localStoreStockForm.value.qty) || 0),
+const isReservedExceedingQty = computed(
+  () =>
+    (Number(localStoreStockForm.value.reserved_qty) || 0) >
+    (Number(localStoreStockForm.value.qty) || 0),
 );
 
 const hasPendingStoreStockForm = computed(() =>
@@ -866,7 +963,9 @@ const sortedVariantStoreStocks = computed(() =>
   localVariantStoreStocks.value
     .map((storeStock, index) => ({ storeStock, index }))
     .sort((a, b) =>
-      (a.storeStock.store?.name || "").localeCompare(b.storeStock.store?.name || ""),
+      (a.storeStock.store?.name || "").localeCompare(
+        b.storeStock.store?.name || "",
+      ),
     ),
 );
 
@@ -910,6 +1009,7 @@ const getAttributeValuesList = (attributeId: number) => {
 
 const handleUpdateVariantName = () => {
   if (isSingleVariant.value) return;
+  delete formErrors.value.attributes;
 
   const variantNameParts: string[] = [];
   const selectedValueIds: number[] = [];
@@ -1013,7 +1113,9 @@ const commitPendingStoreStock = () => {
     return false;
   }
 
-  const store = stores.value.find((s) => s.id === localStoreStockForm.value.store_id);
+  const store = stores.value.find(
+    (s) => s.id === localStoreStockForm.value.store_id,
+  );
   if (!store) {
     toast.error("Store not found");
     return false;
@@ -1045,17 +1147,22 @@ const handleResetStoreStockForm = () => {
   localEditingStoreStockIndex.value = null;
 };
 
-const getStoreAvailableQty = (storeStock: Props["variantStoreStocks"][number]) =>
-  Math.max(0, (storeStock.qty || 0) - (storeStock.reserved_qty || 0));
+const getStoreAvailableQty = (
+  storeStock: Props["variantStoreStocks"][number],
+) => Math.max(0, (storeStock.qty || 0) - (storeStock.reserved_qty || 0));
 
-const getStockStatusLabel = (storeStock: Props["variantStoreStocks"][number]) => {
+const getStockStatusLabel = (
+  storeStock: Props["variantStoreStocks"][number],
+) => {
   const avail = getStoreAvailableQty(storeStock);
   if ((storeStock.qty || 0) <= 0) return "Out of stock";
   if (avail <= 0) return "Fully reserved";
   return "Available";
 };
 
-const getStockStatusBadgeClass = (storeStock: Props["variantStoreStocks"][number]) => {
+const getStockStatusBadgeClass = (
+  storeStock: Props["variantStoreStocks"][number],
+) => {
   const avail = getStoreAvailableQty(storeStock);
   if ((storeStock.qty || 0) <= 0) return "bg-secondary text-white";
   if (avail <= 0) return "bg-dark text-white";
@@ -1116,6 +1223,10 @@ const handleClearVariantImage = () => {
   emit("update:variantForm", { ...localVariantForm.value });
 };
 
+const goToTab = (tabId: string) => {
+  document.getElementById(tabId)?.click();
+};
+
 const handleSave = () => {
   formErrors.value = {};
 
@@ -1125,25 +1236,42 @@ const handleSave = () => {
     (attrId) => localVariantForm.value.selectedAttributeValues[Number(attrId)],
   ).length;
 
-  let hasError = false;
-
-  // Only require attribute selection if:
-  // - single variant is NOT enabled
-  // - no attributes are selected
-  // - there are available attributes in the system (so selection is possible)
-  if (!isSingleVariant.value && selectedCount === 0 && props.availableAttributes.length > 0) {
-    formErrors.value.attributes = "Please select at least one attribute value.";
-    hasError = true;
+  // 1. Atribut belum dipilih
+  if (
+    !isSingleVariant.value &&
+    selectedCount === 0 &&
+    props.availableAttributes.length > 0
+  ) {
+    formErrors.value.attributes =
+      props.selectedAttributes.length === 0
+        ? "Produk ini belum memiliki atribut. Aktifkan 'Allow variant without attributes' atau tambahkan atribut terlebih dahulu."
+        : "Pilih terlebih dahulu minimal satu nilai atribut (mis. Ukuran Botol) sebelum menambahkan variant.";
+    toast.error(formErrors.value.attributes);
+    goToTab("attributes-tab");
+    return;
   }
 
+  // 2. Nama variant kosong
+  if (!localVariantForm.value.variant_name?.trim()) {
+    formErrors.value.attributes = "Nama variant tidak boleh kosong.";
+    toast.error(formErrors.value.attributes);
+    goToTab("attributes-tab");
+    return;
+  }
+
+  // 3. Harga
   if (!localVariantForm.value.price || localVariantForm.value.price <= 0) {
-    formErrors.value.price = "Selling price is required and must be greater than 0.";
-    hasError = true;
+    formErrors.value.price =
+      "Selling price is required and must be greater than 0.";
+    toast.error(formErrors.value.price);
+    goToTab("details-tab");
+    return;
   }
 
-  if (hasError) return;
-
-  if (!commitPendingStoreStock()) return;
+  if (!commitPendingStoreStock()) {
+    goToTab("store-tab");
+    return;
+  }
 
   savingVariant.value = true;
   emit("save", {
@@ -1152,6 +1280,48 @@ const handleSave = () => {
   });
   savingVariant.value = false;
 };
+
+// const handleSave = () => {
+//   formErrors.value = {};
+
+//   const selectedCount = Object.keys(
+//     localVariantForm.value.selectedAttributeValues,
+//   ).filter(
+//     (attrId) => localVariantForm.value.selectedAttributeValues[Number(attrId)],
+//   ).length;
+
+//   let hasError = false;
+
+//   // Only require attribute selection if:
+//   // - single variant is NOT enabled
+//   // - no attributes are selected
+//   // - there are available attributes in the system (so selection is possible)
+//   if (
+//     !isSingleVariant.value &&
+//     selectedCount === 0 &&
+//     props.availableAttributes.length > 0
+//   ) {
+//     formErrors.value.attributes = "Please select at least one attribute value.";
+//     hasError = true;
+//   }
+
+//   if (!localVariantForm.value.price || localVariantForm.value.price <= 0) {
+//     formErrors.value.price =
+//       "Selling price is required and must be greater than 0.";
+//     hasError = true;
+//   }
+
+//   if (hasError) return;
+
+//   if (!commitPendingStoreStock()) return;
+
+//   savingVariant.value = true;
+//   emit("save", {
+//     ...localVariantForm.value,
+//     store_stocks: localVariantStoreStocks.value,
+//   });
+//   savingVariant.value = false;
+// };
 
 const handleCancel = () => {
   emit("cancel");
@@ -1403,7 +1573,9 @@ onMounted(() => {
 }
 
 .stock-summary-card {
-  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+  transition:
+    border-color 0.2s ease,
+    box-shadow 0.2s ease;
 }
 
 .stock-form-field .form-control,
