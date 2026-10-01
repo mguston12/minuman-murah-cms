@@ -101,8 +101,8 @@
     </section>
 
     <!-- Create Store Modal -->
-    <div id="createStoreModal" class="modal fade" tabindex="-1" aria-labelledby="createStoreModalLabel"
-      aria-hidden="true">
+    <div id="createStoreModal" class="modal fade" tabindex="-1" data-bs-focus="false"
+      aria-labelledby="createStoreModalLabel" aria-hidden="true">
       <div class="modal-dialog modal-lg">
         <div class="modal-content">
           <div class="modal-header">
@@ -183,11 +183,13 @@
                 </div>
                 <div class="col-md-6">
                   <label class="form-label">Country</label>
-                  <input v-model="storeForm.country" type="text" class="form-control" required placeholder="Indonesia" />
+                  <input v-model="storeForm.country" type="text" class="form-control" required
+                    placeholder="Indonesia" />
                 </div>
                 <div class="col-md-6">
                   <label class="form-label">Postal Code</label>
-                  <input v-model="storeForm.postal_code" type="text" class="form-control" required placeholder="12345" />
+                  <input v-model="storeForm.postal_code" type="text" class="form-control" required
+                    placeholder="12345" />
                 </div>
                 <div class="col-md-6">
                   <label class="form-label">Status</label>
@@ -196,9 +198,13 @@
                     <option value="INACTIVE">Inactive</option>
                   </select>
                 </div>
-                <div class="col-12">
+                <!-- <div class="col-12">
                   <label class="form-label">Description</label>
                   <TiptapEditor v-model="storeForm.description" placeholder="Store description" />
+                </div> -->
+                <div class="col-12">
+                  <label class="form-label">Description</label>
+                  <CkEditor v-model="storeForm.description" placeholder="Store description" />
                 </div>
               </div>
             </div>
@@ -216,7 +222,8 @@
     </div>
 
     <!-- Edit Store Modal -->
-    <div id="editStoreModal" class="modal fade" tabindex="-1" aria-labelledby="editStoreModalLabel" aria-hidden="true">
+    <div id="editStoreModal" class="modal fade" tabindex="-1" data-bs-focus="false"
+      aria-labelledby="editStoreModalLabel" aria-hidden="true">
       <div class="modal-dialog modal-lg">
         <div class="modal-content">
           <div class="modal-header">
@@ -308,9 +315,13 @@
                     <option value="INACTIVE">Inactive</option>
                   </select>
                 </div>
-                <div class="col-12">
+                <!-- <div class="col-12">
                   <label class="form-label">Description</label>
                   <TiptapEditor v-model="storeForm.description" placeholder="Store description" />
+                </div> -->
+                <div class="col-12">
+                  <label class="form-label">Description</label>
+                  <CkEditor v-model="storeForm.description" placeholder="Store description" />
                 </div>
               </div>
             </div>
@@ -328,8 +339,8 @@
     </div>
 
     <!-- Delete Store Modal -->
-    <div id="deleteStoreModal" class="modal fade" tabindex="-1" aria-labelledby="deleteStoreModalLabel"
-      aria-hidden="true">
+    <div id="deleteStoreModal" class="modal fade" tabindex="-1" data-bs-focus="false"
+      aria-labelledby="deleteStoreModalLabel" aria-hidden="true">
       <div class="modal-dialog">
         <div class="modal-content">
           <div class="modal-header">
@@ -355,7 +366,7 @@
     </div>
 
     <!-- Create Popup Banner Modal -->
-    <div class="modal fade" id="createPopupBannerModal" tabindex="-1">
+    <div class="modal fade" id="createPopupBannerModal" tabindex="-1" data-bs-focus="false">
       <div class="modal-dialog modal-lg">
         <div class="modal-content">
           <div class="modal-header">
@@ -370,9 +381,13 @@
                 <input v-model="popupBannerForm.title" type="text" class="form-control" required />
               </div>
 
-              <div class="mb-3">
+              <!-- <div class="mb-3">
                 <label class="form-label">Description</label>
                 <TiptapEditor v-model="popupBannerForm.description" placeholder="Popup banner description" />
+              </div> -->
+              <div class="mb-3">
+                <label class="form-label">Description</label>
+                <CkEditor v-model="popupBannerForm.description" placeholder="Popup banner description" />
               </div>
 
               <div class="row">
@@ -416,7 +431,7 @@
     </div>
 
     <!-- Edit Popup Banner Modal -->
-    <div class="modal fade" id="editPopupBannerModal" tabindex="-1">
+    <div class="modal fade" id="editPopupBannerModal" tabindex="-1" data-bs-focus="false">
       <div class="modal-dialog modal-lg">
         <div class="modal-content">
           <div class="modal-header">
@@ -431,9 +446,13 @@
                 <input v-model="popupBannerForm.title" type="text" class="form-control" required />
               </div>
 
-              <div class="mb-3">
+              <!-- <div class="mb-3">
                 <label class="form-label">Description</label>
                 <TiptapEditor v-model="popupBannerForm.description" placeholder="Popup banner description" />
+              </div> -->
+              <div class="mb-3">
+                <label class="form-label">Description</label>
+                <CkEditor v-model="popupBannerForm.description" placeholder="Popup banner description" />
               </div>
 
               <div class="row">

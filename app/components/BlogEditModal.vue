@@ -1,22 +1,12 @@
 <template>
-  <div
-    id="editBlogModal"
-    class="modal fade"
-    tabindex="-1"
-    aria-labelledby="editBlogModalLabel"
-    aria-hidden="true"
-  >
+  <div id="editBlogModal" class="modal fade" tabindex="-1" data-bs-focus="false" aria-labelledby="editBlogModalLabel"
+    aria-hidden="true">
     <div class="modal-dialog modal-lg">
       <div class="modal-content">
         <div class="modal-header">
           <h5 class="modal-title" id="editBlogModalLabel">Edit Blog Post</h5>
-          <button
-            type="button"
-            class="btn-close"
-            data-bs-dismiss="modal"
-            aria-label="Close"
-            @click="resetForm"
-          ></button>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"
+            @click="resetForm"></button>
         </div>
         <form @submit.prevent="handleSubmit">
           <div class="modal-body">
@@ -24,16 +14,8 @@
               <label for="edit_blog_title" class="form-label fw-medium">
                 Title <span class="text-danger">*</span>
               </label>
-              <input
-                id="edit_blog_title"
-                v-model="form.title"
-                type="text"
-                required
-                class="form-control"
-                :class="{ 'is-invalid': errors.title }"
-                placeholder="Enter blog title"
-                @input="generateSlug"
-              />
+              <input id="edit_blog_title" v-model="form.title" type="text" required class="form-control"
+                :class="{ 'is-invalid': errors.title }" placeholder="Enter blog title" @input="generateSlug" />
               <div v-if="errors.title" class="invalid-feedback">
                 {{ errors.title[0] }}
               </div>
@@ -43,22 +25,15 @@
               <label for="edit_blog_slug" class="form-label fw-medium">
                 Slug
               </label>
-              <input
-                id="edit_blog_slug"
-                v-model="form.slug"
-                type="text"
-                class="form-control"
-                :class="{ 'is-invalid': errors.slug }"
-                placeholder="Auto generated slug"
-                readonly
-                style="background:#f8f9fa;"
-              />
+              <input id="edit_blog_slug" v-model="form.slug" type="text" class="form-control"
+                :class="{ 'is-invalid': errors.slug }" placeholder="Auto generated slug" readonly
+                style="background:#f8f9fa;" />
               <div v-if="errors.slug" class="invalid-feedback">
                 {{ errors.slug[0] }}
               </div>
             </div>
 
-            <div class="mb-3">
+            <!-- <div class="mb-3">
               <label for="edit_blog_short_desc" class="form-label fw-medium">
                 Short Description (Excerpt) <span class="text-danger">*</span>
               </label>
@@ -72,20 +47,30 @@
               </label>
               <TiptapEditor v-model="form.long_desc" placeholder="Write your blog content here"
                 :error-message="errors.long_desc ? errors.long_desc[0] : ''" />
+            </div> -->
+
+            <div class="mb-3">
+              <label class="form-label fw-medium">
+                Short Description (Excerpt) <span class="text-danger">*</span>
+              </label>
+              <CkEditor v-model="form.short_desc" placeholder="Short summary of the blog post"
+                :error-message="errors.short_desc ? errors.short_desc[0] : ''" />
+            </div>
+
+            <div class="mb-3">
+              <label class="form-label fw-medium">
+                Content <span class="text-danger">*</span>
+              </label>
+              <CkEditor v-model="form.long_desc" placeholder="Write your blog content here"
+                :error-message="errors.long_desc ? errors.long_desc[0] : ''" />
             </div>
 
             <div class="mb-3">
               <label for="edit_blog_category" class="form-label fw-medium">
                 Category <span class="text-danger">*</span>
               </label>
-              <select
-                id="edit_blog_category"
-                v-model="form.fk_category"
-                required
-                class="form-select"
-                :class="{ 'is-invalid': errors.fk_category }"
-                :disabled="loadingCategories"
-              >
+              <select id="edit_blog_category" v-model="form.fk_category" required class="form-select"
+                :class="{ 'is-invalid': errors.fk_category }" :disabled="loadingCategories">
                 <option value="">Select category</option>
                 <option v-for="cat in categories" :key="cat.id" :value="cat.id">
                   {{ cat.name }}
@@ -100,25 +85,16 @@
               <label for="edit_blog_cover" class="form-label fw-medium">
                 Featured Image
               </label>
-              <input
-                id="edit_blog_cover"
-                type="file"
-                accept="image/*"
-                class="form-control"
-                :class="{ 'is-invalid': errors.cover }"
-                @change="handleImageUpload"
-              />
+              <input id="edit_blog_cover" type="file" accept="image/*" class="form-control"
+                :class="{ 'is-invalid': errors.cover }" @change="handleImageUpload" />
               <small class="text-muted">Max 2MB, JPG/PNG. Leave empty to keep current image.</small>
               <div v-if="errors.cover" class="invalid-feedback">
                 {{ errors.cover[0] }}
               </div>
               <div v-if="imagePreview || currentImage" class="mt-2">
-                <img 
-                  :src="imagePreview || currentImage" 
-                  alt="Preview" 
+                <img :src="imagePreview || currentImage" alt="Preview"
                   style="max-width: 100%; max-height: 200px; border-radius: 4px; object-fit: contain; background: #f8f9fa; padding: 8px;"
-                  @error="handleImageError"
-                />
+                  @error="handleImageError" />
               </div>
             </div>
 
@@ -126,27 +102,15 @@
               <label class="form-label fw-medium">Status</label>
               <div>
                 <div class="form-check form-check-inline">
-                  <input
-                    id="edit_blog_status_draft"
-                    v-model="form.status"
-                    class="form-check-input"
-                    type="radio"
-                    name="edit_blog_status"
-                    value="draft"
-                  />
+                  <input id="edit_blog_status_draft" v-model="form.status" class="form-check-input" type="radio"
+                    name="edit_blog_status" value="draft" />
                   <label class="form-check-label" for="edit_blog_status_draft">
                     Draft
                   </label>
                 </div>
                 <div class="form-check form-check-inline">
-                  <input
-                    id="edit_blog_status_published"
-                    v-model="form.status"
-                    class="form-check-input"
-                    type="radio"
-                    name="edit_blog_status"
-                    value="published"
-                  />
+                  <input id="edit_blog_status_published" v-model="form.status" class="form-check-input" type="radio"
+                    name="edit_blog_status" value="published" />
                   <label class="form-check-label" for="edit_blog_status_published">
                     Published
                   </label>
@@ -156,38 +120,26 @@
 
             <div class="mb-3">
               <div class="form-check">
-                <input
-                  id="edit_blog_hot_news"
-                  v-model="form.hot_news"
-                  class="form-check-input"
-                  type="checkbox"
-                />
+                <input id="edit_blog_hot_news" v-model="form.hot_news" class="form-check-input" type="checkbox" />
                 <label class="form-check-label" for="edit_blog_hot_news">
                   Hot News
                 </label>
               </div>
             </div>
 
-            <div v-if="message" class="alert mt-3 mb-0" :class="messageType === 'success' ? 'alert-success' : 'alert-danger'">
+            <div v-if="message" class="alert mt-3 mb-0"
+              :class="messageType === 'success' ? 'alert-success' : 'alert-danger'">
               {{ message }}
             </div>
           </div>
           <div class="modal-footer">
-            <button
-              type="button"
-              class="btn btn-secondary"
-              data-bs-dismiss="modal"
-              :disabled="loading"
-              @click="resetForm"
-            >
+            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" :disabled="loading"
+              @click="resetForm">
               Cancel
             </button>
-            <button
-              type="submit"
-              class="btn btn-success"
-              :disabled="loading"
-            >
-              <span v-if="loading" class="spinner-border spinner-border-sm me-2" role="status" aria-hidden="true"></span>
+            <button type="submit" class="btn btn-success" :disabled="loading">
+              <span v-if="loading" class="spinner-border spinner-border-sm me-2" role="status"
+                aria-hidden="true"></span>
               <span v-if="loading">Updating...</span>
               <span v-else>Update Blog Post</span>
             </button>
@@ -367,4 +319,3 @@ const handleSubmit = async () => {
   loading.value = false
 }
 </script>
-

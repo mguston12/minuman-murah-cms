@@ -13,13 +13,8 @@
       <div class="card-body p-3">
         <div class="row g-2">
           <div class="col-md-4">
-            <input
-              v-model="filters.search"
-              type="text"
-              class="form-control form-control-sm"
-              placeholder="Search name or slug..."
-              @input="handleSearch"
-            />
+            <input v-model="filters.search" type="text" class="form-control form-control-sm"
+              placeholder="Search name or slug..." @input="handleSearch" />
           </div>
           <div class="col-md-3">
             <select v-model="filters.status" class="form-select form-select-sm" @change="handleSearch">
@@ -36,7 +31,7 @@
       <div class="card">
         <div>
           <!-- Brands Table -->
-          <div >
+          <div>
             <div class="card-body">
               <div v-if="loadingBrands" class="text-center py-5">
                 <div class="spinner-border text-primary" role="status">
@@ -93,8 +88,7 @@
                             <i class="bi bi-pencil"></i>
                           </button>
                           <button type="button" class="btn btn-sm btn-outline-danger"
-                            @click="handleDeleteBrandClick(brand)" title="Delete"
-                            :disabled="isLoading">
+                            @click="handleDeleteBrandClick(brand)" title="Delete" :disabled="isLoading">
                             <i class="bi bi-trash"></i>
                           </button>
                         </div>
@@ -110,8 +104,8 @@
     </section>
 
     <!-- Create Brand Modal -->
-    <div id="createBrandModal" class="modal fade" tabindex="-1" aria-labelledby="createBrandModalLabel"
-      aria-hidden="true">
+    <div id="createBrandModal" class="modal fade" tabindex="-1" data-bs-focus="false"
+      aria-labelledby="createBrandModalLabel" aria-hidden="true">
       <div class="modal-dialog modal-lg">
         <div class="modal-content">
           <div class="modal-header">
@@ -164,9 +158,14 @@
                   <input v-model.number="brandForm.order" type="number" min="0" class="form-control" placeholder="0" />
                   <div class="form-text">Lower numbers appear first</div>
                 </div>
-                <div class="col-12">
+                <!-- <div class="col-12">
                   <label class="form-label">Description</label>
                   <TiptapEditor v-model="brandForm.description" placeholder="Brand description" />
+                </div> -->
+
+                <div class="col-12">
+                  <label class="form-label">Description</label>
+                  <CkEditor v-model="brandForm.description" placeholder="Brand description" />
                 </div>
               </div>
             </div>
@@ -184,7 +183,8 @@
     </div>
 
     <!-- Edit Brand Modal -->
-    <div id="editBrandModal" class="modal fade" tabindex="-1" aria-labelledby="editBrandModalLabel" aria-hidden="true">
+    <div id="editBrandModal" class="modal fade" tabindex="-1" data-bs-focus="false"
+      aria-labelledby="editBrandModalLabel" aria-hidden="true">
       <div class="modal-dialog modal-lg">
         <div class="modal-content">
           <div class="modal-header">
@@ -235,9 +235,13 @@
                   <input v-model.number="brandForm.order" type="number" min="0" class="form-control" />
                   <div class="form-text">Lower numbers appear first</div>
                 </div>
-                <div class="col-12">
+                <!-- <div class="col-12">
                   <label class="form-label">Description</label>
                   <TiptapEditor v-model="brandForm.description" placeholder="Brand description" />
+                </div> -->
+                <div class="col-12">
+                  <label class="form-label">Description</label>
+                  <CkEditor v-model="brandForm.description" placeholder="Brand description" />
                 </div>
               </div>
             </div>

@@ -13,7 +13,8 @@
     </div>
 
     <!-- Loading State -->
-    <div v-if="rolesPermissions.isLoading.value && rolesPermissions.permissions.value.length === 0" class="text-center py-5">
+    <div v-if="rolesPermissions.isLoading.value && rolesPermissions.permissions.value.length === 0"
+      class="text-center py-5">
       <div class="spinner-border text-primary" role="status">
         <span class="visually-hidden">Loading...</span>
       </div>
@@ -45,18 +46,12 @@
               <small class="text-muted d-block">{{ getModuleFromPermission(permission.name) }}</small>
             </td>
             <td>
-              <button
-                class="btn btn-sm btn-outline-primary me-2"
-                @click="openEditModal(permission)"
-                :disabled="rolesPermissions.isLoading.value"
-              >
+              <button class="btn btn-sm btn-outline-primary me-2" @click="openEditModal(permission)"
+                :disabled="rolesPermissions.isLoading.value">
                 <i class="bi bi-pencil"></i>
               </button>
-              <button
-                class="btn btn-sm btn-outline-danger"
-                @click="confirmDelete(permission)"
-                :disabled="rolesPermissions.isLoading.value"
-              >
+              <button class="btn btn-sm btn-outline-danger" @click="confirmDelete(permission)"
+                :disabled="rolesPermissions.isLoading.value">
                 <i class="bi bi-trash"></i>
               </button>
             </td>
@@ -66,53 +61,42 @@
     </div>
 
     <!-- Create/Edit Modal -->
-    <div
-      class="modal fade"
-      id="permissionModal"
-      tabindex="-1"
-      aria-labelledby="permissionModalLabel"
-      aria-hidden="true"
-      ref="permissionModalRef"
-    >
+    <div class="modal fade" id="permissionModal" tabindex="-1" data-bs-focus="false"
+      aria-labelledby="permissionModalLabel" aria-hidden="true" ref="permissionModalRef">
       <div class="modal-dialog">
         <div class="modal-content">
           <div class="modal-header">
-              <h5 class="modal-title" id="permissionModalLabel">
-                <i :class="['bi', editingPermission ? 'bi-pencil' : 'bi-plus-circle', 'me-2']"></i>
-                {{ editingPermission ? 'Edit Permission' : 'Create New Permission' }}
-              </h5>
+            <h5 class="modal-title" id="permissionModalLabel">
+              <i :class="['bi', editingPermission ? 'bi-pencil' : 'bi-plus-circle', 'me-2']"></i>
+              {{ editingPermission ? 'Edit Permission' : 'Create New Permission' }}
+            </h5>
             <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
           </div>
           <div class="modal-body">
             <form @submit.prevent="submitPermission">
               <!-- Name -->
               <div class="mb-3">
-                <label for="permissionName" class="form-label">Permission Name <span class="text-danger">*</span></label>
-                <input
-                  v-model="formData.name"
-                  type="text"
-                  class="form-control"
-                  id="permissionName"
-                  placeholder="e.g., products.create, users.delete"
-                  required
-                />
+                <label for="permissionName" class="form-label">Permission Name <span
+                    class="text-danger">*</span></label>
+                <input v-model="formData.name" type="text" class="form-control" id="permissionName"
+                  placeholder="e.g., products.create, users.delete" required />
               </div>
 
               <!-- Description -->
-              <div class="mb-3">
+              <!-- <div class="mb-3">
                 <label for="permissionDesc" class="form-label">Description</label>
               <TiptapEditor v-model="formData.description" placeholder="Permission description..." />
+              </div> -->
+              <div class="mb-3">
+                <label class="form-label">Description</label>
+                <CkEditor v-model="formData.description" placeholder="Permission description..." />
               </div>
             </form>
           </div>
           <div class="modal-footer">
             <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
-            <button
-              type="button"
-              :class="editingPermission ? 'btn btn-success' : 'btn btn-primary action-btn-dark'"
-              @click="submitPermission"
-              :disabled="rolesPermissions.isLoading.value"
-            >
+            <button type="button" :class="editingPermission ? 'btn btn-success' : 'btn btn-primary action-btn-dark'"
+              @click="submitPermission" :disabled="rolesPermissions.isLoading.value">
               <span v-if="rolesPermissions.isLoading.value" class="spinner-border spinner-border-sm me-2"></span>
               {{ editingPermission ? 'Update Permission' : 'Create Permission' }}
             </button>
@@ -122,14 +106,8 @@
     </div>
 
     <!-- Delete Confirmation Modal -->
-    <div
-      class="modal fade"
-      id="deletePermissionModal"
-      tabindex="-1"
-      aria-labelledby="deletePermissionModalLabel"
-      aria-hidden="true"
-      ref="deletePermissionModalRef"
-    >
+    <div class="modal fade" id="deletePermissionModal" tabindex="-1" aria-labelledby="deletePermissionModalLabel"
+      aria-hidden="true" ref="deletePermissionModalRef">
       <div class="modal-dialog">
         <div class="modal-content">
           <div class="modal-header bg-danger text-white">
@@ -147,12 +125,8 @@
           </div>
           <div class="modal-footer">
             <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
-            <button
-              type="button"
-              class="btn btn-danger"
-              @click="performDelete"
-              :disabled="rolesPermissions.isLoading.value"
-            >
+            <button type="button" class="btn btn-danger" @click="performDelete"
+              :disabled="rolesPermissions.isLoading.value">
               <span v-if="rolesPermissions.isLoading.value" class="spinner-border spinner-border-sm me-2"></span>
               Delete Permission
             </button>
@@ -342,4 +316,3 @@ const performDelete = async () => {
   }
 }
 </style>
-

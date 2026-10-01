@@ -51,18 +51,12 @@
               <span v-else class="text-muted">-</span>
             </td>
             <td>
-              <button
-                class="btn btn-sm btn-outline-primary me-2"
-                @click="openEditModal(role)"
-                :disabled="rolesPermissions.isLoading.value"
-              >
+              <button class="btn btn-sm btn-outline-primary me-2" @click="openEditModal(role)"
+                :disabled="rolesPermissions.isLoading.value">
                 <i class="bi bi-pencil"></i>
               </button>
-              <button
-                class="btn btn-sm btn-outline-danger"
-                @click="confirmDelete(role)"
-                :disabled="rolesPermissions.isLoading.value"
-              >
+              <button class="btn btn-sm btn-outline-danger" @click="confirmDelete(role)"
+                :disabled="rolesPermissions.isLoading.value">
                 <i class="bi bi-trash"></i>
               </button>
             </td>
@@ -72,14 +66,8 @@
     </div>
 
     <!-- Create/Edit Modal -->
-    <div
-      class="modal fade"
-      id="roleModal"
-      tabindex="-1"
-      aria-labelledby="roleModalLabel"
-      aria-hidden="true"
-      ref="roleModalRef"
-    >
+    <div class="modal fade" id="roleModal" tabindex="-1" data-bs-focus="false" aria-labelledby="roleModalLabel"
+      aria-hidden="true" ref="roleModalRef">
       <div class="modal-dialog modal-lg">
         <div class="modal-content">
           <div class="modal-header">
@@ -94,20 +82,18 @@
               <!-- Name -->
               <div class="mb-3">
                 <label for="roleName" class="form-label">Role Name <span class="text-danger">*</span></label>
-                <input
-                  v-model="formData.name"
-                  type="text"
-                  class="form-control"
-                  id="roleName"
-                  placeholder="e.g., Manager, Editor"
-                  required
-                />
+                <input v-model="formData.name" type="text" class="form-control" id="roleName"
+                  placeholder="e.g., Manager, Editor" required />
               </div>
 
               <!-- Description -->
-              <div class="mb-3">
+              <!-- <div class="mb-3">
                 <label for="roleDesc" class="form-label">Description</label>
               <TiptapEditor v-model="formData.description" placeholder="Role description..." />
+              </div> -->
+              <div class="mb-3">
+                <label class="form-label">Description</label>
+                <CkEditor v-model="formData.description" placeholder="Role description..." />
               </div>
 
               <!-- Permissions -->
@@ -115,13 +101,8 @@
                 <label class="form-label">Permissions</label>
                 <div class="permissions-list" v-if="rolesPermissions.permissions.value.length">
                   <div v-for="perm in rolesPermissions.permissions.value" :key="perm.id" class="form-check">
-                    <input
-                      v-model="formData.permissions"
-                      type="checkbox"
-                      :value="perm.id"
-                      class="form-check-input"
-                      :id="`perm-${perm.id}`"
-                    />
+                    <input v-model="formData.permissions" type="checkbox" :value="perm.id" class="form-check-input"
+                      :id="`perm-${perm.id}`" />
                     <label class="form-check-label" :for="`perm-${perm.id}`">
                       <strong>{{ perm.name }}</strong>
                     </label>
@@ -133,12 +114,8 @@
           </div>
           <div class="modal-footer">
             <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
-            <button
-              type="button"
-              :class="editingRole ? 'btn btn-success' : 'btn btn-primary action-btn-dark'"
-              @click="submitRole"
-              :disabled="rolesPermissions.isLoading.value"
-            >
+            <button type="button" :class="editingRole ? 'btn btn-success' : 'btn btn-primary action-btn-dark'"
+              @click="submitRole" :disabled="rolesPermissions.isLoading.value">
               <span v-if="rolesPermissions.isLoading.value" class="spinner-border spinner-border-sm me-2"></span>
               {{ editingRole ? 'Update Role' : 'Create Role' }}
             </button>
@@ -148,14 +125,8 @@
     </div>
 
     <!-- Delete Confirmation Modal -->
-    <div
-      class="modal fade"
-      id="deleteModal"
-      tabindex="-1"
-      aria-labelledby="deleteModalLabel"
-      aria-hidden="true"
-      ref="deleteModalRef"
-    >
+    <div class="modal fade" id="deleteModal" tabindex="-1" aria-labelledby="deleteModalLabel" aria-hidden="true"
+      ref="deleteModalRef">
       <div class="modal-dialog">
         <div class="modal-content">
           <div class="modal-header bg-danger text-white">
@@ -173,12 +144,8 @@
           </div>
           <div class="modal-footer">
             <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
-            <button
-              type="button"
-              class="btn btn-danger"
-              @click="performDelete"
-              :disabled="rolesPermissions.isLoading.value"
-            >
+            <button type="button" class="btn btn-danger" @click="performDelete"
+              :disabled="rolesPermissions.isLoading.value">
               <span v-if="rolesPermissions.isLoading.value" class="spinner-border spinner-border-sm me-2"></span>
               Delete Role
             </button>
@@ -385,4 +352,3 @@ const performDelete = async () => {
   }
 }
 </style>
-

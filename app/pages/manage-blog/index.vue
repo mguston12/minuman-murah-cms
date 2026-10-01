@@ -5,11 +5,7 @@
         <p class="text-muted mb-0">Manage blog posts</p>
       </div>
       <div class="d-flex gap-2">
-        <NuxtLink
-          v-if="hasPermission('blogs.create')"
-          to="/manage-blog/create"
-          class="btn btn-primary action-btn-dark"
-        >
+        <NuxtLink v-if="hasPermission('blogs.create')" to="/manage-blog/create" class="btn btn-primary action-btn-dark">
           <span class="me-2">+</span>Create New Blog Post
         </NuxtLink>
       </div>
@@ -20,20 +16,11 @@
       <div class="card-body p-3">
         <div class="row g-2">
           <div class="col-md-4">
-            <input
-              v-model="filters.search"
-              type="text"
-              class="form-control form-control-sm"
-              placeholder="Search title..."
-              @input="handleSearch"
-            />
+            <input v-model="filters.search" type="text" class="form-control form-control-sm"
+              placeholder="Search title..." @input="handleSearch" />
           </div>
           <div class="col-md-4">
-            <select
-              v-model="filters.category"
-              class="form-select form-select-sm"
-              @change="loadBlogs(1)"
-            >
+            <select v-model="filters.category" class="form-select form-select-sm" @change="loadBlogs(1)">
               <option value="">All Categories</option>
               <option v-for="cat in categories" :key="cat.id" :value="cat.id">
                 {{ cat.name }}
@@ -41,11 +28,7 @@
             </select>
           </div>
           <div class="col-md-4">
-            <select
-              v-model="filters.status"
-              class="form-select form-select-sm"
-              @change="loadBlogs(1)"
-            >
+            <select v-model="filters.status" class="form-select form-select-sm" @change="loadBlogs(1)">
               <option value="">All Status</option>
               <option value="published">Published</option>
               <option value="draft">Draft</option>
@@ -85,14 +68,11 @@
               <tbody>
                 <tr v-for="blog in blogs" :key="blog.id">
                   <td>
-                    <img
-                      v-if="blog.cover_url"
-                      :src="blog.cover_url"
-                      :alt="blog.title"
+                    <img v-if="blog.cover_url" :src="blog.cover_url" :alt="blog.title"
                       style="width: 60px; height: 60px; object-fit: cover; border-radius: 4px;"
-                      @error="handleImageError($event)"
-                    />
-                    <div v-else style="width: 60px; height: 60px; background: #e9ecef; border-radius: 4px; display: flex; align-items: center; justify-content: center;">
+                      @error="handleImageError($event)" />
+                    <div v-else
+                      style="width: 60px; height: 60px; background: #e9ecef; border-radius: 4px; display: flex; align-items: center; justify-content: center;">
                       <i class="bi bi-image" style="color: #6c757d;"></i>
                     </div>
                   </td>
@@ -106,29 +86,20 @@
                     <span v-else class="text-muted">-</span>
                   </td>
                   <td>
-                    <span :class="`badge ${(blog.status === 'published' || blog.status === 1) ? 'bg-success' : 'bg-warning'}`">
+                    <span
+                      :class="`badge ${(blog.status === 'published' || blog.status === 1) ? 'bg-success' : 'bg-warning'}`">
                       {{ (blog.status === 'published' || blog.status === 1) ? 'Published' : 'Draft' }}
                     </span>
                   </td>
                   <td>{{ formatDate(blog.created_at) }}</td>
                   <td class="text-end">
                     <div class="d-flex justify-content-end gap-2">
-                      <NuxtLink
-                        v-if="hasPermission('blogs.update')"
-                        :to="`/manage-blog/edit/${blog.id}`"
-                        class="btn btn-sm btn-outline-primary"
-                        title="Edit"
-                      >
+                      <NuxtLink v-if="hasPermission('blogs.update')" :to="`/manage-blog/edit/${blog.id}`"
+                        class="btn btn-sm btn-outline-primary" title="Edit">
                         <i class="bi bi-pencil"></i>
                       </NuxtLink>
-                      <button
-                        v-if="hasPermission('blogs.delete')"
-                        type="button"
-                        class="btn btn-sm btn-outline-danger"
-                        @click="handleDeleteClick(blog)"
-                        title="Delete"
-                        :disabled="loadingBlogs"
-                      >
+                      <button v-if="hasPermission('blogs.delete')" type="button" class="btn btn-sm btn-outline-danger"
+                        @click="handleDeleteClick(blog)" title="Delete" :disabled="loadingBlogs">
                         <i class="bi bi-trash"></i>
                       </button>
                     </div>
@@ -140,43 +111,30 @@
 
           <!-- Pagination -->
           <div v-if="pagination && pagination.last_page > 1" class="mt-3">
-            <div class="d-flex flex-column flex-md-row justify-content-center justify-content-md-between align-items-center gap-2">
+            <div
+              class="d-flex flex-column flex-md-row justify-content-center justify-content-md-between align-items-center gap-2">
               <div class="text-muted text-center text-md-start small" style="font-size: 0.875rem;">
                 Showing {{ pagination.from }} to {{ pagination.to }} of {{ pagination.total }} entries
               </div>
               <nav aria-label="Page navigation">
                 <ul class="pagination mb-0">
                   <li class="page-item" :class="{ disabled: pagination.current_page === 1 }">
-                    <a
-                      class="page-link action-btn-dark"
-                      href="#"
-                      @click.prevent="changePage(pagination.current_page - 1)"
-                    >
+                    <a class="page-link action-btn-dark" href="#"
+                      @click.prevent="changePage(pagination.current_page - 1)">
                       Previous
                     </a>
                   </li>
-                  <li
-                    v-for="page in getPageNumbers()"
-                    :key="page"
-                    class="page-item"
-                    :class="{ active: typeof page === 'number' && page === pagination.current_page, disabled: page === '...' }"
-                  >
-                    <a
-                      v-if="page !== '...'"
-                      class="page-link action-btn-dark"
-                      href="#"
-                      @click.prevent="changePage(Number(page))"
-                    >
+                  <li v-for="page in getPageNumbers()" :key="page" class="page-item"
+                    :class="{ active: typeof page === 'number' && page === pagination.current_page, disabled: page === '...' }">
+                    <a v-if="page !== '...'" class="page-link action-btn-dark" href="#"
+                      @click.prevent="changePage(Number(page))">
                       {{ page }}
                     </a>
                     <span v-else class="page-link">{{ page }}</span>
                   </li>
                   <li class="page-item" :class="{ disabled: pagination.current_page === pagination.last_page }">
-                    <a
-                      class="page-link action-btn-dark"
-                      href="#"
-                      @click.prevent="changePage(pagination.current_page + 1)"
-                    >
+                    <a class="page-link action-btn-dark" href="#"
+                      @click.prevent="changePage(pagination.current_page + 1)">
                       Next
                     </a>
                   </li>
@@ -198,20 +156,11 @@
 
     <!-- Modals -->
     <!-- BlogCreateModal and BlogEditModal are no longer used - replaced with dedicated pages -->
-    <BlogDeleteModal
-      v-if="blogToDelete"
-      :blog="blogToDelete"
-      @deleted="handleBlogDeleted"
-    />
+    <BlogDeleteModal v-if="blogToDelete" :blog="blogToDelete" @deleted="handleBlogDeleted" />
 
     <!-- Manage Categories Modal -->
-    <div
-      id="manageCategoriesModal"
-      class="modal fade"
-      tabindex="-1"
-      aria-labelledby="manageCategoriesModalLabel"
-      aria-hidden="true"
-    >
+    <div id="manageCategoriesModal" class="modal fade" tabindex="-1" data-bs-focus="false"
+      aria-labelledby="manageCategoriesModalLabel" aria-hidden="true">
       <div class="modal-dialog modal-lg">
         <div class="modal-content">
           <div class="modal-header">
@@ -223,11 +172,8 @@
             <div class="card mb-3">
               <div class="card-header d-flex justify-content-between align-items-center">
                 <h6 class="mb-0">Add New Category</h6>
-                <button
-                  type="button"
-                  class="btn btn-sm btn-primary action-btn-dark"
-                  @click="showCreateCategoryForm = !showCreateCategoryForm"
-                >
+                <button type="button" class="btn btn-sm btn-primary action-btn-dark"
+                  @click="showCreateCategoryForm = !showCreateCategoryForm">
                   <i :class="showCreateCategoryForm ? 'bi bi-dash' : 'bi bi-plus'"></i>
                   {{ showCreateCategoryForm ? 'Hide' : 'New' }}
                 </button>
@@ -235,37 +181,25 @@
               <div v-if="showCreateCategoryForm" class="card-body">
                 <div class="row g-2">
                   <div class="col-md-5">
-                    <input
-                      v-model="newCategory.name"
-                      type="text"
-                      class="form-control form-control-sm"
-                      placeholder="Category name"
-                      @input="generateCategorySlug"
-                    />
+                    <input v-model="newCategory.name" type="text" class="form-control form-control-sm"
+                      placeholder="Category name" @input="generateCategorySlug" />
                   </div>
                   <div class="col-md-4">
-                    <input
-                      v-model="newCategory.slug"
-                      type="text"
-                      class="form-control form-control-sm"
-                      placeholder="Slug (auto)"
-                      readonly
-                      style="background:#f8f9fa;"
-                    />
+                    <input v-model="newCategory.slug" type="text" class="form-control form-control-sm"
+                      placeholder="Slug (auto)" readonly style="background:#f8f9fa;" />
                   </div>
                   <div class="col-md-3">
-                    <button
-                      type="button"
-                      class="btn btn-primary btn-sm w-100 action-btn-dark"
-                      :disabled="!newCategory.name || savingCategory"
-                      @click="handleCreateCategory"
-                    >
+                    <button type="button" class="btn btn-primary btn-sm w-100 action-btn-dark"
+                      :disabled="!newCategory.name || savingCategory" @click="handleCreateCategory">
                       <span v-if="savingCategory" class="spinner-border spinner-border-sm me-1"></span>
                       Add
                     </button>
                   </div>
-                  <div class="col-12">
+                  <!-- <div class="col-12">
                     <TiptapEditor v-model="newCategory.description" placeholder="Description (optional)" />
+                  </div> -->
+                  <div class="col-12">
+                    <CkEditor v-model="newCategory.description" placeholder="Description (optional)" />
                   </div>
                 </div>
               </div>
@@ -293,12 +227,8 @@
                   <tr v-for="cat in categories" :key="cat.id">
                     <td>
                       <template v-if="editingCategory?.id === cat.id">
-                        <input
-                          v-model="editingCategory.name"
-                          type="text"
-                          class="form-control form-control-sm"
-                          @input="generateEditCategorySlug"
-                        />
+                        <input v-model="editingCategory.name" type="text" class="form-control form-control-sm"
+                          @input="generateEditCategorySlug" />
                       </template>
                       <template v-else>
                         <strong>{{ cat.name }}</strong>
@@ -308,13 +238,8 @@
                     </td>
                     <td>
                       <template v-if="editingCategory?.id === cat.id">
-                        <input
-                          v-model="editingCategory.slug"
-                          type="text"
-                          class="form-control form-control-sm"
-                          readonly
-                          style="background:#f8f9fa;"
-                        />
+                        <input v-model="editingCategory.slug" type="text" class="form-control form-control-sm" readonly
+                          style="background:#f8f9fa;" />
                       </template>
                       <template v-else>
                         <code>{{ cat.slug }}</code>
@@ -335,38 +260,21 @@
                     </td>
                     <td class="text-end">
                       <template v-if="editingCategory?.id === cat.id">
-                        <button
-                          type="button"
-                          class="btn btn-sm btn-success me-1"
-                          @click="handleUpdateCategory"
-                          :disabled="savingCategory"
-                        >
+                        <button type="button" class="btn btn-sm btn-success me-1" @click="handleUpdateCategory"
+                          :disabled="savingCategory">
                           <i class="bi bi-check"></i>
                         </button>
-                        <button
-                          type="button"
-                          class="btn btn-sm btn-secondary"
-                          @click="editingCategory = null"
-                        >
+                        <button type="button" class="btn btn-sm btn-secondary" @click="editingCategory = null">
                           <i class="bi bi-x"></i>
                         </button>
                       </template>
                       <template v-else>
-                        <button
-                          type="button"
-                          class="btn btn-sm btn-outline-primary me-1"
-                          @click="startEditCategory(cat)"
-                          title="Edit"
-                        >
+                        <button type="button" class="btn btn-sm btn-outline-primary me-1"
+                          @click="startEditCategory(cat)" title="Edit">
                           <i class="bi bi-pencil"></i>
                         </button>
-                        <button
-                          type="button"
-                          class="btn btn-sm btn-outline-danger"
-                          @click="handleDeleteCategory(cat)"
-                          title="Delete"
-                          :disabled="deletingCategory === cat.id"
-                        >
+                        <button type="button" class="btn btn-sm btn-outline-danger" @click="handleDeleteCategory(cat)"
+                          title="Delete" :disabled="deletingCategory === cat.id">
                           <i class="bi bi-trash"></i>
                         </button>
                       </template>
@@ -438,7 +346,7 @@ const filters = ref({
 const loadBlogs = async (page: number = currentPage.value) => {
   loadingBlogs.value = true
   currentPage.value = page
-  
+
   const { data, error } = await getBlogs({
     page,
     per_page: perPage.value,
@@ -583,11 +491,11 @@ const changePage = (page: number) => {
 
 const getPageNumbers = (): (number | string)[] => {
   if (!pagination.value) return []
-  
+
   const current = pagination.value.current_page
   const last = pagination.value.last_page
   const pages: (number | string)[] = []
-  
+
   if (last <= 7) {
     // Show all pages if 7 or fewer
     for (let i = 1; i <= last; i++) {
@@ -596,27 +504,27 @@ const getPageNumbers = (): (number | string)[] => {
   } else {
     // Show first page
     pages.push(1)
-    
+
     if (current > 3) {
       pages.push('...')
     }
-    
+
     // Show pages around current
     const start = Math.max(2, current - 1)
     const end = Math.min(last - 1, current + 1)
-    
+
     for (let i = start; i <= end; i++) {
       pages.push(i)
     }
-    
+
     if (current < last - 2) {
       pages.push('...')
     }
-    
+
     // Show last page
     pages.push(last)
   }
-  
+
   return pages
 }
 

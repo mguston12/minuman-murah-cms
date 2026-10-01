@@ -19,17 +19,9 @@
           <div class="row g-3">
             <!-- Name -->
             <div class="col-md-6">
-              <label class="form-label fw-medium"
-                >Voucher Name <span class="text-danger">*</span></label
-              >
-              <input
-                v-model="form.name"
-                type="text"
-                class="form-control"
-                :class="{ 'is-invalid': errors.name }"
-                placeholder="Voucher Name"
-                @input="generateSlugFromName"
-              />
+              <label class="form-label fw-medium">Voucher Name <span class="text-danger">*</span></label>
+              <input v-model="form.name" type="text" class="form-control" :class="{ 'is-invalid': errors.name }"
+                placeholder="Voucher Name" @input="generateSlugFromName" />
               <div v-if="errors.name" class="invalid-feedback d-block">
                 {{ errors.name[0] }}
               </div>
@@ -37,16 +29,9 @@
 
             <!-- Code -->
             <div class="col-md-6">
-              <label class="form-label fw-medium"
-                >Voucher Code <span class="text-danger">*</span></label
-              >
-              <input
-                v-model="form.code"
-                type="text"
-                class="form-control"
-                :class="{ 'is-invalid': errors.code }"
-                placeholder="e.g. SAVE20"
-              />
+              <label class="form-label fw-medium">Voucher Code <span class="text-danger">*</span></label>
+              <input v-model="form.code" type="text" class="form-control" :class="{ 'is-invalid': errors.code }"
+                placeholder="e.g. SAVE20" />
               <div v-if="errors.code" class="invalid-feedback d-block">
                 {{ errors.code[0] }}
               </div>
@@ -54,16 +39,9 @@
 
             <!-- minimum purchase -->
             <div class="col-md-6">
-              <label class="form-label fw-medium"
-                >Minimum Purchase <span class="text-danger">*</span></label
-              >
-              <input
-                v-model.number="form.min_purchase"
-                type="number"
-                class="form-control"
-                :class="{ 'is-invalid': errors.min_purchase }"
-                placeholder="e.g. 100000"
-              />
+              <label class="form-label fw-medium">Minimum Purchase <span class="text-danger">*</span></label>
+              <input v-model.number="form.min_purchase" type="number" class="form-control"
+                :class="{ 'is-invalid': errors.min_purchase }" placeholder="e.g. 100000" />
               <div v-if="errors.min_purchase" class="invalid-feedback d-block">
                 {{ errors.min_purchase[0] }}
               </div>
@@ -72,20 +50,12 @@
             <div class="col-md-6">
               <label class="form-label fw-medium">Status Publish</label>
               <div class="form-check form-switch">
-                <input
-                  class="form-check-input"
-                  type="checkbox"
-                  id="is_published"
-                  v-model="form.is_published"
-                  :class="{ 'is-invalid': errors.is_published }"
-                />
+                <input class="form-check-input" type="checkbox" id="is_published" v-model="form.is_published"
+                  :class="{ 'is-invalid': errors.is_published }" />
                 <label class="form-check-label" for="is_published">
                   {{ form.is_published ? "Published" : "Unpublished" }}
                 </label>
-                <div
-                  v-if="errors.is_published"
-                  class="invalid-feedback d-block"
-                >
+                <div v-if="errors.is_published" class="invalid-feedback d-block">
                   {{ errors.is_published[0] }}
                 </div>
               </div>
@@ -156,14 +126,8 @@
 
             <!-- Discount Type -->
             <div class="col-md-6">
-              <label class="form-label fw-medium"
-                >Discount Type <span class="text-danger">*</span></label
-              >
-              <select
-                v-model="form.discount_type"
-                class="form-select"
-                :class="{ 'is-invalid': errors.discount_type }"
-              >
+              <label class="form-label fw-medium">Discount Type <span class="text-danger">*</span></label>
+              <select v-model="form.discount_type" class="form-select" :class="{ 'is-invalid': errors.discount_type }">
                 <option value="">Select Type</option>
                 <option value="PERCENTAGE">Percentage</option>
                 <option value="FIXED">Fixed</option>
@@ -175,22 +139,11 @@
 
             <!-- Discount Value -->
             <div class="col-md-6">
-              <label class="form-label fw-medium"
-                >Discount Value <span class="text-danger">*</span></label
-              >
-              <input
-                v-model.number="form.discount_value"
-                type="number"
-                min="0"
-                max="form.discount_type === 'PERCENTAGE' ? 100 : null"
-                class="form-control"
-                :class="{ 'is-invalid': errors.discount_value }"
-                placeholder="0"
-              />
-              <div
-                v-if="errors.discount_value"
-                class="invalid-feedback d-block"
-              >
+              <label class="form-label fw-medium">Discount Value <span class="text-danger">*</span></label>
+              <input v-model.number="form.discount_value" type="number" min="0"
+                max="form.discount_type === 'PERCENTAGE' ? 100 : null" class="form-control"
+                :class="{ 'is-invalid': errors.discount_value }" placeholder="0" />
+              <div v-if="errors.discount_value" class="invalid-feedback d-block">
                 {{ errors.discount_value[0] }}
               </div>
             </div>
@@ -198,14 +151,8 @@
             <!-- Limit User -->
             <div class="col-md-6">
               <label class="form-label fw-medium">Limit Users</label>
-              <input
-                v-model.number="form.limit_user"
-                type="number"
-                min="1"
-                class="form-control"
-                :class="{ 'is-invalid': errors.limit_user }"
-                placeholder="Leave empty for unlimited"
-              />
+              <input v-model.number="form.limit_user" type="number" min="1" class="form-control"
+                :class="{ 'is-invalid': errors.limit_user }" placeholder="Leave empty for unlimited" />
               <div v-if="errors.limit_user" class="invalid-feedback d-block">
                 {{ errors.limit_user[0] }}
               </div>
@@ -214,11 +161,7 @@
             <!-- Status -->
             <div class="col-md-6">
               <label class="form-label fw-medium">Status</label>
-              <select
-                v-model="form.status"
-                class="form-select"
-                :class="{ 'is-invalid': errors.status }"
-              >
+              <select v-model="form.status" class="form-select" :class="{ 'is-invalid': errors.status }">
                 <option value="ACTIVE">Active</option>
                 <option value="INACTIVE">Inactive</option>
                 <option value="DRAFT">Draft</option>
@@ -231,12 +174,8 @@
             <!-- Start Date -->
             <div class="col-md-6">
               <label class="form-label fw-medium">Start Date</label>
-              <input
-                v-model="form.start_date"
-                type="datetime-local"
-                class="form-control"
-                :class="{ 'is-invalid': errors.start_date }"
-              />
+              <input v-model="form.start_date" type="datetime-local" class="form-control"
+                :class="{ 'is-invalid': errors.start_date }" />
               <div v-if="errors.start_date" class="invalid-feedback d-block">
                 {{ errors.start_date[0] }}
               </div>
@@ -245,31 +184,29 @@
             <!-- End Date -->
             <div class="col-md-6">
               <label class="form-label fw-medium">End Date</label>
-              <input
-                v-model="form.end_date"
-                type="datetime-local"
-                class="form-control"
-                :class="{ 'is-invalid': errors.end_date }"
-              />
+              <input v-model="form.end_date" type="datetime-local" class="form-control"
+                :class="{ 'is-invalid': errors.end_date }" />
               <div v-if="errors.end_date" class="invalid-feedback d-block">
                 {{ errors.end_date[0] }}
               </div>
             </div>
 
             <!-- Description -->
-            <div class="col-12">
+            <!-- <div class="col-12">
               <label class="form-label fw-medium">Description</label>
               <TiptapEditor v-model="form.description" placeholder="Optional description..." />
+            </div> -->
+            <!-- Description -->
+            <div class="col-12">
+              <label class="form-label fw-medium">Description</label>
+              <CkEditor v-model="form.description" placeholder="Optional description..."
+                :error-message="errors.description ? errors.description[0] : ''" />
             </div>
 
             <!-- Message -->
             <div v-if="message" class="col-12">
-              <div
-                class="alert"
-                :class="
-                  messageType === 'success' ? 'alert-success' : 'alert-danger'
-                "
-              >
+              <div class="alert" :class="messageType === 'success' ? 'alert-success' : 'alert-danger'
+                ">
                 {{ message }}
               </div>
             </div>
@@ -277,21 +214,13 @@
 
           <!-- Actions -->
           <div class="mt-4 d-flex justify-content-end gap-2">
-            <NuxtLink
-              to="/manage-voucher"
-              class="btn btn-secondary"
-              :disabled="loading"
-            >
+            <NuxtLink to="/manage-voucher" class="btn btn-secondary" :disabled="loading">
               Cancel
             </NuxtLink>
 
             <button type="submit" class="btn btn-primary action-btn-dark" :disabled="loading">
-              <span
-                v-if="loading"
-                class="spinner-border spinner-border-sm me-2 "
-                role="status"
-                aria-hidden="true"
-              ></span>
+              <span v-if="loading" class="spinner-border spinner-border-sm me-2 " role="status"
+                aria-hidden="true"></span>
               <span v-if="loading">Creating...</span>
               <span v-else>Create Voucher</span>
             </button>

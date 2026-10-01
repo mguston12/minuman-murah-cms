@@ -10,6 +10,7 @@
     "postinstall": "nuxt prepare"
   },
   "dependencies": {
+    "@ckeditor/ckeditor5-vue": "^8.2.0",
     "@nuxt/content": "^3.8.0",
     "@nuxt/eslint": "^1.10.0",
     "@nuxt/image": "^1.11.0",
@@ -26,6 +27,7 @@
     "@tiptap/vue-3": "^3.13.0",
     "@unhead/vue": "^2.0.19",
     "better-sqlite3": "^12.4.1",
+    "ckeditor5": "^48.5.2",
     "eslint": "^9.39.1",
     "html2canvas": "^1.4.1",
     "jspdf": "^4.2.1",

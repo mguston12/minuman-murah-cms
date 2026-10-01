@@ -5,12 +5,8 @@
         <h4 class="mb-0">Manage Category Products</h4>
         <p class="text-muted mb-0">Manage products by category</p>
       </div>
-      <button
-        v-if="hasPermission('products.create')"
-        @click="openAddCategoryProductModal"
-        class="btn btn-primary"
-        :disabled="isLoading"
-      >
+      <button v-if="hasPermission('products.create')" @click="openAddCategoryProductModal" class="btn btn-primary"
+        :disabled="isLoading">
         <span class="me-2">+</span>Add Category
       </button>
     </div>
@@ -41,23 +37,16 @@
               </tr>
             </thead>
             <tbody>
-              <tr
-                v-for="(category, index) in categoriesWithCount"
-                :key="category.id"
-              >
+              <tr v-for="(category, index) in categoriesWithCount" :key="category.id">
                 <td>
                   <span class="badge bg-secondary">{{
                     getRowNumber(index)
                   }}</span>
                 </td>
                 <td>
-                  <img
-                    v-if="category.taxonomy_image"
-                    :src="resolveImageUrl(category.taxonomy_image)"
-                    alt="Category Image"
-                    class="img-thumbnail"
-                    style="max-width: 50px; max-height: 50px; object-fit: cover"
-                  />
+                  <img v-if="category.taxonomy_image" :src="resolveImageUrl(category.taxonomy_image)"
+                    alt="Category Image" class="img-thumbnail"
+                    style="max-width: 50px; max-height: 50px; object-fit: cover" />
                   <span v-else class="text-muted small">No image</span>
                 </td>
                 <td>
@@ -69,21 +58,13 @@
                   }}</code>
                 </td>
                 <td class="text-end">
-                  <button
-                    v-if="hasPermission('products.update')"
-                    class="btn btn-sm btn-outline-warning me-2"
-                    @click="openEditCategoryModal(category)"
-                    :disabled="isLoading"
-                  >
+                  <button v-if="hasPermission('products.update')" class="btn btn-sm btn-outline-warning me-2"
+                    @click="openEditCategoryModal(category)" :disabled="isLoading">
                     <i class="bi bi-pencil me-1"></i>Edit Category
                   </button>
 
-                  <button
-                    v-if="hasPermission('products.delete')"
-                    class="btn btn-sm btn-outline-danger"
-                    @click="openDeleteCategoryModal(category)"
-                    :disabled="isLoading"
-                  >
+                  <button v-if="hasPermission('products.delete')" class="btn btn-sm btn-outline-danger"
+                    @click="openDeleteCategoryModal(category)" :disabled="isLoading">
                     <i class="bi bi-trash me-1"></i>Delete
                   </button>
                 </td>
@@ -95,42 +76,24 @@
     </div>
 
     <!-- Add Category Product Modal -->
-    <div
-      class="modal fade"
-      id="addCategoryProductModal"
-      tabindex="-1"
-      aria-labelledby="addCategoryProductModalLabel"
-      aria-hidden="true"
-    >
+    <div class="modal fade" id="addCategoryProductModal" tabindex="-1" data-bs-focus="false"
+      aria-labelledby="addCategoryProductModalLabel" aria-hidden="true">
       <div class="modal-dialog">
         <div class="modal-content">
           <div class="modal-header">
             <h5 class="modal-title" id="addCategoryProductModalLabel">
               Add New Category
             </h5>
-            <button
-              type="button"
-              class="btn-close"
-              data-bs-dismiss="modal"
-              aria-label="Close"
-            ></button>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
           </div>
           <div class="modal-body">
             <div class="mb-3">
               <label for="taxonomy_name" class="form-label">
                 Category Name <span class="text-danger">*</span>
               </label>
-              <input
-                id="taxonomy_name"
-                v-model="form.taxonomy_name"
-                type="text"
-                class="form-control"
-                :class="{ 'is-invalid': formErrors.taxonomy_name }"
-                placeholder="Enter category name"
-                :disabled="isLoading"
-                required
-                @input="generateSlug(form)"
-              />
+              <input id="taxonomy_name" v-model="form.taxonomy_name" type="text" class="form-control"
+                :class="{ 'is-invalid': formErrors.taxonomy_name }" placeholder="Enter category name"
+                :disabled="isLoading" required @input="generateSlug(form)" />
               <div v-if="formErrors.taxonomy_name" class="invalid-feedback">
                 {{ formErrors.taxonomy_name[0] }}
               </div>
@@ -140,16 +103,9 @@
               <label for="taxonomy_slug" class="form-label">
                 Category Slug
               </label>
-              <input
-                id="taxonomy_slug"
-                v-model="form.taxonomy_slug"
-                type="text"
-                class="form-control"
+              <input id="taxonomy_slug" v-model="form.taxonomy_slug" type="text" class="form-control"
                 :class="{ 'is-invalid': formErrors.taxonomy_slug }"
-                placeholder="Enter category slug (auto-generated if empty)"
-                :disabled="isLoading"
-                required
-              />
+                placeholder="Enter category slug (auto-generated if empty)" :disabled="isLoading" required />
               <div v-if="formErrors.taxonomy_slug" class="invalid-feedback">
                 {{ formErrors.taxonomy_slug[0] }}
               </div>
@@ -162,14 +118,8 @@
               <label for="taxonomy_status" class="form-label">
                 Status <span class="text-danger">*</span>
               </label>
-              <select
-                id="taxonomy_status"
-                v-model="form.taxonomy_status"
-                class="form-select"
-                :class="{ 'is-invalid': formErrors.taxonomy_status }"
-                :disabled="isLoading"
-                required
-              >
+              <select id="taxonomy_status" v-model="form.taxonomy_status" class="form-select"
+                :class="{ 'is-invalid': formErrors.taxonomy_status }" :disabled="isLoading" required>
                 <option value="ACTIVE">Active</option>
                 <option value="INACTIVE">Inactive</option>
               </select>
@@ -178,7 +128,7 @@
               </div>
             </div>
 
-            <div class="mb-3">
+            <!-- <div class="mb-3">
               <label for="taxonomy_description" class="form-label">
                 Description
               </label>
@@ -191,6 +141,14 @@
                     : ''
                 "
               />
+            </div> -->
+            <div class="mb-3">
+              <label class="form-label">Description</label>
+              <CkEditor v-model="form.taxonomy_description" placeholder="Enter category description (optional)"
+                :error-message="formErrors.taxonomy_description
+                  ? formErrors.taxonomy_description[0]
+                  : ''
+                  " />
             </div>
 
             <!-- Category Image -->
@@ -198,42 +156,24 @@
               <label for="taxonomy_image" class="form-label">
                 Category Image
               </label>
-              <input
-                id="taxonomy_image"
-                type="file"
-                accept="image/*"
-                class="form-control"
-                :class="{ 'is-invalid': formErrors.taxonomy_image }"
-                :disabled="isLoading"
-                @change="handleImageChange($event, 'add')"
-              />
+              <input id="taxonomy_image" type="file" accept="image/*" class="form-control"
+                :class="{ 'is-invalid': formErrors.taxonomy_image }" :disabled="isLoading"
+                @change="handleImageChange($event, 'add')" />
               <div v-if="formErrors.taxonomy_image" class="invalid-feedback">
                 {{ formErrors.taxonomy_image[0] }}
               </div>
               <div v-if="imagePreview" class="mt-2">
-                <img
-                  :src="imagePreview"
-                  alt="Preview"
-                  class="img-thumbnail"
-                  style="max-width: 150px; max-height: 150px; object-fit: cover"
-                />
+                <img :src="imagePreview" alt="Preview" class="img-thumbnail"
+                  style="max-width: 150px; max-height: 150px; object-fit: cover" />
               </div>
             </div>
           </div>
           <div class="modal-footer">
-            <button
-              type="button"
-              class="btn btn-secondary"
-              data-bs-dismiss="modal"
-            >
+            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
               Cancel
             </button>
-            <button
-              type="button"
-              class="btn btn-primary"
-              @click="handleAddCategoryProduct"
-              :disabled="isLoading || !form.taxonomy_name"
-            >
+            <button type="button" class="btn btn-primary" @click="handleAddCategoryProduct"
+              :disabled="isLoading || !form.taxonomy_name">
               {{ isLoading ? "Creating..." : "Create Category" }}
             </button>
           </div>
@@ -242,39 +182,24 @@
     </div>
 
     <!-- Edit Taxolist Modal -->
-    <div
-      class="modal fade"
-      id="editCategoryProductModal"
-      tabindex="-1"
-      aria-labelledby="editCategoryProductModalLabel"
-      aria-hidden="true"
-    >
+    <div class="modal fade" id="editCategoryProductModal" tabindex="-1" data-bs-focus="false"
+      aria-labelledby="editCategoryProductModalLabel" aria-hidden="true">
       <div class="modal-dialog">
         <div class="modal-content">
           <div class="modal-header">
             <h5 class="modal-title" id="editCategoryProductModalLabel">
               Edit Category
             </h5>
-            <button
-              type="button"
-              class="btn-close"
-              data-bs-dismiss="modal"
-            ></button>
+            <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
           </div>
 
           <div class="modal-body">
             <!-- Category Name -->
             <div class="mb-3">
               <label class="form-label">Category Name *</label>
-              <input
-                v-model="editForm.taxonomy_name"
-                type="text"
-                class="form-control"
-                :class="{ 'is-invalid': editFormErrors.taxonomy_name }"
-                placeholder="Enter category name"
-                @input="generateSlug(editForm)"
-                required
-              />
+              <input v-model="editForm.taxonomy_name" type="text" class="form-control"
+                :class="{ 'is-invalid': editFormErrors.taxonomy_name }" placeholder="Enter category name"
+                @input="generateSlug(editForm)" required />
               <div v-if="editFormErrors.taxonomy_name" class="invalid-feedback">
                 {{ editFormErrors.taxonomy_name[0] }}
               </div>
@@ -283,67 +208,45 @@
             <!-- Slug -->
             <div class="mb-3">
               <label class="form-label">Category Slug</label>
-              <input
-                v-model="editForm.taxonomy_slug"
-                type="text"
-                class="form-control"
-                placeholder="Enter category slug (auto-generated if empty and not-updated)"
-                required
-              />
+              <input v-model="editForm.taxonomy_slug" type="text" class="form-control"
+                placeholder="Enter category slug (auto-generated if empty and not-updated)" required />
             </div>
 
             <!-- Status -->
             <div class="mb-3">
               <label class="form-label">Status *</label>
-              <select
-                v-model="editForm.taxonomy_status"
-                class="form-select"
-                :class="{ 'is-invalid': editFormErrors.taxonomy_status }"
-                required
-              >
+              <select v-model="editForm.taxonomy_status" class="form-select"
+                :class="{ 'is-invalid': editFormErrors.taxonomy_status }" required>
                 <option value="ACTIVE">Active</option>
                 <option value="INACTIVE">Inactive</option>
               </select>
-              <div
-                v-if="editFormErrors.taxonomy_status"
-                class="invalid-feedback"
-              >
+              <div v-if="editFormErrors.taxonomy_status" class="invalid-feedback">
                 {{ editFormErrors.taxonomy_status[0] }}
               </div>
             </div>
 
             <!-- Description -->
+            <!-- <div class="mb-3">
+              <label class="form-label">Description</label>
+              <TiptapEditor v-model="editForm.taxonomy_description"
+                placeholder="Enter category description (optional)" />
+            </div> -->
             <div class="mb-3">
               <label class="form-label">Description</label>
-              <TiptapEditor
-                v-model="editForm.taxonomy_description"
-                placeholder="Enter category description (optional)"
-              />
+              <CkEditor v-model="editForm.taxonomy_description" placeholder="Enter category description (optional)" />
             </div>
 
             <!-- Category Image -->
             <div class="mb-3">
               <label class="form-label">Category Image</label>
-              <input
-                type="file"
-                accept="image/*"
-                class="form-control"
-                :class="{ 'is-invalid': editFormErrors.taxonomy_image }"
-                @change="handleImageChange($event, 'edit')"
-              />
-              <div
-                v-if="editFormErrors.taxonomy_image"
-                class="invalid-feedback"
-              >
+              <input type="file" accept="image/*" class="form-control"
+                :class="{ 'is-invalid': editFormErrors.taxonomy_image }" @change="handleImageChange($event, 'edit')" />
+              <div v-if="editFormErrors.taxonomy_image" class="invalid-feedback">
                 {{ editFormErrors.taxonomy_image[0] }}
               </div>
               <div v-if="editImagePreview" class="mt-2">
-                <img
-                  :src="editImagePreview"
-                  alt="Preview"
-                  class="img-thumbnail"
-                  style="max-width: 150px; max-height: 150px; object-fit: cover"
-                />
+                <img :src="editImagePreview" alt="Preview" class="img-thumbnail"
+                  style="max-width: 150px; max-height: 150px; object-fit: cover" />
               </div>
             </div>
           </div>
@@ -352,11 +255,7 @@
             <button class="btn btn-secondary" data-bs-dismiss="modal">
               Cancel
             </button>
-            <button
-              class="btn btn-success"
-              @click="handleUpdateCategory"
-              :disabled="isLoading"
-            >
+            <button class="btn btn-success" @click="handleUpdateCategory" :disabled="isLoading">
               {{ isLoading ? "Updating..." : "Update Category" }}
             </button>
           </div>
@@ -365,31 +264,21 @@
     </div>
 
     <!-- Delete TaxoList Modal -->
-    <div
-      class="modal fade"
-      id="deleteCategoryModal"
-      tabindex="-1"
-      aria-labelledby="deleteCategoryModalLabel"
-      aria-hidden="true"
-    >
+    <div class="modal fade" id="deleteCategoryModal" tabindex="-1" aria-labelledby="deleteCategoryModalLabel"
+      aria-hidden="true">
       <div class="modal-dialog modal-dialog-centered">
         <div class="modal-content">
           <div class="modal-header bg-danger text-white">
             <h5 class="modal-title" id="deleteCategoryModalLabel">
               Delete Category
             </h5>
-            <button
-              type="button"
-              class="btn-close btn-close-white"
-              data-bs-dismiss="modal"
-            ></button>
+            <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
           </div>
 
           <div class="modal-body">
             <p>
               Are you sure you want to delete
-              <strong>{{ deleteTarget?.taxonomy_name }}</strong
-              >?
+              <strong>{{ deleteTarget?.taxonomy_name }}</strong>?
             </p>
             <p class="text-muted mb-0">This action cannot be undone.</p>
           </div>
@@ -398,11 +287,7 @@
             <button class="btn btn-secondary" data-bs-dismiss="modal">
               Cancel
             </button>
-            <button
-              class="btn btn-danger"
-              @click="handleDeleteCategory"
-              :disabled="isLoading"
-            >
+            <button class="btn btn-danger" @click="handleDeleteCategory" :disabled="isLoading">
               {{ isLoading ? "Deleting..." : "Delete" }}
             </button>
           </div>
@@ -692,7 +577,7 @@ const handleUpdateCategory = async () => {
   try {
     const finalSlug =
       editForm.value.taxonomy_slug &&
-      editForm.value.taxonomy_slug !== editForm.value.original_slug
+        editForm.value.taxonomy_slug !== editForm.value.original_slug
         ? editForm.value.taxonomy_slug
         : editForm.value.taxonomy_name;
 

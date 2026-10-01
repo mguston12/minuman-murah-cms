@@ -18,13 +18,8 @@
               <label class="form-label">
                 Title <span class="text-danger">*</span>
               </label>
-              <input
-                v-model="form.title"
-                type="text"
-                class="form-control"
-                :class="{ 'is-invalid': errors.title }"
-                required
-              />
+              <input v-model="form.title" type="text" class="form-control" :class="{ 'is-invalid': errors.title }"
+                required />
               <div v-if="errors.title" class="invalid-feedback d-block">
                 {{ errors.title[0] }}
               </div>
@@ -34,22 +29,21 @@
               <label class="form-label">
                 Key <span class="text-danger">*</span>
               </label>
-              <input
-                v-model="form.key"
-                type="text"
-                class="form-control"
-                :class="{ 'is-invalid': errors.key }"
-                placeholder="rekomendasi-untukmu"
-                required
-              />
+              <input v-model="form.key" type="text" class="form-control" :class="{ 'is-invalid': errors.key }"
+                placeholder="rekomendasi-untukmu" required />
               <div v-if="errors.key" class="invalid-feedback d-block">
                 {{ errors.key[0] }}
               </div>
             </div>
 
-            <div class="col-12">
+            <!-- <div class="col-12">
               <label class="form-label">Description</label>
               <TiptapEditor v-model="form.description" placeholder="Deskripsi singkat product group" />
+            </div> -->
+            <div class="col-12">
+              <label class="form-label">Description</label>
+              <CkEditor v-model="form.description" placeholder="Deskripsi singkat product group"
+                :error-message="errors.description ? errors.description[0] : ''" />
             </div>
 
             <div class="col-md-6">
@@ -64,37 +58,21 @@
 
             <div class="col-md-6">
               <label class="form-label">Sort Order</label>
-              <input
-                v-model.number="form.sort"
-                type="number"
-                class="form-control"
-              />
+              <input v-model.number="form.sort" type="number" class="form-control" />
             </div>
 
             <div class="col-md-6">
               <label class="form-label">Image</label>
-              <input
-                type="file"
-                accept="image/*"
-                class="form-control"
-                @change="handleImageSelect"
-              />
+              <input type="file" accept="image/*" class="form-control" @change="handleImageSelect" />
               <div v-if="imagePreview" class="mt-2">
-                <img
-                  :src="imagePreview"
-                  class="img-thumbnail"
-                  style="max-width: 200px; max-height: 200px; object-fit: cover"
-                />
+                <img :src="imagePreview" class="img-thumbnail"
+                  style="max-width: 200px; max-height: 200px; object-fit: cover" />
               </div>
             </div>
           </div>
 
           <div class="d-flex gap-2">
-            <button
-              type="submit"
-              class="btn btn-primary action-btn-dark"
-              :disabled="submitting"
-            >
+            <button type="submit" class="btn btn-primary action-btn-dark" :disabled="submitting">
               <i v-if="submitting" class="bi bi-hourglass-split me-2"></i>
               {{ submitting ? "Creating..." : "Create Group" }}
             </button>

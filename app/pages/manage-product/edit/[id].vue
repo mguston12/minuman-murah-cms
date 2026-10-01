@@ -26,10 +26,7 @@
         <div>
           <h4 class="mb-0">Edit Product</h4>
         </div>
-        <NuxtLink
-          :to="`/manage-product/${product.slug}`"
-          class="btn back-nav-btn"
-        >
+        <NuxtLink :to="`/manage-product/${product.slug}`" class="btn back-nav-btn">
           <i class="bi bi-arrow-left me-2"></i>Back to Product
         </NuxtLink>
       </div>
@@ -38,24 +35,10 @@
       <div class="card mb-4">
         <div class="card-body">
           <div class="overflow-auto">
-            <ul
-              class="nav nav-tabs mb-3 flex-nowrap"
-              id="productStepsTabs"
-              role="tablist"
-            >
-              <li
-                class="nav-item"
-                role="presentation"
-                v-for="step in steps"
-                :key="step.key"
-              >
-                <button
-                  class="nav-link text-nowrap"
-                  :class="{ active: currentStep === step.key }"
-                  @click="goToStep(step.key)"
-                  type="button"
-                  :disabled="!canAccessStep(step.key)"
-                >
+            <ul class="nav nav-tabs mb-3 flex-nowrap" id="productStepsTabs" role="tablist">
+              <li class="nav-item" role="presentation" v-for="step in steps" :key="step.key">
+                <button class="nav-link text-nowrap" :class="{ active: currentStep === step.key }"
+                  @click="goToStep(step.key)" type="button" :disabled="!canAccessStep(step.key)">
                   <i :class="step.icon + ' me-2'"></i>
                   {{ step.label }}
                 </button>
@@ -68,116 +51,69 @@
                 <!-- Step 1: Category -->
                 <div v-if="currentStep === 1" class="tab-pane fade show active">
                   <div v-if="loadingCategories" class="text-center py-4">
-                    <div
-                      class="spinner-border spinner-border-sm text-primary"
-                      role="status"
-                    ></div>
+                    <div class="spinner-border spinner-border-sm text-primary" role="status"></div>
                     <p class="mt-2 text-muted small">Loading categories...</p>
                   </div>
 
                   <div v-else class="category-flow">
                     <div class="category-panel border rounded p-3 h-100">
                       <div
-                        class="d-flex flex-column flex-lg-row justify-content-between align-items-lg-center gap-3 mb-3"
-                      >
+                        class="d-flex flex-column flex-lg-row justify-content-between align-items-lg-center gap-3 mb-3">
                         <div>
                           <div class="d-flex align-items-center gap-2 mb-1">
                             <h5 class="mb-0">Category</h5>
                           </div>
                         </div>
-                        <button
-                          type="button"
-                          class="btn btn-sm btn-success align-self-start"
-                          @click="openCreateCategoryModal('primary')"
-                        >
+                        <button type="button" class="btn btn-sm btn-success align-self-start"
+                          @click="openCreateCategoryModal('primary')">
                           <i class="bi bi-plus-circle me-1"></i>New
                         </button>
                       </div>
 
-                      <input
-                        v-model="categorySearchQuery"
-                        type="text"
-                        class="form-control mb-3"
-                        placeholder="Search categories..."
-                      />
+                      <input v-model="categorySearchQuery" type="text" class="form-control mb-3"
+                        placeholder="Search categories..." />
 
-                      <div
-                        class="list-group category-selection-list"
-                        :class="{
-                          'is-empty': filteredPrimaryCategories.length === 0,
-                        }"
-                      >
-                        <button
-                          v-for="category in filteredPrimaryCategories"
-                          :key="category.id"
-                          type="button"
+                      <div class="list-group category-selection-list" :class="{
+                        'is-empty': filteredPrimaryCategories.length === 0,
+                      }">
+                        <button v-for="category in filteredPrimaryCategories" :key="category.id" type="button"
                           class="list-group-item list-group-item-action d-flex justify-content-between align-items-center gap-2"
                           :class="{
                             active: selectedPrimaryCategoryId === category.id,
-                          }"
-                          @click="selectPrimaryCategory(category.id)"
-                        >
+                          }" @click="selectPrimaryCategory(category.id)">
                           <div class="text-start">
-                            <div
-                              class="fw-semibold d-flex align-items-center gap-2"
-                            >
+                            <div class="fw-semibold d-flex align-items-center gap-2">
                               {{ category.taxonomy_name }}
                             </div>
-                            <small
-                              v-if="category.taxonomy_description"
-                              class="text-muted"
-                            >
+                            <small v-if="category.taxonomy_description" class="text-muted">
                               {{ category.taxonomy_description }}
                             </small>
                           </div>
                           <div class="d-flex gap-1">
-                            <button
-                              type="button"
-                              class="btn btn-sm btn-outline-warning py-0 px-1"
-                              @click.stop="
-                                openEditCategoryModalInStep(category)
-                              "
-                              title="Edit Category"
-                            >
-                              <i
-                                class="bi bi-pencil"
-                                style="font-size: 0.7rem"
-                              ></i>
+                            <button type="button" class="btn btn-sm btn-outline-warning py-0 px-1" @click.stop="
+                              openEditCategoryModalInStep(category)
+                              " title="Edit Category">
+                              <i class="bi bi-pencil" style="font-size: 0.7rem"></i>
                             </button>
-                            <button
-                              type="button"
-                              class="btn btn-sm btn-outline-danger py-0 px-1"
-                              @click.stop="
-                                openDeleteCategoryModalInStep(category)
-                              "
-                              title="Delete Category"
-                            >
-                              <i
-                                class="bi bi-trash"
-                                style="font-size: 0.7rem"
-                              ></i>
+                            <button type="button" class="btn btn-sm btn-outline-danger py-0 px-1" @click.stop="
+                              openDeleteCategoryModalInStep(category)
+                              " title="Delete Category">
+                              <i class="bi bi-trash" style="font-size: 0.7rem"></i>
                             </button>
                           </div>
                         </button>
 
-                        <div
-                          v-if="filteredPrimaryCategories.length === 0"
-                          class="text-center py-4 text-muted"
-                        >
+                        <div v-if="filteredPrimaryCategories.length === 0" class="text-center py-4 text-muted">
                           No matching categories found.
                         </div>
                       </div>
                     </div>
 
                     <div class="category-summary border rounded p-3">
-                      <div
-                        class="d-flex flex-wrap align-items-center gap-2 mb-2"
-                      >
+                      <div class="d-flex flex-wrap align-items-center gap-2 mb-2">
                         <div class="fw-semibold mb-0">Selected Category</div>
                       </div>
-                      <div
-                        class="d-flex flex-column flex-md-row gap-2 gap-md-4"
-                      >
+                      <div class="d-flex flex-column flex-md-row gap-2 gap-md-4">
                         <div>
                           Category:
                           <strong>{{
@@ -202,10 +138,7 @@
                 <!-- Step 2: SubCategory -->
                 <div v-if="currentStep === 2" class="tab-pane fade show active">
                   <div v-if="loadingCategories" class="text-center py-4">
-                    <div
-                      class="spinner-border spinner-border-sm text-primary"
-                      role="status"
-                    ></div>
+                    <div class="spinner-border spinner-border-sm text-primary" role="status"></div>
                     <p class="mt-2 text-muted small">
                       Loading subcategories...
                     </p>
@@ -214,126 +147,75 @@
                   <div v-else class="category-flow">
                     <div class="category-panel border rounded p-3 h-100">
                       <div
-                        class="d-flex flex-column flex-lg-row justify-content-between align-items-lg-center gap-3 mb-3"
-                      >
+                        class="d-flex flex-column flex-lg-row justify-content-between align-items-lg-center gap-3 mb-3">
                         <div>
                           <div class="d-flex align-items-center gap-2 mb-1">
                             <h5 class="mb-0">Subcategory</h5>
                           </div>
                         </div>
-                        <button
-                          type="button"
-                          class="btn btn-sm btn-success align-self-start"
-                          :disabled="!selectedPrimaryCategoryId"
-                          @click="openCreateCategoryModal('sub')"
-                        >
+                        <button type="button" class="btn btn-sm btn-success align-self-start"
+                          :disabled="!selectedPrimaryCategoryId" @click="openCreateCategoryModal('sub')">
                           <i class="bi bi-plus-circle me-1"></i>New
                         </button>
                       </div>
 
-                      <input
-                        v-model="subcategorySearchQuery"
-                        type="text"
-                        class="form-control mb-3"
-                        placeholder="Search subcategories..."
-                        :disabled="!selectedPrimaryCategoryId"
-                      />
+                      <input v-model="subcategorySearchQuery" type="text" class="form-control mb-3"
+                        placeholder="Search subcategories..." :disabled="!selectedPrimaryCategoryId" />
 
-                      <div
-                        v-if="!selectedPrimaryCategoryId"
-                        class="alert alert-light border mb-0"
-                      >
+                      <div v-if="!selectedPrimaryCategoryId" class="alert alert-light border mb-0">
                         Select a category first to show its subcategories.
                       </div>
 
                       <!-- NEW: info when the selected category simply has no subcategories -->
-                      <div
-                        v-else-if="
-                          filteredSubcategories.length === 0 &&
-                          !subcategorySearchQuery.trim()
-                        "
-                        class="alert alert-light border mb-0"
-                      >
+                      <div v-else-if="
+                        filteredSubcategories.length === 0 &&
+                        !subcategorySearchQuery.trim()
+                      " class="alert alert-light border mb-0">
                         This category has no subcategories. You can skip this
                         step and continue.
                       </div>
 
-                      <div
-                        v-else
-                        class="list-group category-selection-list"
-                        :class="{
-                          'is-empty': filteredSubcategories.length === 0,
-                        }"
-                      >
-                        <button
-                          v-for="category in filteredSubcategories"
-                          :key="category.id"
-                          type="button"
+                      <div v-else class="list-group category-selection-list" :class="{
+                        'is-empty': filteredSubcategories.length === 0,
+                      }">
+                        <button v-for="category in filteredSubcategories" :key="category.id" type="button"
                           class="list-group-item list-group-item-action d-flex justify-content-between align-items-center gap-2"
                           :class="{
                             active: selectedSubcategoryId === category.id,
-                          }"
-                          @click="selectSubcategory(category.id)"
-                        >
+                          }" @click="selectSubcategory(category.id)">
                           <div class="text-start">
                             <div class="fw-semibold">
                               {{ category.taxonomy_name }}
                             </div>
-                            <small
-                              v-if="category.taxonomy_description"
-                              class="text-muted"
-                            >
+                            <small v-if="category.taxonomy_description" class="text-muted">
                               {{ category.taxonomy_description }}
                             </small>
                           </div>
                           <div class="d-flex gap-1">
-                            <button
-                              type="button"
-                              class="btn btn-sm btn-outline-warning py-0 px-1"
-                              @click.stop="
-                                openEditCategoryModalInStep(category)
-                              "
-                              title="Edit Category"
-                            >
-                              <i
-                                class="bi bi-pencil"
-                                style="font-size: 0.7rem"
-                              ></i>
+                            <button type="button" class="btn btn-sm btn-outline-warning py-0 px-1" @click.stop="
+                              openEditCategoryModalInStep(category)
+                              " title="Edit Category">
+                              <i class="bi bi-pencil" style="font-size: 0.7rem"></i>
                             </button>
-                            <button
-                              type="button"
-                              class="btn btn-sm btn-outline-danger py-0 px-1"
-                              @click.stop="
-                                openDeleteCategoryModalInStep(category)
-                              "
-                              title="Delete Category"
-                            >
-                              <i
-                                class="bi bi-trash"
-                                style="font-size: 0.7rem"
-                              ></i>
+                            <button type="button" class="btn btn-sm btn-outline-danger py-0 px-1" @click.stop="
+                              openDeleteCategoryModalInStep(category)
+                              " title="Delete Category">
+                              <i class="bi bi-trash" style="font-size: 0.7rem"></i>
                             </button>
                           </div>
                         </button>
 
-                        <div
-                          v-if="filteredSubcategories.length === 0"
-                          class="text-center py-4 text-muted"
-                        >
+                        <div v-if="filteredSubcategories.length === 0" class="text-center py-4 text-muted">
                           No subcategories found for this category.
                         </div>
                       </div>
                     </div>
 
                     <div class="category-summary border rounded p-3">
-                      <div
-                        class="d-flex flex-wrap align-items-center gap-2 mb-2"
-                      >
+                      <div class="d-flex flex-wrap align-items-center gap-2 mb-2">
                         <div class="fw-semibold mb-0">Selected Category</div>
                       </div>
-                      <div
-                        class="d-flex flex-column flex-md-row gap-2 gap-md-4"
-                      >
+                      <div class="d-flex flex-column flex-md-row gap-2 gap-md-4">
                         <div>
                           Category:
                           <strong>{{
@@ -355,10 +237,7 @@
                   </div>
                 </div>
 
-                <div
-                  v-if="currentStep === 3"
-                  class="tab-pane fade show active basic-info-step"
-                >
+                <div v-if="currentStep === 3" class="tab-pane fade show active basic-info-step">
                   <div class="row g-3">
                     <div class="col-12 d-none">
                       <div class="border-bottom pb-2 mb-3">
@@ -369,43 +248,20 @@
                       </div>
                     </div>
                     <div class="col-md-6">
-                      <label class="form-label"
-                        >Product Name <span class="text-danger">*</span></label
-                      >
-                      <input
-                        v-model="productForm.name"
-                        type="text"
-                        required
-                        class="form-control"
-                        :class="{ 'is-invalid': productFormErrors.name }"
-                        placeholder="Product Name"
-                        @input="generateSlugFromName"
-                      />
-                      <div
-                        v-if="productFormErrors.name"
-                        class="invalid-feedback"
-                      >
+                      <label class="form-label">Product Name <span class="text-danger">*</span></label>
+                      <input v-model="productForm.name" type="text" required class="form-control"
+                        :class="{ 'is-invalid': productFormErrors.name }" placeholder="Product Name"
+                        @input="generateSlugFromName" />
+                      <div v-if="productFormErrors.name" class="invalid-feedback">
                         {{ productFormErrors.name[0] }}
                       </div>
                     </div>
                     <div class="col-md-6">
-                      <label class="form-label"
-                        >Slug <span class="text-danger">*</span></label
-                      >
-                      <input
-                        v-model="productForm.slug"
-                        type="text"
-                        required
-                        class="form-control"
-                        :class="{ 'is-invalid': productFormErrors.slug }"
-                        placeholder="product-slug"
-                        readonly
-                      />
+                      <label class="form-label">Slug <span class="text-danger">*</span></label>
+                      <input v-model="productForm.slug" type="text" required class="form-control"
+                        :class="{ 'is-invalid': productFormErrors.slug }" placeholder="product-slug" readonly />
                       <small class="text-muted"></small>
-                      <div
-                        v-if="productFormErrors.slug"
-                        class="invalid-feedback"
-                      >
+                      <div v-if="productFormErrors.slug" class="invalid-feedback">
                         {{ productFormErrors.slug[0] }}
                       </div>
                     </div>
@@ -419,10 +275,7 @@
                     </div>
                     <div class="col-md-6">
                       <label class="form-label">Free Shipping</label>
-                      <select
-                        v-model="productForm.is_freeshiping"
-                        class="form-select"
-                      >
+                      <select v-model="productForm.is_freeshiping" class="form-select">
                         <option value="INACTIVE">Inactive</option>
                         <option value="ACTIVE">Active</option>
                       </select>
@@ -434,10 +287,11 @@
                     </div>
                     <div class="col-12">
                       <label class="form-label">Information</label>
-                      <TiptapEditor
+                      <!-- <TiptapEditor
                         v-model="productForm.product_information"
                         placeholder="Product information"
-                      />
+                      /> -->
+                      <CkEditor v-model="productForm.product_information" placeholder="Product information" />
                     </div>
 
                     <!-- Pricing -->
@@ -446,40 +300,22 @@
                     </div>
 
                     <div class="col-md-6">
-                      <label class="form-label"
-                        >Selling Price <span class="text-danger">*</span></label
-                      >
-                      <input
-                        v-model.number="productForm.base_price"
-                        type="number"
-                        step="0.01"
-                        class="form-control"
-                        placeholder="0.00"
-                      />
+                      <label class="form-label">Selling Price <span class="text-danger">*</span></label>
+                      <input v-model.number="productForm.base_price" type="number" step="0.01" class="form-control"
+                        placeholder="0.00" />
                     </div>
                     <div class="col-md-6">
-                      <label class="form-label"
-                        >Original Price (Strike Price)
-                        <span class="text-muted">(Optional)</span></label
-                      >
-                      <input
-                        v-model.number="productForm.base_strike_price"
-                        type="number"
-                        step="0.01"
-                        class="form-control"
-                        placeholder="0.00"
-                      />
+                      <label class="form-label">Original Price (Strike Price)
+                        <span class="text-muted">(Optional)</span></label>
+                      <input v-model.number="productForm.base_strike_price" type="number" step="0.01"
+                        class="form-control" placeholder="0.00" />
                     </div>
 
                     <!-- SEO Metadata (Auto-generated) -->
                     <div class="col-12 mt-3">
                       <div class="seo-meta-panel rounded border px-3 py-2">
-                        <div
-                          class="d-flex flex-column flex-md-row justify-content-between gap-2 mb-2"
-                        >
-                          <div
-                            class="d-flex align-items-center text-muted small fw-semibold"
-                          >
+                        <div class="d-flex flex-column flex-md-row justify-content-between gap-2 mb-2">
+                          <div class="d-flex align-items-center text-muted small fw-semibold">
                             <i class="bi bi-search me-2"></i>SEO Metadata
                           </div>
                         </div>
@@ -521,22 +357,13 @@
                 <div v-if="currentStep === 4" class="tab-pane fade show active">
                   <h5 class="mb-4">Product Images</h5>
 
-                  <ShopeeImageUpload
-                    v-if="!loadingImages"
-                    :images="existingImagesWithPending"
-                    :disabled="uploadingImages"
-                    @change="handleImageChange"
-                    @set-featured="handleSetFeaturedFromUpload"
-                    @remove-image="handleRemoveImageFromUpload"
-                    @remove-featured="handleRemoveFeaturedFromUpload"
-                  />
+                  <ShopeeImageUpload v-if="!loadingImages" :images="existingImagesWithPending"
+                    :disabled="uploadingImages" @change="handleImageChange" @set-featured="handleSetFeaturedFromUpload"
+                    @remove-image="handleRemoveImageFromUpload" @remove-featured="handleRemoveFeaturedFromUpload" />
 
                   <!-- Loading State -->
                   <div v-else class="text-center py-3">
-                    <div
-                      class="spinner-border spinner-border-sm text-primary"
-                      role="status"
-                    ></div>
+                    <div class="spinner-border spinner-border-sm text-primary" role="status"></div>
                     <p class="mt-2 text-muted small">Loading images...</p>
                   </div>
                 </div>
@@ -546,111 +373,66 @@
                   <h5 class="mb-4">Product Attributes</h5>
 
                   <div class="mb-4">
-                    <button
-                      type="button"
-                      class="btn btn-primary action-btn-dark"
-                      @click="handleAddAttributeClick"
-                      :disabled="loadingAttributes"
-                    >
+                    <button type="button" class="btn btn-primary action-btn-dark" @click="handleAddAttributeClick"
+                      :disabled="loadingAttributes">
                       <i class="bi bi-plus-circle me-2"></i>Add Attribute
                     </button>
                   </div>
 
                   <div v-if="loadingAttributes" class="text-center py-3">
-                    <div
-                      class="spinner-border spinner-border-sm text-primary"
-                      role="status"
-                    ></div>
+                    <div class="spinner-border spinner-border-sm text-primary" role="status"></div>
                     <p class="text-muted mt-2">Loading attributes...</p>
                   </div>
 
-                  <div
-                    v-else-if="selectedAttributes.length === 0"
-                    class="text-center py-4"
-                  >
+                  <div v-else-if="selectedAttributes.length === 0" class="text-center py-4">
                     <p class="text-muted mb-0">No attributes yet</p>
                   </div>
 
                   <div v-else class="row g-3">
-                    <div
-                      v-for="(selectedAttr, index) in selectedAttributes"
-                      :key="index"
-                      class="col-12"
-                    >
+                    <div v-for="(selectedAttr, index) in selectedAttributes" :key="index" class="col-12">
                       <div class="card">
-                        <div
-                          class="card-header d-flex justify-content-between align-items-center"
-                        >
+                        <div class="card-header d-flex justify-content-between align-items-center">
                           <h6 class="mb-0">
                             {{ getAttributeName(selectedAttr.attribute_id) }}
                           </h6>
-                          <button
-                            type="button"
-                            class="btn btn-sm btn-danger"
-                            @click="removeAttribute(index)"
-                          >
+                          <button type="button" class="btn btn-sm btn-danger" @click="removeAttribute(index)">
                             <i class="bi bi-trash"></i>
                           </button>
                         </div>
                         <div class="card-body">
-                          <div
-                            class="d-flex justify-content-between align-items-center mb-2"
-                          >
+                          <div class="d-flex justify-content-between align-items-center mb-2">
                             <label class="form-label mb-0">Select Values</label>
                           </div>
                           <div class="row g-2">
-                            <div
-                              v-for="value in getAttributeValuesList(
-                                selectedAttr.attribute_id,
-                              )"
-                              :key="value.id"
-                              class="col-md-3"
-                            >
-                              <div
-                                class="form-check attribute-value-option"
-                                :class="{
-                                  'is-disabled': value.status === 'INACTIVE',
-                                }"
-                              >
-                                <input
-                                  class="form-check-input"
-                                  type="checkbox"
-                                  :value="value.id"
+                            <div v-for="value in getAttributeValuesList(
+                              selectedAttr.attribute_id,
+                            )" :key="value.id" class="col-md-3">
+                              <div class="form-check attribute-value-option" :class="{
+                                'is-disabled': value.status === 'INACTIVE',
+                              }">
+                                <input class="form-check-input" type="checkbox" :value="value.id"
                                   :id="`attr-${selectedAttr.attribute_id}-value-${value.id}`"
-                                  v-model="selectedAttr.values"
-                                  :disabled="value.status === 'INACTIVE'"
-                                  :title="
-                                    value.status === 'INACTIVE'
-                                      ? 'INACTIVE values cannot be selected'
-                                      : ''
-                                  "
-                                />
-                                <label
-                                  class="form-check-label"
-                                  :for="`attr-${selectedAttr.attribute_id}-value-${value.id}`"
-                                  :class="{
+                                  v-model="selectedAttr.values" :disabled="value.status === 'INACTIVE'" :title="value.status === 'INACTIVE'
+                                    ? 'INACTIVE values cannot be selected'
+                                    : ''
+                                    " />
+                                <label class="form-check-label"
+                                  :for="`attr-${selectedAttr.attribute_id}-value-${value.id}`" :class="{
                                     'text-muted': value.status === 'INACTIVE',
                                     'cursor-not-allowed':
                                       value.status === 'INACTIVE',
-                                  }"
-                                >
+                                  }">
                                   {{ value.value }}
-                                  <span
-                                    v-if="value.status === 'INACTIVE'"
-                                    class="badge bg-secondary ms-2"
-                                    >INACTIVE</span
-                                  >
+                                  <span v-if="value.status === 'INACTIVE'"
+                                    class="badge bg-secondary ms-2">INACTIVE</span>
                                 </label>
                               </div>
                             </div>
                           </div>
-                          <div
-                            v-if="
-                              getAttributeValuesList(selectedAttr.attribute_id)
-                                .length === 0
-                            "
-                            class="text-muted small mt-2"
-                          >
+                          <div v-if="
+                            getAttributeValuesList(selectedAttr.attribute_id)
+                              .length === 0
+                          " class="text-muted small mt-2">
                             No values available
                           </div>
                         </div>
@@ -664,34 +446,21 @@
                   <h5 class="mb-4">Product Variants</h5>
 
                   <div class="mb-3">
-                    <button
-                      type="button"
-                      class="btn btn-primary action-btn-dark"
-                      @click="handleAddVariantClick"
-                    >
+                    <button type="button" class="btn btn-primary action-btn-dark" @click="handleAddVariantClick">
                       <i class="bi bi-plus-circle me-2"></i>Add Variant
                     </button>
                   </div>
 
                   <div v-if="loadingVariants" class="text-center py-3">
-                    <div
-                      class="spinner-border spinner-border-sm text-primary"
-                      role="status"
-                    ></div>
+                    <div class="spinner-border spinner-border-sm text-primary" role="status"></div>
                     <p class="mt-2 text-muted small">Loading variants...</p>
                   </div>
 
-                  <div
-                    v-else-if="!variants || variants.length === 0"
-                    class="text-center py-4"
-                  >
+                  <div v-else-if="!variants || variants.length === 0" class="text-center py-4">
                     <p class="text-muted mb-0">No variants yet</p>
                   </div>
 
-                  <div
-                    v-else-if="variants && variants.length > 0"
-                    class="table-responsive"
-                  >
+                  <div v-else-if="variants && variants.length > 0" class="table-responsive">
                     <table class="table table-striped">
                       <thead>
                         <tr>
@@ -709,36 +478,23 @@
                         </tr>
                       </thead>
                       <tbody>
-                        <tr
-                          v-for="(variant, index) in variants"
-                          :key="variant.id || index"
-                        >
+                        <tr v-for="(variant, index) in variants" :key="variant.id || index">
                           <td>
-                            <img
-                              v-if="variant.image_path"
-                              :src="variant.image_path"
-                              :alt="variant.variant_name || 'Variant'"
-                              class="img-thumbnail"
-                              style="
+                            <img v-if="variant.image_path" :src="variant.image_path"
+                              :alt="variant.variant_name || 'Variant'" class="img-thumbnail" style="
                                 max-width: 60px;
                                 max-height: 60px;
                                 object-fit: cover;
-                              "
-                            />
-                            <span v-else class="text-muted small"
-                              >No image</span
-                            >
+                              " />
+                            <span v-else class="text-muted small">No image</span>
                           </td>
                           <td>
                             {{ variant.variant_name || "Unnamed Variant" }}
                           </td>
                           <td>
                             <div class="d-flex flex-wrap gap-1">
-                              <span
-                                v-for="valueId in variant.attribute_value_ids"
-                                :key="valueId"
-                                class="badge bg-secondary"
-                              >
+                              <span v-for="valueId in variant.attribute_value_ids" :key="valueId"
+                                class="badge bg-secondary">
                                 {{ getAttributeValueName(valueId) }}
                               </span>
                             </div>
@@ -766,32 +522,23 @@
                             <span v-else class="text-muted">-</span>
                           </td>
                           <td>
-                            <span
-                              :class="[
-                                'badge',
-                                variant.status === 'ACTIVE'
-                                  ? 'bg-success'
-                                  : 'bg-secondary',
-                              ]"
-                            >
+                            <span :class="[
+                              'badge',
+                              variant.status === 'ACTIVE'
+                                ? 'bg-success'
+                                : 'bg-secondary',
+                            ]">
                               {{ variant.status }}
                             </span>
                           </td>
                           <td class="text-end">
                             <div class="d-flex gap-2 justify-content-end">
-                              <button
-                                type="button"
-                                class="btn btn-sm btn-outline-primary"
-                                @click="editVariant(index)"
-                              >
+                              <button type="button" class="btn btn-sm btn-outline-primary" @click="editVariant(index)">
                                 <i class="bi bi-pencil"></i>
                               </button>
-                              <button
-                                type="button"
-                                class="btn btn-sm btn-outline-danger"
+                              <button type="button" class="btn btn-sm btn-outline-danger"
                                 @click="handleDeleteVariant(variant.id, index)"
-                                :disabled="deletingVariantId === variant.id"
-                              >
+                                :disabled="deletingVariantId === variant.id">
                                 <i class="bi bi-trash"></i>
                               </button>
                             </div>
@@ -806,85 +553,44 @@
                 <div v-if="currentStep === 7" class="tab-pane fade show active">
                   <h5 class="mb-4 pt-3">Merk Product</h5>
 
-                  <div
-                    class="mb-3 d-flex justify-content-between align-items-center"
-                  >
+                  <div class="mb-3 d-flex justify-content-between align-items-center">
                     <div class="flex-grow-1">
-                      <input
-                        v-model="brandSearchQuery"
-                        type="text"
-                        class="form-control"
-                        placeholder="Search brands..."
-                      />
+                      <input v-model="brandSearchQuery" type="text" class="form-control"
+                        placeholder="Search brands..." />
                     </div>
                   </div>
 
                   <div v-if="loadingBrands" class="text-center py-3">
-                    <div
-                      class="spinner-border spinner-border-sm text-primary"
-                      role="status"
-                    ></div>
+                    <div class="spinner-border spinner-border-sm text-primary" role="status"></div>
                     <p class="mt-2 text-muted small">Loading brands...</p>
                   </div>
 
                   <div v-else>
                     <!-- Selected Brands -->
-                    <div
-                      v-if="selectedBrandIds && selectedBrandIds.length > 0"
-                      class="mb-3"
-                    >
-                      <label class="form-label"
-                        ><strong>Selected Brands:</strong></label
-                      >
+                    <div v-if="selectedBrandIds && selectedBrandIds.length > 0" class="mb-3">
+                      <label class="form-label"><strong>Selected Brands:</strong></label>
                       <div class="d-flex flex-wrap gap-2">
-                        <span
-                          v-for="brandId in selectedBrandIds"
-                          :key="brandId"
+                        <span v-for="brandId in selectedBrandIds" :key="brandId"
                           class="badge bg-primary d-flex align-items-center gap-2"
-                          style="font-size: 0.9rem; padding: 0.5rem 0.75rem"
-                        >
+                          style="font-size: 0.9rem; padding: 0.5rem 0.75rem">
                           {{ getBrandName(brandId) }}
-                          <button
-                            type="button"
-                            class="btn-close btn-close-white"
-                            style="font-size: 0.7rem"
-                            @click="removeBrand(brandId)"
-                            aria-label="Remove"
-                          ></button>
+                          <button type="button" class="btn-close btn-close-white" style="font-size: 0.7rem"
+                            @click="removeBrand(brandId)" aria-label="Remove"></button>
                         </span>
                       </div>
                     </div>
 
                     <!-- Brands List -->
-                    <div
-                      class="border rounded p-3"
-                      style="max-height: 400px; overflow-y: auto"
-                    >
-                      <div
-                        v-if="filteredBrands.length === 0"
-                        class="text-center py-4"
-                      >
+                    <div class="border rounded p-3" style="max-height: 400px; overflow-y: auto">
+                      <div v-if="filteredBrands.length === 0" class="text-center py-4">
                         <p class="text-muted mb-0">No brands found</p>
                       </div>
                       <div v-else class="row g-2">
-                        <div
-                          v-for="brand in filteredBrands"
-                          :key="brand.id"
-                          class="col-12 col-md-6"
-                        >
+                        <div v-for="brand in filteredBrands" :key="brand.id" class="col-12 col-md-6">
                           <div class="form-check">
-                            <input
-                              class="form-check-input"
-                              type="checkbox"
-                              :value="Number(brand.id)"
-                              :id="`brand-${brand.id}`"
-                              v-model="selectedBrandIds"
-                            />
-                            <label
-                              class="form-check-label"
-                              :for="`brand-${brand.id}`"
-                              style="cursor: pointer"
-                            >
+                            <input class="form-check-input" type="checkbox" :value="Number(brand.id)"
+                              :id="`brand-${brand.id}`" v-model="selectedBrandIds" />
+                            <label class="form-check-label" :for="`brand-${brand.id}`" style="cursor: pointer">
                               {{ brand?.name || "Unknown Brand" }}
                             </label>
                           </div>
@@ -898,38 +604,20 @@
               <!-- Navigation Buttons -->
               <div class="mt-4 d-flex justify-content-between">
                 <div>
-                  <button
-                    v-if="currentStep > 1"
-                    type="button"
-                    class="btn btn-secondary"
-                    @click="previousStep"
-                  >
+                  <button v-if="currentStep > 1" type="button" class="btn btn-secondary" @click="previousStep">
                     <i class="bi bi-arrow-left me-2"></i>Previous
                   </button>
                 </div>
                 <div class="d-flex gap-2">
-                  <NuxtLink
-                    :to="`/manage-product/${product.slug}`"
-                    class="btn btn-outline-secondary outline-dark-btn"
-                  >
+                  <NuxtLink :to="`/manage-product/${product.slug}`" class="btn btn-outline-secondary outline-dark-btn">
                     Cancel
                   </NuxtLink>
-                  <button
-                    v-if="currentStep < steps.length"
-                    type="button"
-                    class="btn btn-primary action-btn-dark"
-                    @click="nextStep"
-                    :disabled="!canProceedToNextStep"
-                  >
+                  <button v-if="currentStep < steps.length" type="button" class="btn btn-primary action-btn-dark"
+                    @click="nextStep" :disabled="!canProceedToNextStep">
                     Next<i class="bi bi-arrow-right ms-2"></i>
                   </button>
-                  <button
-                    v-else
-                    type="button"
-                    class="btn btn-success"
-                    @click="handleUpdateProduct"
-                    :disabled="isLoading || !canUpdateProduct"
-                  >
+                  <button v-else type="button" class="btn btn-success" @click="handleUpdateProduct"
+                    :disabled="isLoading || !canUpdateProduct">
                     {{ isLoading ? "Updating..." : "Update Product" }}
                   </button>
                 </div>
@@ -941,36 +629,22 @@
     </div>
 
     <!-- Add Attribute Modal -->
-    <div
-      class="modal fade"
-      id="addAttributeModal"
-      tabindex="-1"
-      aria-labelledby="addAttributeModalLabel"
-      aria-hidden="true"
-    >
+    <div class="modal fade" id="addAttributeModal" tabindex="-1" aria-labelledby="addAttributeModalLabel"
+      aria-hidden="true">
       <div class="modal-dialog modal-lg">
         <div class="modal-content">
           <div class="modal-header">
             <h5 class="modal-title" id="addAttributeModalLabel">
               Add Attribute
             </h5>
-            <button
-              type="button"
-              class="btn-close"
-              data-bs-dismiss="modal"
-              aria-label="Close"
-            ></button>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
           </div>
           <div class="modal-body">
             <!-- Tabs -->
             <ul class="nav nav-tabs mb-3" role="tablist">
               <li class="nav-item" role="presentation">
-                <button
-                  class="nav-link"
-                  :class="{ active: attributeModalTab === 'select' }"
-                  @click="attributeModalTab = 'select'"
-                  type="button"
-                >
+                <button class="nav-link" :class="{ active: attributeModalTab === 'select' }"
+                  @click="attributeModalTab = 'select'" type="button">
                   <i class="bi bi-list-check me-2"></i>Select Existing
                 </button>
               </li>
@@ -979,32 +653,19 @@
             <!-- Tab Content: Select Existing -->
             <div v-if="attributeModalTab === 'select'" class="tab-content">
               <div v-if="loadingAttributes" class="text-center py-3">
-                <div
-                  class="spinner-border spinner-border-sm text-primary"
-                  role="status"
-                ></div>
+                <div class="spinner-border spinner-border-sm text-primary" role="status"></div>
                 <p class="text-muted mt-2">Loading attributes...</p>
               </div>
-              <div
-                v-else-if="unselectedAttributes.length === 0"
-                class="text-center py-4"
-              >
+              <div v-else-if="unselectedAttributes.length === 0" class="text-center py-4">
                 <p class="text-muted">No available attributes to add</p>
                 <p class="text-muted small">
                   All attributes have been selected or create a new one
                 </p>
               </div>
               <div v-else class="list-group">
-                <button
-                  v-for="attr in unselectedAttributes"
-                  :key="attr.id"
-                  type="button"
-                  class="list-group-item list-group-item-action"
-                  @click="selectAttribute(attr.id)"
-                >
-                  <div
-                    class="d-flex justify-content-between align-items-center"
-                  >
+                <button v-for="attr in unselectedAttributes" :key="attr.id" type="button"
+                  class="list-group-item list-group-item-action" @click="selectAttribute(attr.id)">
+                  <div class="d-flex justify-content-between align-items-center">
                     <div>
                       <h6 class="mb-1">{{ attr.name }}</h6>
                       <small class="text-muted">
@@ -1022,12 +683,7 @@
             </div>
           </div>
           <div class="modal-footer">
-            <button
-              type="button"
-              class="btn btn-secondary"
-              data-bs-dismiss="modal"
-              @click="resetNewAttributeForm"
-            >
+            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" @click="resetNewAttributeForm">
               Cancel
             </button>
           </div>
@@ -1036,13 +692,8 @@
     </div>
 
     <!-- Add Attribute Value Modal -->
-    <div
-      class="modal fade"
-      id="addAttributeValueModal"
-      tabindex="-1"
-      aria-labelledby="addAttributeValueModalLabel"
-      aria-hidden="true"
-    >
+    <div class="modal fade" id="addAttributeValueModal" tabindex="-1" aria-labelledby="addAttributeValueModalLabel"
+      aria-hidden="true">
       <div class="modal-dialog">
         <div class="modal-content">
           <div class="modal-header">
@@ -1054,78 +705,39 @@
                   : "Attribute"
               }}
             </h5>
-            <button
-              type="button"
-              class="btn-close"
-              data-bs-dismiss="modal"
-              aria-label="Close"
-            ></button>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
           </div>
           <div class="modal-body">
             <form @submit.prevent="handleCreateAttributeValue">
               <div class="mb-3">
-                <label class="form-label"
-                  >Value <span class="text-danger">*</span></label
-                >
-                <input
-                  v-model="newAttributeValueForm.value"
-                  type="text"
-                  class="form-control"
-                  placeholder="e.g., Red, Blue, Small, Large"
-                  required
-                  maxlength="100"
-                />
-                <small class="text-muted"
-                  >Value for this attribute (e.g., Red for Color, Small for
-                  Size)</small
-                >
+                <label class="form-label">Value <span class="text-danger">*</span></label>
+                <input v-model="newAttributeValueForm.value" type="text" class="form-control"
+                  placeholder="e.g., Red, Blue, Small, Large" required maxlength="100" />
+                <small class="text-muted">Value for this attribute (e.g., Red for Color, Small for
+                  Size)</small>
               </div>
               <div class="mb-3">
                 <label class="form-label">Sort Order</label>
-                <input
-                  v-model.number="newAttributeValueForm.sort"
-                  type="number"
-                  class="form-control"
-                  placeholder="0"
-                  min="0"
-                />
-                <small class="text-muted"
-                  >Display order (lower number appears first)</small
-                >
+                <input v-model.number="newAttributeValueForm.sort" type="number" class="form-control" placeholder="0"
+                  min="0" />
+                <small class="text-muted">Display order (lower number appears first)</small>
               </div>
               <div class="d-flex gap-2">
-                <button
-                  type="submit"
-                  class="btn btn-primary action-btn-dark"
-                  :disabled="
-                    creatingAttributeValue || !newAttributeValueForm.value
-                  "
-                >
-                  <span
-                    v-if="creatingAttributeValue"
-                    class="spinner-border spinner-border-sm me-2"
-                    role="status"
-                  ></span>
+                <button type="submit" class="btn btn-primary action-btn-dark" :disabled="creatingAttributeValue || !newAttributeValueForm.value
+                  ">
+                  <span v-if="creatingAttributeValue" class="spinner-border spinner-border-sm me-2"
+                    role="status"></span>
                   <i v-else class="bi bi-check-circle me-2"></i>
                   Create & Add
                 </button>
-                <button
-                  type="button"
-                  class="btn btn-secondary"
-                  @click="resetNewAttributeValueForm"
-                >
+                <button type="button" class="btn btn-secondary" @click="resetNewAttributeValueForm">
                   Reset
                 </button>
               </div>
             </form>
           </div>
           <div class="modal-footer">
-            <button
-              type="button"
-              class="btn btn-secondary"
-              data-bs-dismiss="modal"
-              @click="resetNewAttributeValueForm"
-            >
+            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" @click="resetNewAttributeValueForm">
               Cancel
             </button>
           </div>
@@ -1134,23 +746,13 @@
     </div>
 
     <!-- Delete Image Modal -->
-    <div
-      id="deleteImageModal"
-      class="modal fade"
-      tabindex="-1"
-      aria-labelledby="deleteImageModalLabel"
-      aria-hidden="true"
-    >
+    <div id="deleteImageModal" class="modal fade" tabindex="-1" aria-labelledby="deleteImageModalLabel"
+      aria-hidden="true">
       <div class="modal-dialog">
         <div class="modal-content">
           <div class="modal-header">
             <h5 class="modal-title" id="deleteImageModalLabel">Delete Image</h5>
-            <button
-              type="button"
-              class="btn-close"
-              data-bs-dismiss="modal"
-              aria-label="Close"
-            ></button>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
           </div>
           <div class="modal-body">
             <p>
@@ -1158,29 +760,16 @@
               undone.
             </p>
             <div v-if="imageToDelete" class="text-center mt-3">
-              <img
-                :src="imageToDelete.path"
-                :alt="`Image ${imageToDelete.order_number}`"
-                class="img-thumbnail"
-                style="max-height: 200px; max-width: 100%"
-                @error="handleImageError"
-              />
+              <img :src="imageToDelete.path" :alt="`Image ${imageToDelete.order_number}`" class="img-thumbnail"
+                style="max-height: 200px; max-width: 100%" @error="handleImageError" />
             </div>
           </div>
           <div class="modal-footer">
-            <button
-              type="button"
-              class="btn btn-secondary"
-              data-bs-dismiss="modal"
-            >
+            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
               Cancel
             </button>
-            <button
-              type="button"
-              class="btn btn-danger"
-              @click="handleConfirmDeleteImage"
-              :disabled="deletingImageId !== null"
-            >
+            <button type="button" class="btn btn-danger" @click="handleConfirmDeleteImage"
+              :disabled="deletingImageId !== null">
               {{ deletingImageId !== null ? "Deleting..." : "Delete Image" }}
             </button>
           </div>
@@ -1189,50 +778,29 @@
     </div>
 
     <!-- Add Category Modal -->
-    <div
-      class="modal fade"
-      id="addCategoryModal"
-      tabindex="-1"
-      aria-labelledby="addCategoryModalLabel"
-      aria-hidden="true"
-    >
+    <div class="modal fade" id="addCategoryModal" tabindex="-1" aria-labelledby="addCategoryModalLabel"
+      aria-hidden="true">
       <div class="modal-dialog">
         <div class="modal-content">
           <div class="modal-header">
             <h5 class="modal-title" id="addCategoryModalLabel">
               Create New Category
             </h5>
-            <button
-              type="button"
-              class="btn-close"
-              data-bs-dismiss="modal"
-              aria-label="Close"
-            ></button>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
           </div>
           <div class="modal-body">
             <form @submit.prevent="handleCreateCategory">
               <div class="mb-3">
-                <label class="form-label"
-                  >{{
-                    newCategoryForm.taxonomy_type === 2
-                      ? "Category"
-                      : "Subcategory"
-                  }}
-                  <span class="text-danger">*</span></label
-                >
-                <input
-                  v-model="newCategoryForm.taxonomy_name"
-                  type="text"
-                  class="form-control"
-                  :placeholder="
-                    newCategoryForm.taxonomy_type === 2
-                      ? 'e.g., Tas, Dompet, Ikat Pinggang'
-                      : 'e.g., Tas Selempang, Tas Ransel'
-                  "
-                  required
-                  maxlength="250"
-                  @input="generateCategorySlug"
-                />
+                <label class="form-label">{{
+                  newCategoryForm.taxonomy_type === 2
+                    ? "Category"
+                    : "Subcategory"
+                }}
+                  <span class="text-danger">*</span></label>
+                <input v-model="newCategoryForm.taxonomy_name" type="text" class="form-control" :placeholder="newCategoryForm.taxonomy_type === 2
+                  ? 'e.g., Tas, Dompet, Ikat Pinggang'
+                  : 'e.g., Tas Selempang, Tas Ransel'
+                  " required maxlength="250" @input="generateCategorySlug" />
                 <small class="text-muted">
                   {{
                     newCategoryForm.taxonomy_type === 2
@@ -1243,83 +811,48 @@
               </div>
               <div class="mb-3">
                 <label class="form-label">Category Type</label>
-                <select
-                  v-model="newCategoryForm.taxonomy_type"
-                  class="form-select"
-                >
+                <select v-model="newCategoryForm.taxonomy_type" class="form-select">
                   <option :value="2">Category</option>
                   <option :value="3">Subcategory</option>
                 </select>
               </div>
               <div v-if="newCategoryForm.taxonomy_type === 3" class="mb-3">
-                <label class="form-label"
-                  >Parent Category <span class="text-danger">*</span></label
-                >
+                <label class="form-label">Parent Category <span class="text-danger">*</span></label>
                 <select v-model="newCategoryForm.parent" class="form-select">
                   <option :value="null">Select a category...</option>
-                  <option
-                    v-for="category in availablePrimaryCategories"
-                    :key="category.id"
-                    :value="category.id"
-                  >
+                  <option v-for="category in availablePrimaryCategories" :key="category.id" :value="category.id">
                     {{ category.taxonomy_name }}
                   </option>
                 </select>
               </div>
               <div class="mb-3">
                 <label class="form-label">Slug</label>
-                <input
-                  v-model="newCategoryForm.taxonomy_slug"
-                  type="text"
-                  class="form-control"
-                  placeholder="auto-generated-from-name"
-                  maxlength="250"
-                />
-                <small class="text-muted"
-                  >URL-friendly version of the name (auto-generated)</small
-                >
+                <input v-model="newCategoryForm.taxonomy_slug" type="text" class="form-control"
+                  placeholder="auto-generated-from-name" maxlength="250" />
+                <small class="text-muted">URL-friendly version of the name (auto-generated)</small>
               </div>
               <div class="mb-3">
                 <label class="form-label">Status</label>
-                <select
-                  v-model="newCategoryForm.taxonomy_status"
-                  class="form-select"
-                >
+                <select v-model="newCategoryForm.taxonomy_status" class="form-select">
                   <option value="ACTIVE">Active</option>
                   <option value="INACTIVE">Inactive</option>
                 </select>
               </div>
               <div class="d-flex gap-2">
-                <button
-                  type="submit"
-                  class="btn btn-primary action-btn-dark"
-                  :disabled="creatingCategory || !newCategoryForm.taxonomy_name"
-                >
-                  <span
-                    v-if="creatingCategory"
-                    class="spinner-border spinner-border-sm me-2"
-                    role="status"
-                  ></span>
+                <button type="submit" class="btn btn-primary action-btn-dark"
+                  :disabled="creatingCategory || !newCategoryForm.taxonomy_name">
+                  <span v-if="creatingCategory" class="spinner-border spinner-border-sm me-2" role="status"></span>
                   <i v-else class="bi bi-check-circle me-2"></i>
                   Create & Add
                 </button>
-                <button
-                  type="button"
-                  class="btn btn-secondary"
-                  @click="resetNewCategoryForm"
-                >
+                <button type="button" class="btn btn-secondary" @click="resetNewCategoryForm">
                   Reset
                 </button>
               </div>
             </form>
           </div>
           <div class="modal-footer">
-            <button
-              type="button"
-              class="btn btn-secondary"
-              data-bs-dismiss="modal"
-              @click="resetNewCategoryForm"
-            >
+            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" @click="resetNewCategoryForm">
               Cancel
             </button>
           </div>
@@ -1328,73 +861,41 @@
     </div>
 
     <!-- Edit Category Modal -->
-    <div
-      class="modal fade"
-      id="editCategoryInStepModal"
-      tabindex="-1"
-      aria-labelledby="editCategoryInStepModalLabel"
-      aria-hidden="true"
-    >
+    <div class="modal fade" id="editCategoryInStepModal" tabindex="-1" aria-labelledby="editCategoryInStepModalLabel"
+      aria-hidden="true">
       <div class="modal-dialog">
         <div class="modal-content">
           <div class="modal-header">
             <h5 class="modal-title" id="editCategoryInStepModalLabel">
               Edit Category
             </h5>
-            <button
-              type="button"
-              class="btn-close"
-              data-bs-dismiss="modal"
-              aria-label="Close"
-            ></button>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
           </div>
           <div class="modal-body">
             <div class="mb-3">
-              <label class="form-label"
-                >Category Name <span class="text-danger">*</span></label
-              >
-              <input
-                v-model="editCategoryFormData.taxonomy_name"
-                type="text"
-                class="form-control"
-                placeholder="Enter category name"
-                @input="generateEditCategorySlug"
-              />
+              <label class="form-label">Category Name <span class="text-danger">*</span></label>
+              <input v-model="editCategoryFormData.taxonomy_name" type="text" class="form-control"
+                placeholder="Enter category name" @input="generateEditCategorySlug" />
             </div>
             <div class="mb-3">
               <label class="form-label">Slug</label>
-              <input
-                v-model="editCategoryFormData.taxonomy_slug"
-                type="text"
-                class="form-control"
-                placeholder="auto-generated-from-name"
-              />
+              <input v-model="editCategoryFormData.taxonomy_slug" type="text" class="form-control"
+                placeholder="auto-generated-from-name" />
             </div>
             <div class="mb-3">
               <label class="form-label">Status</label>
-              <select
-                v-model="editCategoryFormData.taxonomy_status"
-                class="form-select"
-              >
+              <select v-model="editCategoryFormData.taxonomy_status" class="form-select">
                 <option value="ACTIVE">Active</option>
                 <option value="INACTIVE">Inactive</option>
               </select>
             </div>
           </div>
           <div class="modal-footer">
-            <button
-              type="button"
-              class="btn btn-secondary"
-              data-bs-dismiss="modal"
-            >
+            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
               Cancel
             </button>
-            <button
-              type="button"
-              class="btn btn-success"
-              @click="handleEditCategoryInStep"
-              :disabled="editingCategoryInStep"
-            >
+            <button type="button" class="btn btn-success" @click="handleEditCategoryInStep"
+              :disabled="editingCategoryInStep">
               {{ editingCategoryInStep ? "Updating..." : "Update Category" }}
             </button>
           </div>
@@ -1403,47 +904,29 @@
     </div>
 
     <!-- Delete Category Modal -->
-    <div
-      class="modal fade"
-      id="deleteCategoryInStepModal"
-      tabindex="-1"
-      aria-labelledby="deleteCategoryInStepModalLabel"
-      aria-hidden="true"
-    >
+    <div class="modal fade" id="deleteCategoryInStepModal" tabindex="-1"
+      aria-labelledby="deleteCategoryInStepModalLabel" aria-hidden="true">
       <div class="modal-dialog modal-dialog-centered">
         <div class="modal-content">
           <div class="modal-header bg-danger text-white">
             <h5 class="modal-title" id="deleteCategoryInStepModalLabel">
               Delete Category
             </h5>
-            <button
-              type="button"
-              class="btn-close btn-close-white"
-              data-bs-dismiss="modal"
-            ></button>
+            <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
           </div>
           <div class="modal-body">
             <p>
               Are you sure you want to delete
-              <strong>{{ categoryToDeleteInStep?.taxonomy_name }}</strong
-              >?
+              <strong>{{ categoryToDeleteInStep?.taxonomy_name }}</strong>?
             </p>
             <p class="text-muted mb-0">This action cannot be undone.</p>
           </div>
           <div class="modal-footer">
-            <button
-              type="button"
-              class="btn btn-secondary"
-              data-bs-dismiss="modal"
-            >
+            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
               Cancel
             </button>
-            <button
-              type="button"
-              class="btn btn-danger"
-              @click="handleDeleteCategoryInStep"
-              :disabled="deletingCategoryInStep"
-            >
+            <button type="button" class="btn btn-danger" @click="handleDeleteCategoryInStep"
+              :disabled="deletingCategoryInStep">
               {{ deletingCategoryInStep ? "Deleting..." : "Delete" }}
             </button>
           </div>
@@ -1452,26 +935,16 @@
     </div>
 
     <!-- Add Brand Modal -->
-    <div
-      id="createBrandModal"
-      class="modal fade"
-      :class="{ show: showBrandModal }"
-      :style="showBrandModal ? 'display: block;' : ''"
-      tabindex="-1"
-    >
+    <div id="createBrandModal" class="modal fade" :class="{ show: showBrandModal }"
+      :style="showBrandModal ? 'display: block;' : ''" tabindex="-1">
       <div class="modal-dialog">
         <div class="modal-content">
           <div class="modal-header">
             <h5 class="modal-title" id="addBrandModalLabel">
               Create New Brand
             </h5>
-            <button
-              type="button"
-              class="btn-close"
-              data-bs-dismiss="modal"
-              @click="resetNewBrandForm"
-              aria-label="Close"
-            ></button>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" @click="resetNewBrandForm"
+              aria-label="Close"></button>
           </div>
           <div class="modal-body">
             <form @submit.prevent="handleCreateBrand">
@@ -1479,56 +952,32 @@
                 <label class="form-label">
                   Brand Name <span class="text-danger">*</span>
                 </label>
-                <input
-                  v-model="newBrand.name"
-                  type="text"
-                  class="form-control"
-                  required
-                  maxlength="250"
-                />
+                <input v-model="newBrand.name" type="text" class="form-control" required maxlength="250" />
                 <small class="text-muted">Name of the brand</small>
               </div>
               <div class="mb-3">
                 <label class="form-label">Description</label>
-                <TiptapEditor
-                  v-model="newBrand.description"
-                  placeholder="Brand description (optional)"
-                />
+                <!-- <TiptapEditor v-model="newBrand.description" placeholder="Brand description (optional)" /> -->
+                <CkEditor v-model="newBrand.description" placeholder="Brand description (optional)" />
                 <small class="text-muted">
                   Brief description of the brand
                 </small>
               </div>
               <div class="d-flex gap-2">
-                <button
-                  type="submit"
-                  class="btn btn-primary action-btn-dark"
-                  :disabled="creatingBrand || !newBrand.name"
-                >
-                  <span
-                    v-if="creatingBrand"
-                    class="spinner-border spinner-border-sm me-2"
-                    role="status"
-                  ></span>
+                <button type="submit" class="btn btn-primary action-btn-dark"
+                  :disabled="creatingBrand || !newBrand.name">
+                  <span v-if="creatingBrand" class="spinner-border spinner-border-sm me-2" role="status"></span>
                   <i v-else class="bi bi-check-circle me-2"></i>
                   Create & Add
                 </button>
-                <button
-                  type="button"
-                  class="btn btn-secondary"
-                  @click="resetInputField"
-                >
+                <button type="button" class="btn btn-secondary" @click="resetInputField">
                   Reset
                 </button>
               </div>
             </form>
           </div>
           <div class="modal-footer">
-            <button
-              type="button"
-              class="btn btn-secondary"
-              data-bs-dismiss="modal"
-              @click="resetNewBrandForm"
-            >
+            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" @click="resetNewBrandForm">
               Cancel
             </button>
           </div>
@@ -1537,20 +986,11 @@
     </div>
 
     <!-- Variant Modal -->
-    <VariantModal
-      :selected-attributes="selectedAttributes"
-      :variant-form="variantForm"
-      :variant-store-stocks="variantStoreStocks"
-      :editing-variant-index="editingVariantIndex"
-      :available-attributes="availableAttributes"
-      :product-slug="product?.slug"
-      :api-errors="variantApiErrors"
-      @save="handleSaveVariant"
-      @cancel="handleCancelVariant"
-      @update:variant-form="variantForm = $event"
-      @update:variant-store-stocks="variantStoreStocks = $event"
-      @update-variant-name="updateVariantName"
-    />
+    <VariantModal :selected-attributes="selectedAttributes" :variant-form="variantForm"
+      :variant-store-stocks="variantStoreStocks" :editing-variant-index="editingVariantIndex"
+      :available-attributes="availableAttributes" :product-slug="product?.slug" :api-errors="variantApiErrors"
+      @save="handleSaveVariant" @cancel="handleCancelVariant" @update:variant-form="variantForm = $event"
+      @update:variant-store-stocks="variantStoreStocks = $event" @update-variant-name="updateVariantName" />
   </div>
 </template>
 
@@ -2473,10 +1913,13 @@ const primaryCategoryHasSubcategories = computed(() => {
   );
 });
 
+// const hasCategorySelection = computed(() => {
+//   if (!selectedPrimaryCategoryId.value) return false;
+//   if (!primaryCategoryHasSubcategories.value) return true;
+//   return !!selectedSubcategoryId.value;
+// });
 const hasCategorySelection = computed(() => {
-  if (!selectedPrimaryCategoryId.value) return false;
-  if (!primaryCategoryHasSubcategories.value) return true;
-  return !!selectedSubcategoryId.value;
+  return !!selectedPrimaryCategoryId.value;
 });
 
 const goToStep = async (step: number) => {
@@ -2553,10 +1996,12 @@ const canProceedToNextStep = computed(() => {
   if (currentStep.value === 1) {
     return !!selectedPrimaryCategoryId.value;
   }
+  // if (currentStep.value === 2) {
+  //   if (!primaryCategoryHasSubcategories.value) return true;
+  //   return !!selectedSubcategoryId.value;
+  // }
   if (currentStep.value === 2) {
-    // FIX: don't block "Next" when the category simply has no subcategories
-    if (!primaryCategoryHasSubcategories.value) return true;
-    return !!selectedSubcategoryId.value;
+    return true; 
   }
   if (currentStep.value === 3) {
     return productForm.value.name && productForm.value.slug;
@@ -2788,9 +2233,9 @@ const updateVariantName = () => {
 const generateSKU = () => {
   const productPrefix = product.value?.slug
     ? product.value.slug
-        .replace(/[^a-zA-Z0-9]/g, "-")
-        .toUpperCase()
-        .substring(0, 6)
+      .replace(/[^a-zA-Z0-9]/g, "-")
+      .toUpperCase()
+      .substring(0, 6)
     : "SKU";
 
   const attrValueSlugs: string[] = [];
@@ -3268,7 +2713,7 @@ const syncSelectedCategoriesFromIds = (categoryIds: number[]) => {
   selectedPrimaryCategoryId.value = primaryCategory?.id || null;
   selectedSubcategoryId.value =
     subcategory &&
-    (!primaryCategory || Number(subcategory.parent) === primaryCategory.id)
+      (!primaryCategory || Number(subcategory.parent) === primaryCategory.id)
       ? subcategory.id
       : null;
 };
@@ -3831,7 +3276,7 @@ const handleEditCategoryInStep = async () => {
     if (
       editCategoryFormData.value.taxonomy_slug &&
       editCategoryFormData.value.taxonomy_slug !==
-        editCategoryFormData.value.original_slug
+      editCategoryFormData.value.original_slug
     ) {
       payload.taxonomy_slug = editCategoryFormData.value.taxonomy_slug;
     } else {

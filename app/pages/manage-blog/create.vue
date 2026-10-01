@@ -42,20 +42,34 @@
             </div>
 
             <!-- Short Description -->
-            <div class="col-12">
+            <!-- <div class="col-12">
               <label for="blog_short_desc" class="form-label fw-medium">
                 Short Description (Excerpt) <span class="text-danger">*</span>
               </label>
               <TiptapEditor v-model="form.short_desc" placeholder="Short summary of the blog post"
                 :error-message="errors.short_desc ? errors.short_desc[0] : ''" />
+            </div> -->
+            <div class="col-12">
+              <label class="form-label fw-medium">
+                Short Description (Excerpt) <span class="text-danger">*</span>
+              </label>
+              <CkEditor v-model="form.short_desc" placeholder="Short summary of the blog post"
+                :error-message="errors.short_desc ? errors.short_desc[0] : ''" />
             </div>
 
             <!-- Content (Long Description) -->
-            <div class="col-12">
+            <!-- <div class="col-12">
               <label for="blog_long_desc" class="form-label fw-medium">
                 Content <span class="text-danger">*</span>
               </label>
               <TiptapEditor v-model="form.long_desc" placeholder="Write your blog content here..."
+                :error-message="errors.long_desc ? errors.long_desc[0] : ''" />
+            </div> -->
+            <div class="col-12">
+              <label class="form-label fw-medium">
+                Content <span class="text-danger">*</span>
+              </label>
+              <CkEditor v-model="form.long_desc" placeholder="Write your blog content here..."
                 :error-message="errors.long_desc ? errors.long_desc[0] : ''" />
             </div>
 
@@ -133,9 +147,7 @@
             <!-- SEO Metadata Preview -->
             <div class="col-12 mt-2">
               <div class="seo-meta-panel rounded border px-3 py-2">
-                <div
-                  class="d-flex flex-column flex-md-row justify-content-between gap-2 mb-2"
-                >
+                <div class="d-flex flex-column flex-md-row justify-content-between gap-2 mb-2">
                   <div class="d-flex align-items-center text-muted small fw-semibold">
                     <i class="bi bi-search me-2"></i>SEO Metadata
                   </div>
